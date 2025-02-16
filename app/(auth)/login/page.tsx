@@ -6,7 +6,6 @@ export default function LogIn() {
             <div className="w-full max-w-sm">
                 <LoginForm />
             </div>
-
         </section>
     )
 }

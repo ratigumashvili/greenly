@@ -4,9 +4,10 @@ import { SearchIcon } from "lucide-react";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { SubmitButton } from "@/components/forms/submit-button";
+import { UserDropdown } from "@/components/shared/user-dropdown";
 
 import { auth, signOut } from "@/lib/utils";
-import { SubmitButton } from "../forms/submit-button";
 
 export async function Navbar() {
 
@@ -41,12 +42,9 @@ export async function Navbar() {
             </div>
             <div className="flex items-center gap-x-2">
                 {session?.user ? (
-                    <form action={async () => {
-                        "use server"
-                        await signOut({redirectTo: "/"})
-                    }}>
-                        <SubmitButton title="Logout" pendingTitle="Pending..." variant="destructive" />
-                    </form>
+                    <>
+                        <UserDropdown name={session?.user?.name || "U"} />
+                    </>
                 ) : (
                     <>
                         <Button variant="outline" asChild>

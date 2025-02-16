@@ -1,7 +1,12 @@
-export default function Home() {
+import { auth } from "@/lib/utils";
+
+export default async function Home() {
+  const session = await auth()
   return (
     <section>
-        lorem ipsum
+        <pre>
+          {JSON.stringify(session, null, 2)}
+        </pre>
     </section>
   );
 }
