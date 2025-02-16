@@ -28,7 +28,7 @@ export async function LoginForm() {
                 <form action={async () => {
                     "use server"
                     await signIn("google", {
-                        redirectTo: "/"
+                        redirectTo: `${process.env.NEXT_PUBLIC_API_URL!}/api/auth/creation`
                     })
                 }}>
                     <SubmitButton
@@ -50,7 +50,7 @@ export async function LoginForm() {
                 <form action={async () => {
                     "use server"
                     await signIn("github", {
-                        redirectTo: "/"
+                        redirectTo: `${process.env.NEXT_PUBLIC_API_URL!}/api/auth/creation`
                     })
                 }}>
                     <SubmitButton
