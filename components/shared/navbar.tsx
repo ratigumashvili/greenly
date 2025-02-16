@@ -5,7 +5,13 @@ import { SearchIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-export function Navbar() {
+import { auth, signOut } from "@/lib/utils";
+import { SubmitButton } from "../forms/submit-button";
+
+export async function Navbar() {
+
+    const session = await auth()
+
     return (
         <nav className="h-[10vh] w-full max-w-7xl mx-auto flex items-center justify-between px-4 md:px-8 lg:px-10 border-b">
             <Link href={'/'}>
@@ -34,16 +40,27 @@ export function Navbar() {
                 />
             </div>
             <div className="flex items-center gap-x-2">
-                <Button asChild>
-                    <Link href={'/sign-up'}>Sign up</Link>
-                </Button>
-                <Button variant="outline" asChild>
-                    <Link href={'/login'}>Login</Link>
-                </Button>
+                {session?.user ? (
+                    <form action={async () => {
+                        "use server"
+                        await signOut({redirectTo: "/"})
+                    }}>
+                        <SubmitButton title="Logout" pendingTitle="Pending..." />
+                    </form>
+                ) : (
+                    <>
+                        <Button variant="outline" asChild>
+                            <Link href={'/login'}>Login</Link>
+                        </Button>
+                        <Button asChild>
+                            <Link href={'/sign-up'}>Sign up</Link>
+                        </Button>
+                    </>
+                )}
                 <Button className="md:hidden">
-                <SearchIcon
-                    className="text-white"
-                />
+                    <SearchIcon
+                        className="text-white"
+                    />
                 </Button>
             </div>
         </nav>

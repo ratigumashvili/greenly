@@ -1,14 +1,21 @@
 import Link from "next/link";
 import Image from "next/image";
+import { redirect } from "next/navigation";
 
 import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { SubmitButton } from "@/components/forms/submit-button";
 
-import { signIn } from "@/lib/utils";
+import { auth, signIn } from "@/lib/utils";
 
-export function LoginForm() {
+export async function LoginForm() {
+    const session = await auth()
+
+    if(session?.user) {
+        return redirect("/")
+    }
+
     return (
         <Card className="p-4">
             <CardTitle>
