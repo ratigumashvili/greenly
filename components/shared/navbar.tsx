@@ -13,10 +13,18 @@ export function Navbar() {
                     src={'/logo-lg.svg'}
                     width={150}
                     height={150}
-                    alt="Logo"
+                    alt="Logo desktop"
+                    className="hidden lg:block"
+                />
+                <Image
+                    src={'/logo-sm.svg'}
+                    width={40}
+                    height={40}
+                    alt="Logo mobile"
+                    className="block lg:hidden h-10 min-h-10 w-fit"
                 />
             </Link>
-            <div className="relative w-full max-w-[400px] ">
+            <div className="relative hidden md:block w-full max-w-[400px] ">
                 <Input
                     placeholder="Search greenly"
                     className="rounded-full pl-9 placeholder:text-muted-foreground bg-slate-50"
@@ -28,6 +36,11 @@ export function Navbar() {
             <div className="flex items-center gap-x-2">
                 <Button>Register</Button>
                 <Button variant="outline">Login</Button>
+                <Button className="md:hidden">
+                <SearchIcon
+                    className="text-white"
+                />
+                </Button>
             </div>
         </nav>
     )
