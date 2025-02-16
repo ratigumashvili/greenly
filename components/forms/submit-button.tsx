@@ -11,7 +11,7 @@ interface SubmitButtonProps {
     title: string,
     pendingTitle: string,
     classNames?: string,
-    variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link" | null,
+    variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link" | null | undefined
     size?: "default" | "sm" | "lg" | "icon" | null | undefined
 }
 

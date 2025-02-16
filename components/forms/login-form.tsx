@@ -2,9 +2,11 @@ import Link from "next/link";
 import Image from "next/image";
 
 import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { SubmitButton } from "@/components/forms/submit-button";
-import { Input } from "../ui/input";
+
+import { signIn } from "@/lib/utils";
 
 export function LoginForm() {
     return (
@@ -16,7 +18,12 @@ export function LoginForm() {
                 <p>By continuing, you agree to our <Link href={'/'} className="text-primary">User Agreement</Link> and acknowledge that you understand the <Link href={'/'} className="text-primary">Privacy Policy</Link>.</p>
             </CardDescription>
             <CardContent className="p-0 flex flex-col gap-4">
-                <form>
+                <form action={async () => {
+                    "use server"
+                    await signIn("google", {
+                        redirectTo: "/"
+                    })
+                }}>
                     <SubmitButton
                         title="Continue with google"
                         pendingTitle="Loading..."
@@ -33,7 +40,12 @@ export function LoginForm() {
                     </SubmitButton>
                 </form>
 
-                <form>
+                <form action={async () => {
+                    "use server"
+                    await signIn("github", {
+                        redirectTo: "/"
+                    })
+                }}>
                     <SubmitButton
                         title="Continue with Github"
                         pendingTitle="Loading..."
