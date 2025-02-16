@@ -34,8 +34,12 @@ export function Navbar() {
                 />
             </div>
             <div className="flex items-center gap-x-2">
-                <Button>Register</Button>
-                <Button variant="outline">Login</Button>
+                <Button asChild>
+                    <Link href={'/sign-up'}>Sign up</Link>
+                </Button>
+                <Button variant="outline" asChild>
+                    <Link href={'/login'}>Login</Link>
+                </Button>
                 <Button className="md:hidden">
                 <SearchIcon
                     className="text-white"
