@@ -45,7 +45,7 @@ export async function Navbar() {
                         "use server"
                         await signOut({redirectTo: "/"})
                     }}>
-                        <SubmitButton title="Logout" pendingTitle="Pending..." />
+                        <SubmitButton title="Logout" pendingTitle="Pending..." variant="destructive" />
                     </form>
                 ) : (
                     <>
