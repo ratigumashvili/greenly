@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { generateUsername } from "unique-username-generator";
 
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/utils";
@@ -22,7 +21,6 @@ export async function GET() {
             data: {
                 name: session.user.name ?? "Anonymous",
                 email: session.user.email,
-                userName: generateUsername("-", 3, 8),
             },
         });
     }
