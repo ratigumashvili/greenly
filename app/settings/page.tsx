@@ -1,4 +1,4 @@
-import { UpdateUsernameForm } from "@/components/forms/update-username-form"
+import { UpdateSettings } from "@/components/forms/update-username-form"
 import { NotLoggedIn } from "@/components/shared/not-logged-in"
 
 import { getUserData } from "@/lib/utils"
@@ -13,7 +13,7 @@ export default async function SettingsPage() {
 
     return (
         <section className="py-8">
-            <UpdateUsernameForm username={user?.userName ?? ""} />
+            <UpdateSettings username={user?.userName ?? ""} />
         </section>
     )
 }

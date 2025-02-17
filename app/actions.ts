@@ -102,7 +102,7 @@ export async function registerAndSignIn(name: string, email: string, password: s
   }
 }
 
-export async function updateUserName(formData: FormData) {
+export async function updateUserInfo(formData: FormData) {
 
   const { session, user } = await getUserData()
 
