@@ -1,12 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
-
 import { SubmitButton } from "@/components/forms/submit-button";
-import { registerUser } from "@/app/api/auth/register";
+import { registerAndSignIn } from "@/app/actions";
 
 export function SignUpWithCredentials() {
   const router = useRouter();
@@ -23,11 +21,10 @@ export function SignUpWithCredentials() {
     const email = (form.elements.namedItem("email") as HTMLInputElement)?.value;
     const password = (form.elements.namedItem("password") as HTMLInputElement)?.value;
 
-    const result = await registerUser(name, email, password);
+    const result = await registerAndSignIn(name, email, password);
 
     if (result.success) {
-      router.push("/");
-      toast.success("Succsess. You can now login to your account")
+      router.push("/"); // Redirect to homepage
     } else {
       setError(result.error || "Registration failed");
     }

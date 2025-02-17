@@ -3,15 +3,14 @@ import Image from "next/image";
 import { redirect } from "next/navigation";
 
 import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { SubmitButton } from "@/components/forms/submit-button";
 
-import { auth, signIn } from "@/lib/utils";
+import { authSession, signIn } from "@/lib/auth";
 import { LoginWithCredentials } from "./login-with-credentials";
 
 export async function LoginForm() {
-    const session = await auth()
+    const session = await authSession()
 
     if(session?.user) {
         return redirect("/")

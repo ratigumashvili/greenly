@@ -4,7 +4,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Input } from "@/components/ui/input"
 import { SubmitButton } from "@/components/forms/submit-button"
-import { loginWithCredentials } from "@/app/api/auth/login"
+import { loginWithCredentials } from "@/app/actions"
 
 export function LoginWithCredentials() {
   const router = useRouter()
