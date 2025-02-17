@@ -9,17 +9,28 @@ datasource db {
 }
 
 model User {
+  id                    String         @id @default(uuid())
+  email                 String         @unique
+  name                  String
+  userName              String         @unique
+  password              String?
+  isAdmin               Boolean        @default(false)
+  institution           String?
+  department            String?
+  disciplines           String?
+  fields                String?
+  interests             String?
+  about                 String?
+  createdAt             DateTime       @default(now())
+  createdSubcommunities Subcommunity[]
+}
+
+model Subcommunity {
   id          String   @id @default(uuid())
-  email       String   @unique
-  name        String
-  userName    String   @unique
-  password    String?
-  isAdmin     Boolean  @default(false)
-  institution String?
-  department  String?
-  disciplines String?
-  fields      String?
-  interests   String?
-  about       String?
+  name        String   @unique
+  description String?
   createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  User        User?    @relation(fields: [userId], references: [id])
+  userId      String?
 }
