@@ -1,11 +1,13 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import {generateUsername} from "unique-username-generator"
+import { generateUsername } from "unique-username-generator"
 import bcrypt from "bcryptjs";
 
 import { prisma } from "@/lib/prisma";
 import { signIn } from "@/lib/auth";
+import { getUserData } from "@/lib/utils";
+import { redirect } from "next/navigation";
 
 export async function loginWithCredentials(email: string, password: string) {
   try {
@@ -83,7 +85,6 @@ export async function registerAndSignIn(name: string, email: string, password: s
       },
     });
 
-    // Automatically sign in the new user
     const result = await signIn("credentials", {
       email: user.email,
       password,
@@ -100,3 +101,45 @@ export async function registerAndSignIn(name: string, email: string, password: s
     return { success: false, error: "Registration failed" };
   }
 }
+
+export async function updateUserName(formData: FormData) {
+
+  const { session, user } = await getUserData()
+
+
+  if (!session || !user) {
+    return redirect("/")
+  }
+
+  const newUsername = formData.get("username")
+
+  if (typeof newUsername !== "string" || !newUsername.trim()) {
+    return { error: "Invalid username" }
+  }
+
+  const existingUser = await prisma.user.findFirst({
+    where: {
+      userName: newUsername
+    }
+  })
+
+  if (existingUser) {
+    return { error: "Username already taken" }
+  }
+
+  await prisma.user.update({
+    where: {
+      email: user?.email
+    },
+    data: {
+      userName: newUsername
+    }
+  })
+
+  return {
+    message: "Successfully updated username"
+  }
+}
+
+
+
