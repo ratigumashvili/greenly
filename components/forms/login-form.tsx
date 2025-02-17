@@ -8,6 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { SubmitButton } from "@/components/forms/submit-button";
 
 import { auth, signIn } from "@/lib/utils";
+import { LoginWithCredentials } from "./login-with-credentials";
 
 export async function LoginForm() {
     const session = await auth()
@@ -74,11 +75,12 @@ export async function LoginForm() {
                     <Separator />
                 </div>
 
-                <form className="flex flex-col gap-4">
+                {/* <form className="flex flex-col gap-4">
                     <Input placeholder="Enter your email" type="email" className="py-5 rounded-full bg-slate-50" />
                     <Input placeholder="Enter your password" type="password" className="py-5 rounded-full bg-slate-50" />
                     <SubmitButton title="Log in" pendingTitle="loading..." size="lg" classNames="rounded-full" />
-                </form>
+                </form> */}
+                <LoginWithCredentials />
             </CardContent>
         </Card >
     )

@@ -3,11 +3,11 @@ import Image from "next/image";
 import { redirect } from "next/navigation";
 
 import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { SubmitButton } from "@/components/forms/submit-button";
 
 import { auth, signIn } from "@/lib/utils";
+import { SignUpWithCredentials } from "./signup-with-credentials";
 
 export async function SignUpForm() {
     const session = await auth()
@@ -26,11 +26,7 @@ export async function SignUpForm() {
             </CardDescription>
             <CardContent className="p-0 flex flex-col gap-4">
 
-                <form className="flex flex-col gap-4">
-                    <Input placeholder="Enter your email" type="email" className="py-5 rounded-full bg-slate-50" />
-                    <Input placeholder="Enter your password" type="password" className="py-5 rounded-full bg-slate-50" />
-                    <SubmitButton title="Log in" pendingTitle="loading..." size="lg" classNames="rounded-full" />
-                </form>
+                <SignUpWithCredentials />
 
                 <div className="relative w-full my-4">
                     <p className="text-xs text-muted-foreground p-4 bg-white absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">OR</p>

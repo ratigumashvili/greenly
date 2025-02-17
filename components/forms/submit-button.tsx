@@ -11,11 +11,12 @@ interface SubmitButtonProps {
     title: string,
     pendingTitle: string,
     classNames?: string,
-    variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link" | null | undefined
-    size?: "default" | "sm" | "lg" | "icon" | null | undefined
+    variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link" | null | undefined,
+    size?: "default" | "sm" | "lg" | "icon" | null | undefined,
+    isLoading?: boolean
 }
 
-export function SubmitButton({ children, title, pendingTitle, classNames, variant, size }: SubmitButtonProps) {
+export function SubmitButton({ children, title, pendingTitle, classNames, variant, size, isLoading }: SubmitButtonProps) {
     const { pending } = useFormStatus()
 
     return (
@@ -24,7 +25,7 @@ export function SubmitButton({ children, title, pendingTitle, classNames, varian
                 variant={variant}
                 size={size}
                 type="button"
-                disabled={pending}
+                disabled={pending || isLoading}
                 className={cn("w-full disabled:opacity-50 disabled:cursor-not-allowed", classNames)}
             >
                 <Loader2Icon className="animate-spin" /> <span className="ml-2">{pendingTitle}</span>

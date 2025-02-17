@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { SubmitButton } from "@/components/forms/submit-button";
 import { UserDropdown } from "@/components/shared/user-dropdown";
 
-import { auth, signOut } from "@/lib/utils";
+import { auth } from "@/lib/utils";
 
 export async function Navbar() {
 
