@@ -5,9 +5,9 @@ import { redirect } from "next/navigation";
 import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { SubmitButton } from "@/components/forms/submit-button";
+import { SignUpWithCredentials } from "@/components/forms/signup-with-credentials";
 
 import {authSession, signIn} from "@/lib/auth"
-import { SignUpWithCredentials } from "./signup-with-credentials";
 
 export async function SignUpForm() {
     const session = await authSession()
