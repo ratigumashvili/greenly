@@ -6,11 +6,11 @@ import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/c
 import { Separator } from "@/components/ui/separator";
 import { SubmitButton } from "@/components/forms/submit-button";
 
-import { auth, signIn } from "@/lib/utils";
+import {authSession, signIn} from "@/lib/auth"
 import { SignUpWithCredentials } from "./signup-with-credentials";
 
 export async function SignUpForm() {
-    const session = await auth()
+    const session = await authSession()
 
     if (session?.user) {
         return redirect("/")
