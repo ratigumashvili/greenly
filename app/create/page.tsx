@@ -1,5 +1,5 @@
 export default function CreatePage () {
     return (
-        <section>create</section>
+        <section className="py-8">create</section>
     )
 }
