@@ -79,6 +79,6 @@ export const authOptions: NextAuthConfig = {
 
 export const { auth, handlers, signIn, signOut } = NextAuth(authOptions);
 
-export const { auth: authSession } = NextAuth({
+export const { auth: authSession, handlers: providerHandlers } = NextAuth({
   providers: [GitHub, Google, Credentials],
 })

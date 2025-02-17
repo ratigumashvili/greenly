@@ -1,3 +1,2 @@
-import { handlers } from "@/lib/utils"
-export const { GET, POST } = handlers
-
+import { providerHandlers } from "@/lib/auth"
+export const { GET, POST } = providerHandlers
