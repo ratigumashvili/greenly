@@ -4,14 +4,13 @@ import { SearchIcon } from "lucide-react";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { SubmitButton } from "@/components/forms/submit-button";
 import { UserDropdown } from "@/components/shared/user-dropdown";
 
-import { auth } from "@/lib/utils";
+import { authSession } from "@/lib/auth";
 
 export async function Navbar() {
 
-    const session = await auth()
+    const session = await authSession()
 
     return (
         <nav className="h-[10vh] w-full max-w-7xl mx-auto flex items-center justify-between px-4 md:px-8 lg:px-10 border-b">

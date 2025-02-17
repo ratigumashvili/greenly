@@ -1,12 +1,13 @@
-import NextAuth from "next-auth"
-import { PrismaAdapter } from "@auth/prisma-adapter"
-import { prisma } from "@/lib/prisma"
-import GitHub from "next-auth/providers/github"
-import Google from "next-auth/providers/google"
-import Credentials from "next-auth/providers/credentials"
-import bcrypt from "bcryptjs"
-import type { NextAuthConfig } from "next-auth"
-import type { Adapter } from "@auth/core/adapters"
+import NextAuth from "next-auth";
+import GitHub from "next-auth/providers/github";
+import Google from "next-auth/providers/google";
+import Credentials from "next-auth/providers/credentials";
+import bcrypt from "bcryptjs";
+import { PrismaAdapter } from "@auth/prisma-adapter";
+import { prisma } from "@/lib/prisma";
+
+import type { NextAuthConfig } from "next-auth";
+import type { Adapter } from "@auth/core/adapters";
 
 export const authOptions: NextAuthConfig = {
   adapter: PrismaAdapter(prisma) as Adapter,
@@ -27,7 +28,7 @@ export const authOptions: NextAuthConfig = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          return null
+          throw new Error("Missing credentials");
         }
 
         if (
@@ -38,56 +39,46 @@ export const authOptions: NextAuthConfig = {
           ) {
           throw new Error("Invalid credentials")
           }
-      
+
         const user = await prisma.user.findUnique({
           where: { email: credentials.email },
-        })
-      
-        if (!user || !user.password) {
-          console.error("User not found or password missing")
-          return null
-        }
-      
-        const isValid = await bcrypt.compare(credentials.password, user.password)
-        if (!isValid) {
-          console.error("Invalid password")
-          return null
-        }
-        return {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-        }
-      }
-      
+        });
 
+        if (!user || !user.password) {
+          throw new Error("Invalid credentials");
+        }
+
+        const isValid = await bcrypt.compare(credentials.password, user.password);
+        if (!isValid) {
+          throw new Error("Invalid credentials");
+        }
+
+        return { id: user.id, email: user.email, name: user.name };
+      },
     }),
   ],
   callbacks: {
-    async jwt({ token, user, account, profile }) {
+    async jwt({ token, user }) {
       if (user) {
-        token.id = user.id
-        token.email = user.email
+        token.id = user.id;
+        token.email = user.email;
       }
-      return token
+      return token;
     },
     async session({ session, token }) {
       if (token) {
-        session.user.id = token.id as string
-        session.user.email = token.email as string
+        session.user.id = token.id as string;
+        session.user.email = token.email as string;
       }
-      return session
+      return session;
     },
-    async redirect({ url, baseUrl }) {
-      return url.startsWith(baseUrl) ? url : "/"
-    },
-  },
-  pages: {
-    signIn: "/login",
-    error: "/login?error=true",
   },
   secret: process.env.NEXTAUTH_SECRET,
   debug: process.env.NODE_ENV === "development",
-}
+};
 
-export const { auth, handlers, signIn, signOut } = NextAuth(authOptions)
+export const { auth, handlers, signIn, signOut } = NextAuth(authOptions);
+
+export const { auth: authSession } = NextAuth({
+  providers: [GitHub, Google, Credentials],
+})
