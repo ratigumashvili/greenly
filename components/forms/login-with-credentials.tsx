@@ -1,35 +1,36 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { Input } from "@/components/ui/input"
-import { SubmitButton } from "@/components/forms/submit-button"
-import { loginWithCredentials } from "@/app/actions"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Input } from "@/components/ui/input";
+import { SubmitButton } from "@/components/forms/submit-button";
+import { loginWithCredentials } from "@/app/actions";
 
 export function LoginWithCredentials() {
-  const router = useRouter()
-  const [error, setError] = useState("")
-  const [loading, setLoading] = useState(false)
+  const router = useRouter();
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    setLoading(true)
-    setError("")
+    event.preventDefault();
+    setLoading(true);
+    setError("");
 
-    const form = event.currentTarget
-    const email = (form.elements.namedItem("email") as HTMLInputElement)?.value
-    const password = (form.elements.namedItem("password") as HTMLInputElement)?.value
+    const form = event.currentTarget;
+    const email = (form.elements.namedItem("email") as HTMLInputElement)?.value;
+    const password = (form.elements.namedItem("password") as HTMLInputElement)?.value;
 
-    const result = await loginWithCredentials(email, password)
+    const result = await loginWithCredentials(email, password);
 
     if (result?.error) {
-      setError(result.error)
+      console.log(result.error);
+      setError("Invalid credentials");
     } else {
-      router.push("/")
+      router.push("/");
     }
 
-    setLoading(false)
-  }
+    setLoading(false);
+  };
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -44,5 +45,5 @@ export function LoginWithCredentials() {
         isLoading={loading} 
       />
     </form>
-  )
+  );
 }
