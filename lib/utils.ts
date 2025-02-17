@@ -8,10 +8,10 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export async function getUserData () {
+export async function getUserData() {
   const session = await authSession()
   if (!session?.user.email) {
-    return {session: null, use: null}
+    return { session: null, use: null }
   }
 
   const user = await prisma.user.findUnique({
@@ -23,9 +23,15 @@ export async function getUserData () {
       userName: true,
       email: true,
       isAdmin: true,
+      institution: true,
+      department: true,
+      disciplines: true,
+      fields: true,
+      interests: true,
+      about: true,
       createdAt: true
     }
   })
 
-  return {session, user}
+  return { session, user }
 }

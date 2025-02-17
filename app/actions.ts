@@ -103,43 +103,63 @@ export async function registerAndSignIn(name: string, email: string, password: s
 }
 
 export async function updateUserInfo(formData: FormData) {
-
-  const { session, user } = await getUserData()
-
+  const { session, user } = await getUserData();
 
   if (!session || !user) {
-    return redirect("/")
+    return redirect("/");
   }
 
-  const newUsername = formData.get("username")
+  // Retrieve form data
+  const newUsername = formData.get("username") as string | null;
+  const institution = formData.get("institution") as string | null;
+  const department = formData.get("department") as string | null;
+  const disciplines = formData.get("disciplines") as string | null;
+  const fields = formData.get("fields") as string | null;
+  const interests = formData.get("interests") as string | null;
+  const about = formData.get("about") as string | null;
 
+  // ✅ Validate username if provided
   if (typeof newUsername !== "string" || !newUsername.trim()) {
-    return { error: "Invalid username" }
+    return { error: "Invalid username" };
   }
 
-  const existingUser = await prisma.user.findFirst({
-    where: {
-      userName: newUsername
+  // ✅ Check if the new username belongs to another user
+  if (newUsername !== user.userName) {
+    const existingUser = await prisma.user.findFirst({
+      where: {
+        userName: newUsername,
+        NOT: {
+          email: user.email, // ✅ Skip current user
+        },
+      },
+    });
+
+    if (existingUser) {
+      return { error: "Username already taken" };
     }
-  })
-
-  if (existingUser) {
-    return { error: "Username already taken" }
   }
 
+  // ✅ Update user info
   await prisma.user.update({
     where: {
-      email: user?.email
+      email: user.email,
     },
     data: {
-      userName: newUsername
-    }
-  })
+      userName: newUsername,
+      institution,
+      department,
+      disciplines,
+      fields,
+      interests,
+      about,
+    },
+  });
 
   return {
-    message: "Successfully updated username"
-  }
+    message: "Successfully updated user information",
+  };
 }
+
 
 
 
