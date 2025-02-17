@@ -12,10 +12,18 @@ import { Textarea } from "@/components/ui/textarea"
 import { updateUserInfo } from "@/app/actions"
 
 interface UpdateSettingsProps {
-    username: string
+    user: {
+        username: string,
+        institution: string | null,
+        department: string | null,
+        disciplines: string | null,
+        fields: string | null,
+        interests: string | null,
+        about: string | null
+    }
 }
 
-export function UpdateSettings({ username }: UpdateSettingsProps) {
+export function UpdateSettings({ user }: UpdateSettingsProps) {
     async function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
 
@@ -34,38 +42,74 @@ export function UpdateSettings({ username }: UpdateSettingsProps) {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
                 <div className="col-span-1 flex flex-col gap-y-2">
-                    <Label htmlFor="username">Update username</Label>
-                    <Input type="text" id="username" name="username" defaultValue={username} placeholder="Update your unique username" />
+                    <Label htmlFor="username">Username</Label>
+                    <Input
+                        type="text"
+                        id="username"
+                        name="username"
+                        defaultValue={user?.username}
+                        placeholder="Update your unique username"
+                    />
                 </div>
 
                 <div className="col-span-1 flex flex-col gap-y-2">
                     <Label htmlFor="institution">Institution/University</Label>
-                    <Input type="text" id="institution" name="institution" placeholder="Institution or University" />
+                    <Input
+                        type="text"
+                        id="institution"
+                        name="institution"
+                        defaultValue={user.institution ?? ""}
+                        placeholder="Institution or University"
+                    />
                 </div>
 
                 <div className="col-span-1 flex flex-col gap-y-2">
                     <Label htmlFor="department">Department</Label>
-                    <Input type="text" id="department" name="department" placeholder="Department" />
+                    <Input
+                        type="text"
+                        id="department"
+                        name="department"
+                        defaultValue={user.department ?? ""}
+                        placeholder="Department"
+                    />
                 </div>
 
                 <div className="col-span-1 flex flex-col gap-y-2">
                     <Label htmlFor="disciplines">Research Disciplines</Label>
-                    <Input type="text" id="disciplines" name="disciplines" placeholder="Provide your disciplines" />
+                    <Input
+                        type="text"
+                        id="disciplines"
+                        name="disciplines"
+                        defaultValue={user.disciplines ?? ""}
+                        placeholder="Provide your disciplines"
+                    />
                 </div>
 
                 <div className="col-span-1 flex flex-col gap-y-2">
                     <Label htmlFor="fields">Research Fields</Label>
-                    <Input type="text" id="fields" name="fields" placeholder="Tell us your research field" />
+                    <Input
+                        type="text"
+                        id="fields"
+                        name="fields"
+                        defaultValue={user.fields ?? ""}
+                        placeholder="Tell us your research field"
+                    />
                 </div>
 
                 <div className="col-span-1 flex flex-col gap-y-2">
                     <Label htmlFor="interests">Research Interests</Label>
-                    <Input type="text" id="interests" name="interests" placeholder="mammals, insects..." />
+                    <Input
+                        type="text"
+                        id="interests"
+                        name="interests"
+                        defaultValue={user.interests ?? ""}
+                        placeholder="mammals, insects..."
+                    />
                 </div>
 
                 <div className="col-span-1 sm:col-span-2 lg:col-span-3 flex flex-col gap-y-2">
                     <Label htmlFor="about">More about you</Label>
-                    <Textarea id="about" name="about" placeholder="Tell us about you..." />
+                    <Textarea id="about" name="about" defaultValue={user.about ?? ""} placeholder="Tell us about you..." />
                 </div>
             </div>
 
