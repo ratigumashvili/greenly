@@ -1,7 +1,11 @@
 "use server";
 
-import { signIn } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
+import {generateUsername} from "unique-username-generator"
+import bcrypt from "bcryptjs";
+
+import { prisma } from "@/lib/prisma";
+import { signIn } from "@/lib/auth";
 
 export async function loginWithCredentials(email: string, password: string) {
   try {
@@ -29,8 +33,6 @@ export async function loginWithCredentials(email: string, password: string) {
   }
 }
 
-import { prisma } from "@/lib/prisma";
-import bcrypt from "bcryptjs";
 
 export async function registerUser(name: string, email: string, password: string) {
   try {
@@ -47,6 +49,7 @@ export async function registerUser(name: string, email: string, password: string
     await prisma.user.create({
       data: {
         name,
+        userName: generateUsername("-", 0, 15),
         email,
         password: hashedPassword,
       },
@@ -74,6 +77,7 @@ export async function registerAndSignIn(name: string, email: string, password: s
     const user = await prisma.user.create({
       data: {
         name,
+        userName: generateUsername("-", 0, 15),
         email,
         password: hashedPassword,
       },

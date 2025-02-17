@@ -1,14 +1,13 @@
-import { authSession } from "@/lib/auth";
+import { getUserData } from "@/lib/utils";
 
 export default async function Home() {
-  const session = await authSession()
-  if (!session) {
-    return null;
-  }
+
+
+  const data = await getUserData()
   return (
     <section>
       <pre>
-        session: {JSON.stringify(session?.user, null, 2)}
+        session: {JSON.stringify(data?.user, null, 2)}
       </pre>
     </section>
   );

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import {generateUsername} from "unique-username-generator"
 
 import { prisma } from "@/lib/prisma";
 import { authSession } from "@/lib/auth";
@@ -20,6 +21,7 @@ export async function GET() {
         dbUser = await prisma.user.create({
             data: {
                 name: session.user.name ?? "Anonymous",
+                userName: generateUsername("-", 0, 15),
                 email: session.user.email,
             },
         });
