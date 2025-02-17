@@ -2,9 +2,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { SearchIcon } from "lucide-react";
 
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { UserDropdown } from "@/components/shared/user-dropdown";
+import { SearchForm } from "@/components/forms/search-form";
 
 import { authSession } from "@/lib/auth";
 
@@ -30,15 +30,9 @@ export async function Navbar() {
                     className="block lg:hidden h-10 min-h-10 w-fit"
                 />
             </Link>
-            <div className="relative hidden md:block w-full max-w-[400px] ">
-                <Input
-                    placeholder="Search greenly"
-                    className="rounded-full pl-9 placeholder:text-muted-foreground bg-slate-50"
-                />
-                <SearchIcon
-                    className="size-5 absolute top-1/2 left-2 -translate-y-1/2 text-muted-foreground"
-                />
-            </div>
+
+            <SearchForm />
+
             <div className="flex items-center gap-x-2">
                 {session?.user ? (
                     <>
