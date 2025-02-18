@@ -3,11 +3,11 @@ import { getUserData } from "@/lib/utils";
 export default async function Home() {
 
 
-  const data = await getUserData()
+  const {session, user} = await getUserData()
   return (
     <section>
       <pre>
-        session: {JSON.stringify(data?.user, null, 2)}
+        {JSON.stringify(session?.user?.email, null, 2)}
       </pre>
     </section>
   );

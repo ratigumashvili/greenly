@@ -1,5 +1,6 @@
 "use server";
 
+import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { generateUsername } from "unique-username-generator"
 import bcrypt from "bcryptjs";
@@ -7,7 +8,7 @@ import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { signIn } from "@/lib/auth";
 import { getUserData } from "@/lib/utils";
-import { redirect } from "next/navigation";
+import { Prisma } from "@prisma/client";
 
 export async function loginWithCredentials(email: string, password: string) {
   try {
@@ -106,10 +107,9 @@ export async function updateUserInfo(formData: FormData) {
   const { session, user } = await getUserData();
 
   if (!session || !user) {
-    return redirect("/");
+    return { error: "Unauthorized" };
   }
 
-  // Retrieve form data
   const newUsername = formData.get("username") as string | null;
   const institution = formData.get("institution") as string | null;
   const department = formData.get("department") as string | null;
@@ -118,18 +118,16 @@ export async function updateUserInfo(formData: FormData) {
   const interests = formData.get("interests") as string | null;
   const about = formData.get("about") as string | null;
 
-  // ✅ Validate username if provided
   if (typeof newUsername !== "string" || !newUsername.trim()) {
     return { error: "Invalid username" };
   }
 
-  // ✅ Check if the new username belongs to another user
   if (newUsername !== user.userName) {
     const existingUser = await prisma.user.findFirst({
       where: {
         userName: newUsername,
         NOT: {
-          email: user.email, // ✅ Skip current user
+          email: user.email,
         },
       },
     });
@@ -139,7 +137,6 @@ export async function updateUserInfo(formData: FormData) {
     }
   }
 
-  // ✅ Update user info
   await prisma.user.update({
     where: {
       email: user.email,
@@ -158,6 +155,39 @@ export async function updateUserInfo(formData: FormData) {
   return {
     message: "Successfully updated user information",
   };
+}
+
+export async function createSubCommunity(formData: FormData) {
+  const { session } = await getUserData()
+
+  if (!session) {
+    return { error: "Unauthorized" };
+  }
+
+  try {
+    const name = formData.get("name") as string
+
+    const data = await prisma.subcommunity.create({
+      data: {
+        name: name,
+        User: {
+          connect: {
+            email: session?.user?.email as string
+          }
+        }
+      }
+    })
+
+    return { success: true, redirectUrl: `/g/${data.id}` };
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === "P2002") {
+        return { error: "Name already taken!" }
+      }
+    }
+    return { error: "Failed to create subcommunity" };
+  }
+
 }
 
 
