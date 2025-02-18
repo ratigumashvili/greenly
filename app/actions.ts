@@ -158,37 +158,71 @@ export async function updateUserInfo(formData: FormData) {
 }
 
 export async function createSubCommunity(formData: FormData) {
-  const { session } = await getUserData()
+  const { session } = await getUserData();
 
   if (!session) {
     return { error: "Unauthorized" };
   }
 
   try {
-    const name = formData.get("name") as string
+    const name = formData.get("name") as string;
+    const description = formData.get("description") as string;
+
+    const rawTags = formData.get("tags");
+    let tags: string[] = [];
+
+    try {
+      if (rawTags && typeof rawTags === "string" && rawTags.trim() !== "") {
+        tags = JSON.parse(rawTags);
+      }
+    } catch (error) {
+      console.error("Error parsing tags:", error);
+      return { error: "Invalid tags format" };
+    }
+
+    const tagEntries = await Promise.all(
+      tags.map(async (tag) =>
+        prisma.tag.upsert({
+          where: { name: tag },
+          update: {},
+          create: { name: tag },
+        })
+      )
+    );
 
     const data = await prisma.subcommunity.create({
       data: {
-        name: name,
+        name,
+        description,
         User: {
           connect: {
-            email: session?.user?.email as string
-          }
-        }
-      }
-    })
+            email: session.user.email as string,
+          },
+        },
+        tags: {
+          create: tagEntries.map((tag) => ({
+            tag: {
+              connect: { id: tag.id },
+            },
+          })),
+        },
+      },
+    });
 
     return { success: true, redirectUrl: `/g/${data.id}` };
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === "P2002") {
-        return { error: "Name already taken!" }
+        return { error: "Subcommunity name already taken!" };
       }
     }
+    console.error("Subcommunity Creation Error:", error);
     return { error: "Failed to create subcommunity" };
   }
-
 }
+
+
+
 
 
 

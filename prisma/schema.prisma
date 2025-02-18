@@ -26,11 +26,31 @@ model User {
 }
 
 model Subcommunity {
-  id          String   @id @default(uuid())
-  name        String   @unique
+  id    String @id @default(uuid())
+  name  String @unique
   description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  User        User?    @relation(fields: [userEmail], references: [email])
-  userEmail   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userEmail String?
+  User      User? @relation(fields: [userEmail], references: [email])
+
+  tags SubcommunityTag[]
+}
+
+model Tag {
+  id    String @id @default(uuid())
+  name  String @unique
+
+  subcommunities SubcommunityTag[]
+}
+
+model SubcommunityTag {
+  subcommunityId String
+  tagId          String
+
+  subcommunity Subcommunity @relation(fields: [subcommunityId], references: [id])
+  tag          Tag          @relation(fields: [tagId], references: [id])
+
+  @@id([subcommunityId, tagId])
 }
