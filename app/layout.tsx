@@ -4,6 +4,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Navbar } from "@/components/shared/navbar";
 import { Toaster } from "@/components/ui/sonner";
 
+import { SidebarProvider } from "@/components/ui/sidebar"
+import { AppSidebar } from "@/components/shared/app-sidebar"
+
 import "./globals.css";
 
 const geistSans = Geist({
@@ -25,19 +28,22 @@ export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) 
-
-{
+}>) {
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Navbar />
-        <main className="w-full max-w-7xl mx-auto px-4 md:px-8 lg:px-10">
-          {children}
-          <Toaster />
-        </main>
+        <SidebarProvider className="flex min-h-screen w-full">
+          <AppSidebar />
+          <div className="flex flex-col flex-1 w-full">
+            <Navbar />
+            <main className="flex-1 w-full max-w-7xl mx-auto px-4 md:px-8 lg:px-10">
+              {children}
+              <Toaster />
+            </main>
+          </div>
+        </SidebarProvider>
       </body>
     </html>
   );

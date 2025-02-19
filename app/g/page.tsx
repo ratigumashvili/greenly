@@ -20,6 +20,7 @@ async function getData(page: number = 1, limit: number = COMMUNITIES_DISPLAY_LIM
             id: true,
             name: true,
             description: true,
+            views: true,
             createdAt: true,
             User: {
                 select: {
@@ -38,9 +39,9 @@ export default async function Communities({ searchParams }: { searchParams: { pa
 
     const { page } = await searchParams
     const currentPage = page ? parseInt(page, 10) || 1 : 1;
-    
+
     const { communities, totalCommunities } = await getData(currentPage);
-    
+
     const totalPages = Math.ceil(totalCommunities / COMMUNITIES_DISPLAY_LIMIT);
 
     return (

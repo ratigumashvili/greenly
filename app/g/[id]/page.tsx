@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { FilePenLineIcon } from "lucide-react"
+import { Prisma } from "@prisma/client";
 
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
@@ -13,15 +14,56 @@ import { DeleteCommunityForm } from "@/components/forms/delete-community-form"
 import { prisma } from "@/lib/prisma"
 import { getUserData } from "@/lib/utils"
 
+// async function getData(id: string) {
+//     const data = await prisma.subcommunity.findUnique({
+//         where: {
+//             id: id
+//         },
+//         data: {
+//             views: { increment: 1 }
+//         },
+//         select: {
+//             id: true,
+//             name: true,
+//             description: true,
+//             views: true,
+//             createdAt: true,
+//             User: {
+//                 select: {
+//                     id: true,
+//                     name: true,
+//                     email: true,
+//                     userName: true
+//                 }
+//             },
+//             tags: {
+//                 select: {
+//                     subcommunityId: true,
+//                     tag: {
+//                         select: {
+//                             name: true,
+//                             id: true
+//                         }
+//                     }
+//                 }
+//             }
+//         }
+//     }) 
+
+//     return data
+// }
+
 async function getData(id: string) {
-    const data = await prisma.subcommunity.findUnique({
-        where: {
-            id: id
+    const data = await prisma.subcommunity.update({
+        where: { id },
+        data: {
+            views: { increment: 1 }
         },
         select: {
             id: true,
             name: true,
             description: true,
+            views: true,
             createdAt: true,
             User: {
                 select: {
@@ -43,10 +85,11 @@ async function getData(id: string) {
                 }
             }
         }
-    })
+    });
 
-    return data
+    return data;
 }
+
 
 export default async function SingleSubCommunityPage({ params }: { params: { id: string } }) {
     const { id } = await params
@@ -83,8 +126,8 @@ export default async function SingleSubCommunityPage({ params }: { params: { id:
                     </div>
                     <p className="text-muted-foreground">{data.description}</p>
                     <Separator className="my-4" />
+                    <p className="mb-2 text-sm">Tags:</p>
                     <div className="flex flex-wrap gap-2">
-                        <span className="text-sm pr-2">Tags:</span>
                         {data.tags.map((item, index) => (
                             <Badge key={index} className="hover:cursor-pointer">{item.tag.name}</Badge>
                         ))}
