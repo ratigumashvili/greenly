@@ -9,38 +9,40 @@ datasource db {
 }
 
 model User {
-  id                    String         @id @default(uuid())
-  email                 String         @unique
+  id                    String               @id @default(uuid())
+  email                 String               @unique
   name                  String
-  userName              String         @unique
+  userName              String               @unique
   password              String?
-  isAdmin               Boolean        @default(false)
+  isAdmin               Boolean              @default(false)
   institution           String?
   department            String?
   disciplines           String?
   fields                String?
   interests             String?
   about                 String?
-  createdAt             DateTime       @default(now())
+  createdAt             DateTime             @default(now())
   createdSubcommunities Subcommunity[]
+  SubcommunityMember    SubcommunityMember[]
 }
 
 model Subcommunity {
-  id    String @id @default(uuid())
-  name  String @unique
+  id          String   @id @default(uuid())
+  name        String   @unique
   description String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   userEmail String?
-  User      User? @relation(fields: [userEmail], references: [email])
+  User      User?   @relation(fields: [userEmail], references: [email])
 
-  tags SubcommunityTag[]
+  tags    SubcommunityTag[]
+  members SubcommunityMember[]
 }
 
 model Tag {
-  id    String @id @default(uuid())
-  name  String @unique
+  id   String @id @default(uuid())
+  name String @unique
 
   subcommunities SubcommunityTag[]
 }
@@ -53,4 +55,14 @@ model SubcommunityTag {
   tag          Tag          @relation(fields: [tagId], references: [id])
 
   @@id([subcommunityId, tagId])
+}
+
+model SubcommunityMember {
+  userId         String
+  subcommunityId String
+
+  user         User         @relation(fields: [userId], references: [id], onDelete: Restrict)
+  subcommunity Subcommunity @relation(fields: [subcommunityId], references: [id], onDelete: Cascade)
+
+  @@id([userId, subcommunityId])
 }

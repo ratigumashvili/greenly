@@ -293,6 +293,7 @@ export async function updateSubCommunity(formData: FormData) {
   }
 }
 
+
 export async function deleteCommunity(formData: FormData) {
   try {
     const subId = formData.get("subId") as string;
@@ -303,6 +304,9 @@ export async function deleteCommunity(formData: FormData) {
 
     const existingSub = await prisma.subcommunity.findUnique({
       where: { id: subId },
+      include: {
+        tags: true,
+      },
     });
 
     if (!existingSub) {
@@ -313,8 +317,18 @@ export async function deleteCommunity(formData: FormData) {
       where: { subcommunityId: subId },
     });
 
+    await prisma.subcommunityMember.deleteMany({
+      where: { subcommunityId: subId },
+    });
+
     await prisma.subcommunity.delete({
       where: { id: subId },
+    });
+
+    await prisma.tag.deleteMany({
+      where: {
+        subcommunities: { none: {} },
+      },
     });
 
     return { success: true, redirectUrl: "/g/" };
@@ -322,6 +336,8 @@ export async function deleteCommunity(formData: FormData) {
     return { error: "Failed to delete subcommunity" };
   }
 }
+
+
 
 
 
