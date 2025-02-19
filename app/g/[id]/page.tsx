@@ -3,9 +3,10 @@ import { FilePenLineIcon } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
+import { Button } from "@/components/ui/button"
 import { PageTitle } from "@/components/shared/page-title"
 import { CreatedAt } from "@/components/shared/created-at"
-import { Button } from "@/components/ui/button"
+import { DeleteCommunityForm } from "@/components/forms/delete-community-form"
 
 import { prisma } from "@/lib/prisma"
 import { getUserData } from "@/lib/utils"
@@ -62,19 +63,24 @@ export default async function SingleSubCommunityPage({ params }: { params: { id:
                 <div className="col-span-10 md:col-span-4 lg:col-span-3">
                     <div className="flex items-center justify-between mb-4">
                         <h2 className="font-bold text-lg">About the community</h2>
-                        {user?.id === data?.User?.id
-                            ? (<Button variant="ghost" size="lg" asChild>
-                                <Link href={`/`}>
-                                    <FilePenLineIcon className="w-8 h-8" />
-                                </Link>
-                            </Button>)
-                            : ("")}
+                        {user?.id === data?.User?.id &&
+                            (<div className="flex items-center gap-2">
+                                <Button variant="secondary" size="icon" asChild>
+                                    <Link href={`/g/edit?recordId=${data.id}`}>
+                                        <FilePenLineIcon className="w-8 h-8" />
+                                    </Link>
+                                </Button>
+                                <DeleteCommunityForm subId={data.id} />
+                            </div>)}
                     </div>
                     <p className="text-muted-foreground">{data.description}</p>
                     <Separator className="my-4" />
-                    <div className="flex flex-wrap gap-2"><span className="text-sm">Tags:</span> {data.tags.map((item) => (
-                        <Badge className="hover:cursor-pointer">{item.tag.name}</Badge>
-                    ))}</div>
+                    <div className="flex flex-wrap gap-2">
+                        <span className="text-sm pr-2">Tags:</span>
+                        {data.tags.map((item, index) => (
+                            <Badge key={index} className="hover:cursor-pointer">{item.tag.name}</Badge>
+                        ))}
+                    </div>
                     <Separator className="my-4" />
                     <div className="flex flex-col gap-2">
                         <p className="text-sm">Created by: <Link className="text-primary hover:text-primary/90 transition" href={`mailto:${data.User?.email}`}>@{data.User?.userName}</Link></p>
@@ -84,8 +90,6 @@ export default async function SingleSubCommunityPage({ params }: { params: { id:
                     <Button className="w-max md:w-full">Join</Button>
                 </div>
             </div>
-            <pre>user: {JSON.stringify(user?.id, null, 2)}</pre>
-            <pre>data: {JSON.stringify(data?.User?.id, null, 2)}</pre>
         </section>
     )
 }

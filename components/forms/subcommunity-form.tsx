@@ -12,11 +12,23 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { SubmitButton } from "@/components/forms/submit-button";
 
-import { createSubCommunity } from "@/app/actions";
+import { createSubCommunity, updateSubCommunity } from "@/app/actions";
 
-export function CreateSubCommunityForm() {
+interface SubCommunityFormProps {
+    mode: "edit" | "create";
+    initialData?: {
+        id: string;
+        name: string;
+        description: string;
+        tags: { id: string; name: string }[];
+    };
+}
+
+export function SubCommunityForm({ mode, initialData }: SubCommunityFormProps) {
     const [tagValue, setTagValue] = useState("");
-    const [tagsArray, setTagsArray] = useState<string[]>([])
+    const [tagsArray, setTagsArray] = useState<string[]>(
+        mode === "edit" ? initialData?.tags.map(tag => tag.name) ?? [] : []
+    );
 
     const router = useRouter()
 
@@ -37,19 +49,27 @@ export function CreateSubCommunityForm() {
         setTagsArray((prev) => prev.filter((_, i) => i !== index));
     }
 
+
     async function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
 
         const formData = new FormData(e.currentTarget)
-        
+
+        if (mode === "edit") {
+            formData.append("id", initialData!.id);
+        }
+
         formData.append("tags", JSON.stringify(tagsArray))
 
-        const result = await createSubCommunity(formData)
+        const result =
+        mode === "edit"
+            ? await updateSubCommunity(formData)
+            : await createSubCommunity(formData);
 
         if (result?.error) {
             toast.error(result.error)
         } else if (result?.success) {
-            toast.success("Subcommunity created successfully!")
+            toast.success(mode === "edit" ? "Subcommunity updated successfully!" : "Subcommunity created successfully!")
             router.push(result.redirectUrl)
         }
     }
@@ -65,6 +85,7 @@ export function CreateSubCommunityForm() {
                         <Input
                             id="name"
                             name="name"
+                            defaultValue={mode === "edit" ? initialData?.name : ""}
                             placeholder="community name"
                             className="pl-5"
                             minLength={3}
@@ -87,7 +108,13 @@ export function CreateSubCommunityForm() {
                 <div className="col-span-2">
                     <Label htmlFor="description" className="line-clamp-1">Description</Label>
                     <p className="my-3" />
-                    <Textarea id="description" name="description" placeholder="Provide brief desxription, max 250 char." maxLength={250} />
+                    <Textarea
+                        id="description"
+                        name="description"
+                        defaultValue={mode === "edit" ? initialData?.description : ""}
+                        placeholder="Provide brief desxription, max 250 char."
+                        maxLength={250}
+                    />
                 </div>
             </div>
 
@@ -95,11 +122,7 @@ export function CreateSubCommunityForm() {
 
                 <div className="flex flex-wrap gap-2 w-full">
                     {tagsArray.map((tag, index) => (
-                        <Badge
-                            key={index}
-                            variant="secondary"
-                            className="p-2 text-sm"
-                        >
+                        <Badge key={index} variant="secondary" className="p-2 text-sm">
                             #{tag}
                             <button
                                 type="button"
@@ -112,11 +135,12 @@ export function CreateSubCommunityForm() {
                     ))}
                 </div>
 
+
                 <div className="w-full sm:w-max flex gap-2 justify-end">
                     <Button variant="secondary" asChild className="w-full sm:w-max">
                         <Link href={"/"}>Cancel</Link>
                     </Button>
-                    <SubmitButton classNames="w-full sm:w-max" title="Create" pendingTitle="Loading..." />
+                    <SubmitButton classNames="w-full sm:w-max" title={mode === "edit" ? "Update" : "Create"} pendingTitle="Loading..." />
                 </div>
 
             </div>

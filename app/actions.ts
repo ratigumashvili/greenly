@@ -1,6 +1,5 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { generateUsername } from "unique-username-generator"
 import bcrypt from "bcryptjs";
@@ -219,6 +218,113 @@ export async function createSubCommunity(formData: FormData) {
     return { error: "Failed to create subcommunity" };
   }
 }
+
+export async function updateSubCommunity(formData: FormData) {
+  const { session } = await getUserData();
+
+  if (!session) {
+    return { error: "Unauthorized" };
+  }
+
+  try {
+    const id = formData.get("id") as string;
+    const newName = formData.get("name") as string;
+    const newDescription = formData.get("description") as string;
+
+    const rawTags = formData.get("tags");
+    let tags: string[] = [];
+
+    try {
+      if (rawTags && typeof rawTags === "string" && rawTags.trim() !== "") {
+        tags = JSON.parse(rawTags);
+      }
+    } catch (error) {
+      return { error: "Invalid tags format" };
+    }
+
+    const existingSubCommunity = await prisma.subcommunity.findUnique({
+      where: { id },
+    });
+
+    if (!existingSubCommunity) {
+      return { error: "Subcommunity not found!" };
+    }
+
+    if (existingSubCommunity.name !== newName) {
+      const nameExists = await prisma.subcommunity.findUnique({
+        where: { name: newName },
+      });
+
+      if (nameExists) {
+        return { error: "Subcommunity name already taken!" };
+      }
+    }
+
+    const tagEntries = await Promise.all(
+      tags.map(async (tag) =>
+        prisma.tag.upsert({
+          where: { name: tag },
+          update: {},
+          create: { name: tag },
+        })
+      )
+    );
+
+    const data = await prisma.subcommunity.update({
+      where: { id },
+      data: {
+        name: newName,
+        description: newDescription ?? "",
+        tags: {
+          deleteMany: {},
+          create: tagEntries.map((tag) => ({
+            tag: {
+              connect: { id: tag.id },
+            },
+          })),
+        },
+      },
+    });
+
+    return { success: true, redirectUrl: `/g/${data.id}` };
+  } catch (error) {
+    console.error("Subcommunity Update Error:", error);
+    return { error: "Failed to update subcommunity" };
+  }
+}
+
+export async function deleteCommunity(formData: FormData) {
+  try {
+    const subId = formData.get("subId") as string;
+
+    if (!subId) {
+      return { error: "Invalid subcommunity ID." };
+    }
+
+    const existingSub = await prisma.subcommunity.findUnique({
+      where: { id: subId },
+    });
+
+    if (!existingSub) {
+      return { error: "Subcommunity not found." };
+    }
+
+    await prisma.subcommunityTag.deleteMany({
+      where: { subcommunityId: subId },
+    });
+
+    await prisma.subcommunity.delete({
+      where: { id: subId },
+    });
+
+    return { success: true, redirectUrl: "/g/" };
+  } catch (error) {
+    return { error: "Failed to delete subcommunity" };
+  }
+}
+
+
+
 
 
 
