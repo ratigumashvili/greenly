@@ -176,7 +176,6 @@ export async function createSubCommunity(formData: FormData) {
         tags = JSON.parse(rawTags);
       }
     } catch (error) {
-      console.error("Error parsing tags:", error);
       return { error: "Invalid tags format" };
     }
 

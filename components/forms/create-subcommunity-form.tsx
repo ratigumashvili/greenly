@@ -79,7 +79,7 @@ export function CreateSubCommunityForm() {
                         id="hashtag"
                         name="hashtag"
                         placeholder="Max 10 char. separated with comma"
-                        maxLength={10}
+                        maxLength={15}
                         value={tagValue}
                         onChange={handleTagInput}
                     />
