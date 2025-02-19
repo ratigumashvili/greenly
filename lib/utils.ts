@@ -3,12 +3,6 @@ import { twMerge } from "tailwind-merge"
 import { prisma } from "@/lib/prisma"
 import { authSession } from "@/lib/auth"
 
-import TimeAgo from "react-time-ago";
-import en from "javascript-time-ago/locale/en.json";
-import TimeAgoLib from "javascript-time-ago";
-
-TimeAgoLib.addDefaultLocale(en);
-
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }

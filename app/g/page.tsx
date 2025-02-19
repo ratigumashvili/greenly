@@ -43,7 +43,7 @@ export default async function Communities() {
                             <CardFooter className="flex flex-col gap-4">
                                 <div className="text-sm w-full flex flex-col md:flex-row md:justify-between items-start gap-2 ">
                                     <p>Created by: <span className="font-bold">@{item?.User?.userName}</span></p>
-                                    <p><CreatedAt data={item.createdAt} /></p>
+                                    <p><CreatedAt date={item.createdAt} /></p>
                                 </div>
                                 <Button asChild>
                                     <Link href={`/g/${item.id}`} className="w-full">View group</Link>

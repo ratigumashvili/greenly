@@ -1,9 +1,13 @@
 "use client"
 
 import ReactTimeAgo from "react-time-ago";
+import en from "javascript-time-ago/locale/en.json";
+import TimeAgoLib from "javascript-time-ago";
 
-export function CreatedAt({data}) {
+TimeAgoLib.addDefaultLocale(en);
+
+export function CreatedAt({ date }: { date: Date }) {
     return (
-        <ReactTimeAgo date={data} locale="en-US"/>
+        <ReactTimeAgo date={date} locale="en-US"/>
     )
 }

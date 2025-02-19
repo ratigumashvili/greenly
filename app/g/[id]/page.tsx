@@ -6,6 +6,8 @@ import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
 import { PageTitle } from "@/components/shared/page-title"
 import { CreatedAt } from "@/components/shared/created-at"
+import { Feed } from "@/components/shared/feed"
+import { NotLoggedIn } from "@/components/shared/not-logged-in"
 import { DeleteCommunityForm } from "@/components/forms/delete-community-form"
 
 import { prisma } from "@/lib/prisma"
@@ -49,7 +51,11 @@ async function getData(id: string) {
 export default async function SingleSubCommunityPage({ params }: { params: { id: string } }) {
     const { id } = await params
     const data = await getData(id)
-    const { user } = await getUserData()
+    const { session, user } = await getUserData()
+
+    // if(!session) {
+    //     return <NotLoggedIn />
+    // }
 
     if (!data) {
         return null
@@ -59,7 +65,9 @@ export default async function SingleSubCommunityPage({ params }: { params: { id:
         <section className="py-8">
             <PageTitle>{data.name}</PageTitle>
             <div className="grid grid-cols-10 gap-4">
-                <div className="col-span-10 md:col-span-6 lg:col-span-7 border">1</div>
+                <div className="col-span-10 md:col-span-6 lg:col-span-7">
+                    <Feed />
+                </div>
                 <div className="col-span-10 md:col-span-4 lg:col-span-3">
                     <div className="flex items-center justify-between mb-4">
                         <h2 className="font-bold text-lg">About the community</h2>
@@ -83,8 +91,9 @@ export default async function SingleSubCommunityPage({ params }: { params: { id:
                     </div>
                     <Separator className="my-4" />
                     <div className="flex flex-col gap-2">
-                        <p className="text-sm">Created by: <Link className="text-primary hover:text-primary/90 transition" href={`mailto:${data.User?.email}`}>@{data.User?.userName}</Link></p>
-                        <p className="text-sm">Created at: <CreatedAt data={data.createdAt} /></p>
+                        <p className="text-sm">
+                            Created by: <Link className="text-primary hover:text-primary/90 transition" href={`mailto:${data.User?.email}`}>@{data.User?.userName}</Link>, <CreatedAt date={data.createdAt} />
+                        </p>
                     </div>
                     <Separator className="my-4" />
                     <Button className="w-max md:w-full">Join</Button>
