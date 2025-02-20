@@ -22,7 +22,6 @@ export default async function Home() {
             <Button asChild size="lg" variant="secondary">
               <Link href={"/g"}>View all</Link>
             </Button>
-            {/* <span>OR</span> */}
             <Button asChild size="lg">
               <Link href={"/g/create"}>Create one</Link>
             </Button>
