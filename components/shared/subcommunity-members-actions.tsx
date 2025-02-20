@@ -1,20 +1,25 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { kickMember, promoteToAdmin, getSubcommunityMembers } from "@/app/actions"; // ✅ Import actions
-import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+
+import { Button } from "@/components/ui/button";
+
+import { kickMember, promoteToAdmin, getSubcommunityMembers } from "@/app/actions";
+import { useModalStore } from "@/store/modal-store";
 
 interface SubcommunityMemberActionsProps {
   subcommunityId: string;
-  currentUserId: string; // ✅ Pass the current user’s ID
-  isAdmin: boolean; // ✅ Pass whether the user is an admin
+  currentUserId: string;
+  isAdmin: boolean;
 }
 
 export function SubcommunityMemberActions({ subcommunityId, currentUserId, isAdmin }: SubcommunityMemberActionsProps) {
   const [members, setMembers] = useState<
     { id: string; userName: string; name?: string; role: string, email: string }[]
   >([]);
+
+  const { openModal } = useModalStore()
 
   useEffect(() => {
     async function fetchMembers() {
@@ -33,13 +38,11 @@ export function SubcommunityMemberActions({ subcommunityId, currentUserId, isAdm
   }, [subcommunityId]);
 
   const handleKick = async (memberEmail: string) => {
-    console.log("🔹 Kicking Member Email:", memberEmail); // ✅ Debugging
-
     const result = await kickMember(subcommunityId, memberEmail);
 
     if (result.success) {
       toast.success(result.message);
-      setMembers(members.filter((member) => member.email !== memberEmail)); // ✅ Filter by email
+      setMembers(members.filter((member) => member.email !== memberEmail));
     } else {
       toast.error(result.error);
     }
@@ -80,7 +83,21 @@ export function SubcommunityMemberActions({ subcommunityId, currentUserId, isAdm
 
             {isAdmin && member.id !== currentUserId && member.role !== "admin" && (
               <div className="flex space-x-2">
-                <Button variant="destructive" onClick={() => handleKick(member.email)}>Kick</Button>
+                <Button
+                  variant="destructive"
+                  onClick={() =>
+                    openModal({
+                      title: "Remove Member?",
+                      description: `Are you sure you want to remove ${member.name} AKA ${member.userName} from this community?`,
+                      confirmText: "Remove",
+                      cancelText: "Cancel",
+                      onConfirm: () => handleKick(member.email), // ✅ Call handleKick only when confirmed
+                    })
+                  }
+                >
+                  Kick
+                </Button>
+
                 <Button variant="default" onClick={() => handlePromote(member.email)}>Promote</Button>
               </div>
             )}
