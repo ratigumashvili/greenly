@@ -1,3 +1,4 @@
+import Link from "next/link"
 import {
   Sidebar,
   SidebarContent,
@@ -8,7 +9,6 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import { menuItems } from "@/lib/constants"
-import Link from "next/link"
 
 export function AppSidebar() {
   return (

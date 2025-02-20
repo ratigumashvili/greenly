@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
 import { Navbar } from "@/components/shared/navbar";
+import { Footer } from "@/components/shared/footer";
 import { Toaster } from "@/components/ui/sonner";
 
 import { SidebarProvider } from "@/components/ui/sidebar"
@@ -38,10 +39,11 @@ export default function RootLayout({
           <AppSidebar />
           <div className="flex flex-col flex-1 w-full">
             <Navbar />
-            <main className="flex-1 w-full max-w-7xl mx-auto pr-4 pl-16 md:px-16 xl:px-4">
+            <main className="flex-1 h-full min-h-[calc(100%-20vh)] w-full max-w-7xl mx-auto pr-4 pl-16 md:px-16 xl:px-4">
               {children}
               <Toaster />
             </main>
+            <Footer />
           </div>
         </SidebarProvider>
       </body>
