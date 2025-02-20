@@ -74,7 +74,9 @@ export default async function SingleSubCommunityPage({ params }: { params: { id:
             <PageTitle>{data.name}</PageTitle>
             <div className="grid grid-cols-10 gap-4">
                 <div className="col-span-10 md:col-span-6 lg:col-span-7">
-                    <Feed />
+                    <Feed /> 
+                    <pre>MEMBER: {JSON.stringify(isMember, null, 2)}</pre>
+                    <pre>CREATOR: {JSON.stringify(isCreator, null, 2)}</pre>
                 </div>
                 <div className="col-span-10 md:col-span-4 lg:col-span-3">
                     <div className="flex items-center justify-between mb-4">
@@ -108,7 +110,11 @@ export default async function SingleSubCommunityPage({ params }: { params: { id:
                     {session && !isCreator && (
                         <JoinCommunityButton subcommunityId={data.id} isMember={isMember} />
                     )}
-
+                    {isCreator && (
+                        <Button asChild className="w-full">
+                        <Link href={`/g/${id}/create`}>Create post</Link>
+                      </Button>
+                    )}
                 </div>
             </div>
         </section>

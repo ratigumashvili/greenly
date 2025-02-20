@@ -97,4 +97,4 @@ export async function getUserData(subcommunityId?: string) {
   };
 }
 
-export const separator = (index: number, array: any, separatorType = ', ', separatorEnd = ".") => index === array.length - 1 ? separatorEnd : separatorType
+export const separator = (index: number, array: any, separatorType: string = ', ', separatorEnd: string = ".") => index === array.length - 1 ? separatorEnd : separatorType
