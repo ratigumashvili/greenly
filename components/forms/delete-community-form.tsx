@@ -3,8 +3,6 @@
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-import { Button } from "@/components/ui/button";
-
 import { deleteCommunity } from "@/app/actions";
 
 export function DeleteCommunityForm({ subId }: { subId: string }) {
@@ -28,9 +26,11 @@ export function DeleteCommunityForm({ subId }: { subId: string }) {
       <h2 className="font-bold text-lg text-red-600">Danger zone</h2>
       <form action={handleDelete}>
         <input type="hidden" name="subId" value={subId} />
-        <p>Here you can delete this community. Are you sure you want to proceed? Remember, this action can not be undone. <button type="submit">
-          <span className="text-base font-bold text-red-600">Delete community</span>
-        </button></p>
+        <p>Here you can delete this community. Are you sure you want to proceed? Remember, this action can not be undone.
+          <button type="submit">
+            <span className="text-base font-bold text-red-600">Delete community</span>
+          </button>
+        </p>
       </form>
     </div>
   );
