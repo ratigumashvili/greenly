@@ -20,7 +20,7 @@ export function JoinCommunityButton({ subcommunityId, isMember }: JoinCommunityB
     if (joined) return;
 
     startTransition(async () => {
-      const result = await joinCommunity(subcommunityId); // ✅ Calls server action
+      const result = await joinCommunity(subcommunityId);
 
       if (result.error) {
         toast.error(result.error);

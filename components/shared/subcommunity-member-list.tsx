@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MemberCount } from "@/components/shared/member-count"
 
 import { separator } from "@/lib/utils"
+import Link from "next/link";
 
 interface SubcommunityMemberListProps {
   subcommunityId: string;
@@ -39,7 +40,7 @@ export function SubcommunityMemberList({ subcommunityId, isMember }: Subcommunit
           <>
             {members.slice(0, 3).map((member, index) => (
               <span key={member.id}>
-                {member.userName}
+                <Link href={`/users/${member.id}`}>@{member.userName}</Link>
                 {separator(index, members.slice(0, 3), ", ", "...")}
               </span>
             ))}
