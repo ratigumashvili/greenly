@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Navbar } from "@/components/shared/navbar";
 import { Footer } from "@/components/shared/footer";
 import { Toaster } from "@/components/ui/sonner";
+import { ConfirmModal } from "@/components/shared/confirm-modal";
 
 import { SidebarProvider } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/shared/app-sidebar"
@@ -41,6 +42,7 @@ export default function RootLayout({
             <Navbar />
             <main className="flex-1 h-full min-h-[calc(100%-20vh)] w-full max-w-7xl mx-auto pr-4 pl-16 md:px-16 xl:px-4">
               {children}
+              <ConfirmModal />
               <Toaster />
             </main>
             <Footer />

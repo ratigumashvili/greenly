@@ -1,11 +1,13 @@
 "use client";
 
-import { useTransition, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
-import { joinCommunity, leaveCommunity } from "@/app/actions";
 import Link from "next/link";
+import { useTransition, useState } from "react";
+import { toast } from "sonner";
 
+import { Button } from "@/components/ui/button";
+
+import { useModalStore } from "@/store/modal-store";
+import { joinCommunity, leaveCommunity } from "@/app/actions";
 
 interface JoinCommunityButtonProps {
   subcommunityId: string;
@@ -15,6 +17,7 @@ interface JoinCommunityButtonProps {
 export function JoinCommunityButton({ subcommunityId, isMember }: JoinCommunityButtonProps) {
   const [joined, setJoined] = useState(isMember);
   const [pending, startTransition] = useTransition();
+  const { openModal } = useModalStore()
 
   const handleJoin = () => {
     if (joined) return;
@@ -49,15 +52,28 @@ export function JoinCommunityButton({ subcommunityId, isMember }: JoinCommunityB
   return (
     <div className="flex gap-4">
       {joined
-        ? <Button className="w-full" onClick={handleLeave} variant="destructive">Leave group</Button>
+        ? <Button
+          variant="destructive"
+          onClick={() =>
+            openModal({
+              title: "Leave this Community?",
+              description: "Are you sure you want to leave? You may need to request access again.",
+              confirmText: "Leave",
+              cancelText: "Cancel",
+              onConfirm: handleLeave,
+            })
+          }
+        >
+          Leave group
+        </Button>
         : <Button className="w-full" onClick={handleJoin} disabled={pending || joined}>
           {joined ? "You're a member" : pending ? "Loading..." : "Join Community"}
         </Button>}
-        {isMember && (
-          <Button asChild className="w-full">
-            <Link href={`/g/${subcommunityId}/create`}>Create post</Link>
-          </Button>
-        )}
+      {isMember && (
+        <Button asChild className="w-full">
+          <Link href={`/g/${subcommunityId}/create`}>Create post</Link>
+        </Button>
+      )}
     </div>
   );
 }
