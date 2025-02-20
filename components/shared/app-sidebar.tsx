@@ -1,4 +1,4 @@
-import { Plus, Text, Home, Handshake, Tags, Search, Settings } from "lucide-react"
+import { Plus, Home, Handshake, Tags, Search, Settings } from "lucide-react"
 
 import {
   Sidebar,
@@ -25,11 +25,6 @@ const items = [
     title: "Create Community",
     url: "/g/create",
     icon: Plus,
-  },
-  {
-    title: "Create Post",
-    url: "/create",
-    icon: Text,
   },
   {
     title: "Search",
