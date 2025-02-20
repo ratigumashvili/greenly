@@ -1,18 +1,19 @@
 import Link from "next/link"
-import { FilePenLineIcon, UsersIcon } from "lucide-react"
+import { FilePenLineIcon } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
 import { PageTitle } from "@/components/shared/page-title"
 import { CreatedAt } from "@/components/shared/created-at"
+import { SubcommunityMemberList } from "@/components/shared/subcommunity-member-list"
 import { Feed } from "@/components/shared/feed"
 import { DeleteCommunityForm } from "@/components/forms/delete-community-form"
 
 import { prisma } from "@/lib/prisma"
 import { getUserData } from "@/lib/utils"
 import { JoinCommunityButton } from "@/components/forms/join-community-button"
-import { MemberCount } from "@/components/shared/member-count"
+
 
 async function getData(id: string) {
     const data = await prisma.subcommunity.update({
@@ -74,9 +75,7 @@ export default async function SingleSubCommunityPage({ params }: { params: { id:
             <PageTitle>{data.name}</PageTitle>
             <div className="grid grid-cols-10 gap-4">
                 <div className="col-span-10 md:col-span-6 lg:col-span-7">
-                    <Feed /> <pre>
-                        {JSON.stringify(data, null, 2)}
-                    </pre>
+                    <Feed />
                 </div>
                 <div className="col-span-10 md:col-span-4 lg:col-span-3">
                     <div className="flex items-center justify-between mb-4">
@@ -106,9 +105,8 @@ export default async function SingleSubCommunityPage({ params }: { params: { id:
                                 @{data.User?.userName}
                             </Link>, <CreatedAt date={data.createdAt} />.
                         </p>
-                        <MemberCount subcommunityId={id} isMember={isMember} />
+                        <SubcommunityMemberList subcommunityId={id} isMember={isMember} />
                     </div>
-                    <Separator className="my-4" />
                     {session && !isCreator && (
                         <JoinCommunityButton subcommunityId={data.id} isMember={isMember} />
                     )}

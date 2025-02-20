@@ -414,6 +414,28 @@ export async function leaveCommunity(subcommunityId: string) {
   }
 }
 
+export async function getSubcommunityMembers(subcommunityId: string) {
+  try {
+    const members = await prisma.subcommunityMember.findMany({
+      where: { subcommunityId },
+      select: {
+        user: {
+          select: {
+            id: true,
+            userName: true,
+            name: true,
+          },
+        },
+      },
+    });
+
+    return { success: true, members };
+  } catch (error) {
+    console.error("Error fetching members:", error);
+    return { error: "Failed to fetch members" };
+  }
+}
+
 export async function getMemberCount(subcommunityId: string) {
   try {
     const count = await prisma.subcommunityMember.count({

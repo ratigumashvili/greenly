@@ -48,3 +48,6 @@ export async function getUserData(subcommunityId?: string) {
 
   return { session, user, isMember, memberCount }
 }
+
+
+export const separator = (index: number, array: any, separatorType = ', ', separatorEnd = ".") => index === array.length - 1 ? separatorEnd : separatorType
