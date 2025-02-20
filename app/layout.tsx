@@ -38,7 +38,7 @@ export default function RootLayout({
           <AppSidebar />
           <div className="flex flex-col flex-1 w-full">
             <Navbar />
-            <main className="flex-1 w-full max-w-7xl mx-auto px-4 md:px-8 lg:px-10">
+            <main className="flex-1 w-full max-w-7xl mx-auto pr-4 pl-16 md:px-16 xl:px-4">
               {children}
               <Toaster />
             </main>

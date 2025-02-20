@@ -48,6 +48,7 @@ export default async function EditSubCommunityPage({ searchParams }: { searchPar
             members: { 
                 select: { 
                     userId: true,
+                    role: true
                 } 
             }
         }
@@ -70,9 +71,8 @@ export default async function EditSubCommunityPage({ searchParams }: { searchPar
         : undefined;
 
         const isCreator = user?.email === data.User?.email;
-        const isAdmin = role === "admin";
 
-        if(!isCreator) {
+        if((!isCreator && role !== "admin")) {
             return <div className="py-8">You don't have permission to update this record.</div>;
         }
 
@@ -81,7 +81,7 @@ export default async function EditSubCommunityPage({ searchParams }: { searchPar
             <PageTitle>Edit Community</PageTitle>
             <SubCommunityForm mode="edit" initialData={formattedData} />
             <Separator className="my-4" />
-            <SubcommunityMemberActions subcommunityId={recordId} isAdmin={isCreator || isAdmin} currentUserId={user.id} />
+            <SubcommunityMemberActions subcommunityId={recordId} isAdmin={isCreator || role === "admin"} currentUserId={user.id} />
             <Separator className="my-4" />
             <DeleteCommunityForm subId={recordId} />
         </section>

@@ -64,6 +64,7 @@ export default async function SingleSubCommunityPage({ params }: { params: { id:
 
     const isMember = user ? data.members.some(member => member.userId === user.id) : false;
     const isCreator = user?.email === data.User?.email;
+    const isAdmin = user?.SubcommunityMember[0]?.role === "admin"
 
     if (!data) {
         return null
@@ -77,11 +78,12 @@ export default async function SingleSubCommunityPage({ params }: { params: { id:
                     <Feed /> 
                     <pre>MEMBER: {JSON.stringify(isMember, null, 2)}</pre>
                     <pre>CREATOR: {JSON.stringify(isCreator, null, 2)}</pre>
+                    <pre>ROLE: {JSON.stringify(isAdmin, null, 2)}</pre>
                 </div>
                 <div className="col-span-10 md:col-span-4 lg:col-span-3">
                     <div className="flex items-center justify-between mb-4">
                         <h2 className="font-bold text-lg">About the community</h2>
-                        {isCreator &&
+                        {(isCreator || isAdmin) &&
                             (
                                 <Button variant="secondary" size="icon" asChild>
                                     <Link href={`/g/edit?recordId=${data.id}`}>

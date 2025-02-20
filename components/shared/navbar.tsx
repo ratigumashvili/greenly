@@ -13,7 +13,7 @@ export async function Navbar() {
     const session = await authSession()
 
     return (
-        <nav className="h-[10vh] w-full max-w-7xl mx-auto flex items-center justify-between px-4 md:px-8 lg:px-10 border-b">
+        <nav className="h-[10vh] w-full max-w-7xl mx-auto flex items-center justify-between pr-4 pl-16 md:px-16 xl:px-4 border-b">
             <Link href={'/'}>
                 <Image
                     src={'/logo-lg.svg'}
@@ -48,11 +48,6 @@ export async function Navbar() {
                         </Button>
                     </>
                 )}
-                <Button className="md:hidden">
-                    <SearchIcon
-                        className="text-white"
-                    />
-                </Button>
             </div>
         </nav>
     )
