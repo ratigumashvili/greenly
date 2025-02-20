@@ -35,13 +35,6 @@ export function SubcommunityMemberList({ subcommunityId, isMember }: Subcommunit
         </CardTitle>
       </CardHeader>
       <CardContent className="p-4 pt-0">
-        {/* {members && members.length !== 0 &&
-          members.map((member, index) => (
-            <span key={member.id}>
-              {member.userName}
-              {separator(index, members)}
-            </span>
-          ))} */}
         {members && members.length !== 0 && (
           <>
             {members.slice(0, 3).map((member, index) => (

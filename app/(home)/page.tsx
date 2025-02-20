@@ -15,19 +15,20 @@ export default async function Home() {
           <p>Join vibrant discussions on wildlife, conservation, climate change, and environmental research. Engage with fellow members, contribute to knowledge-sharing, and discover new insights about the natural world. From birdwatching and mycology to freshwater ecosystems and endangered species, Greenly is your gateway to meaningful conversations and impactful action.</p>
           <p>Let's work together to protect and celebrate nature! Create or join sub-communities, share your findings, and stay informed about the latest developments in biodiversity and conservation. Welcome to Greenly – where nature and knowledge thrive!</p>
         </div>
-      </section>
-      <section>
-        <h2 className="font-bold tracking-tighter text-xl mb-4">Most Popular Communities</h2>
-        <MostViewdCommunities />
-        <div className="flex items-center justify-center gap-3 my-6">
-          <Button asChild size="lg">
-            <Link href={"/g"}>View all</Link>
-          </Button>
-          <span>OR</span>
-          <Button asChild size="lg">
-            <Link href={"/g/create"}>Create one</Link>
-          </Button>
+
+        <div className="flex flex-col gap-4 md:flex-row items-center justify-between mt-6 mb-4">
+          <h2 className="font-bold tracking-tighter text-xl">Most Popular Communities</h2>
+          <div className="flex items-center justify-center gap-3">
+            <Button asChild size="lg" variant="secondary">
+              <Link href={"/g"}>View all</Link>
+            </Button>
+            {/* <span>OR</span> */}
+            <Button asChild size="lg">
+              <Link href={"/g/create"}>Create one</Link>
+            </Button>
+          </div>
         </div>
+        <MostViewdCommunities />
       </section>
     </>
   );
