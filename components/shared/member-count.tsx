@@ -23,7 +23,7 @@ export function MemberCount({subcommunityId, isMember}: MemberCountProps) {
         fetchCount();
     }, [isMember]);
     return (
-        <p className="text-sm flex gap-2">
+        <p className="text-sm flex items-center gap-2">
             <UsersIcon className="w-4 h-4 text-muted-foreground" /> {memberCount}
         </p>
     )

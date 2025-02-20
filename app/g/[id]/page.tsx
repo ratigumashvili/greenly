@@ -45,7 +45,11 @@ async function getData(id: string) {
                     }
                 }
             },
-            members: { select: { userId: true } }
+            members: { 
+                select: { 
+                    userId: true,
+                } 
+            }
         }
     });
 
@@ -70,7 +74,9 @@ export default async function SingleSubCommunityPage({ params }: { params: { id:
             <PageTitle>{data.name}</PageTitle>
             <div className="grid grid-cols-10 gap-4">
                 <div className="col-span-10 md:col-span-6 lg:col-span-7">
-                    <Feed />
+                    <Feed /> <pre>
+                        {JSON.stringify(data, null, 2)}
+                    </pre>
                 </div>
                 <div className="col-span-10 md:col-span-4 lg:col-span-3">
                     <div className="flex items-center justify-between mb-4">
