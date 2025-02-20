@@ -13,7 +13,8 @@ interface SubmitButtonProps {
     classNames?: string,
     variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link" | null | undefined,
     size?: "default" | "sm" | "lg" | "icon" | null | undefined,
-    isLoading?: boolean
+    isLoading?: boolean,
+    onClick?: () => void,
 }
 
 export function SubmitButton({ children, title, pendingTitle, classNames, variant, size, isLoading }: SubmitButtonProps) {

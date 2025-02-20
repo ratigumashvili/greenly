@@ -1,6 +1,5 @@
 import Link from "next/link"
 import { FilePenLineIcon } from "lucide-react"
-import { Prisma } from "@prisma/client";
 
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
@@ -8,50 +7,11 @@ import { Button } from "@/components/ui/button"
 import { PageTitle } from "@/components/shared/page-title"
 import { CreatedAt } from "@/components/shared/created-at"
 import { Feed } from "@/components/shared/feed"
-import { NotLoggedIn } from "@/components/shared/not-logged-in"
 import { DeleteCommunityForm } from "@/components/forms/delete-community-form"
 
 import { prisma } from "@/lib/prisma"
 import { getUserData } from "@/lib/utils"
-
-// async function getData(id: string) {
-//     const data = await prisma.subcommunity.findUnique({
-//         where: {
-//             id: id
-//         },
-//         data: {
-//             views: { increment: 1 }
-//         },
-//         select: {
-//             id: true,
-//             name: true,
-//             description: true,
-//             views: true,
-//             createdAt: true,
-//             User: {
-//                 select: {
-//                     id: true,
-//                     name: true,
-//                     email: true,
-//                     userName: true
-//                 }
-//             },
-//             tags: {
-//                 select: {
-//                     subcommunityId: true,
-//                     tag: {
-//                         select: {
-//                             name: true,
-//                             id: true
-//                         }
-//                     }
-//                 }
-//             }
-//         }
-//     }) 
-
-//     return data
-// }
+import { JoinCommunityButton } from "@/components/forms/join-community-button"
 
 async function getData(id: string) {
     const data = await prisma.subcommunity.update({
@@ -83,7 +43,8 @@ async function getData(id: string) {
                         }
                     }
                 }
-            }
+            },
+            members: { select: { userId: true } }
         }
     });
 
@@ -96,9 +57,8 @@ export default async function SingleSubCommunityPage({ params }: { params: { id:
     const data = await getData(id)
     const { session, user } = await getUserData()
 
-    // if(!session) {
-    //     return <NotLoggedIn />
-    // }
+    const isMember = user ? data.members.some(member => member.userId === user.id) : false;
+    const isCreator = user?.email === data.User?.email;
 
     if (!data) {
         return null
@@ -139,7 +99,11 @@ export default async function SingleSubCommunityPage({ params }: { params: { id:
                         </p>
                     </div>
                     <Separator className="my-4" />
-                    <Button className="w-max md:w-full">Join</Button>
+                    {/* <Button className="w-max md:w-full">Join the community</Button>*/}
+                    {session && !isCreator && (
+                        <JoinCommunityButton subcommunityId={data.id} isMember={isMember} />
+                    )}
+                
                 </div>
             </div>
         </section>

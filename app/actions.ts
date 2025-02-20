@@ -5,7 +5,7 @@ import { generateUsername } from "unique-username-generator"
 import bcrypt from "bcryptjs";
 
 import { prisma } from "@/lib/prisma";
-import { signIn } from "@/lib/auth";
+import { authSession, signIn } from "@/lib/auth";
 import { getUserData } from "@/lib/utils";
 import { Prisma } from "@prisma/client";
 
@@ -334,6 +334,83 @@ export async function deleteCommunity(formData: FormData) {
     return { success: true, redirectUrl: "/g/" };
   } catch (error) {
     return { error: "Failed to delete subcommunity" };
+  }
+}
+
+export async function joinCommunity(subcommunityId: string) {
+  try {
+    const { session, user } = await getUserData();
+
+    if (!session || !user?.id) {
+      return { error: "Unauthorized" }; // ✅ Ensure user is authenticated
+    }
+
+    const userId = user.id;
+
+    const existingMember = await prisma.subcommunityMember.findUnique({
+      where: {
+        userId_subcommunityId: {
+          userId,
+          subcommunityId,
+        },
+      },
+    });
+
+    if (existingMember) {
+      return { success: false, message: "Already a member" };
+    }
+
+    await prisma.subcommunityMember.create({
+      data: { userId, subcommunityId },
+    });
+
+    revalidatePath(`/g/${subcommunityId}`);
+
+    return { success: true, message: "Joined successfully" };
+  } catch (error) {
+    console.error("Join Community Error:", error);
+    return { error: "Internal Server Error" };
+  }
+}
+
+export async function leaveCommunity(subcommunityId: string) {
+  try {
+    const { session, user } = await getUserData();
+
+    if (!session || !user?.id) {
+      return { error: "Unauthorized" };
+    }
+
+    const userId = user.id;
+
+    const existingMember = await prisma.subcommunityMember.findUnique({
+      where: {
+        userId_subcommunityId: {
+          userId,
+          subcommunityId,
+        },
+      },
+    });
+
+    if (!existingMember) {
+      return { error: "You're not a member of this group" };
+    }
+
+    await prisma.subcommunityMember.delete({
+      where: {
+        userId_subcommunityId: {
+          userId,
+          subcommunityId,
+        },
+      },
+    });
+
+    revalidatePath(`/g/${subcommunityId}`);
+
+    return { success: true, message: "Left the group successfully" };
+  } catch (error) {
+    console.error("Leave Community Error:", error);
+    return { error: "Failed to leave the group" };
   }
 }
 
