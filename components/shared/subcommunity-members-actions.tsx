@@ -91,7 +91,7 @@ export function SubcommunityMemberActions({ subcommunityId, currentUserId, isAdm
                       description: `Are you sure you want to remove ${member.name} AKA ${member.userName} from this community?`,
                       confirmText: "Remove",
                       cancelText: "Cancel",
-                      onConfirm: () => handleKick(member.email), // ✅ Call handleKick only when confirmed
+                      onConfirm: () => handleKick(member.email),
                     })
                   }
                 >
