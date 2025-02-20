@@ -45,7 +45,7 @@ const items = [
 
 export function AppSidebar() {
   return (
-    <Sidebar>
+    <Sidebar className="pt-12">
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>

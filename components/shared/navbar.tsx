@@ -3,7 +3,6 @@ import Link from "next/link";
 import { SearchIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { SidebarTrigger } from "@/components/ui/sidebar";
 import { UserDropdown } from "@/components/shared/user-dropdown";
 import { SearchForm } from "@/components/forms/search-form";
 
@@ -15,25 +14,22 @@ export async function Navbar() {
 
     return (
         <nav className="h-[10vh] w-full max-w-7xl mx-auto flex items-center justify-between px-4 md:px-8 lg:px-10 border-b">
-            <div className="flex items-center gap-4">
-                <SidebarTrigger className="w-20 h-20" />
-                <Link href={'/'}>
-                    <Image
-                        src={'/logo-lg.svg'}
-                        width={150}
-                        height={150}
-                        alt="Logo desktop"
-                        className="hidden lg:block"
-                    />
-                    <Image
-                        src={'/logo-sm.svg'}
-                        width={40}
-                        height={40}
-                        alt="Logo mobile"
-                        className="block lg:hidden h-10 min-h-10 w-fit"
-                    />
-                </Link>
-            </div>
+            <Link href={'/'}>
+                <Image
+                    src={'/logo-lg.svg'}
+                    width={150}
+                    height={150}
+                    alt="Logo desktop"
+                    className="hidden lg:block"
+                />
+                <Image
+                    src={'/logo-sm.svg'}
+                    width={40}
+                    height={40}
+                    alt="Logo mobile"
+                    className="block lg:hidden h-10 min-h-10 w-fit"
+                />
+            </Link>
 
             <SearchForm />
 
