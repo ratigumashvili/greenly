@@ -7,19 +7,47 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
+export async function getSubCommunity() {
+  const session = await authSession();
+
+  if (!session?.user?.email) {
+    console.error("❌ No session found, returning empty data.");
+    return [];
+  }
+
+  const data = await prisma.subcommunity.findMany({
+    where: {
+      User: {
+        email: session.user.email,
+      },
+    },
+    select: {
+      id: true,
+      name: true,
+      User: {
+        select: {
+          email: true,
+        },
+      },
+    },
+  });
+
+  return data;
+}
+
 export async function getUserData(subcommunityId?: string) {
   
   const session = await authSession()
 
-
   if (!session?.user.email) {
-    return { session: null, user: null, isMember: false };
+    return { session: null, user: null, isMember: false, role: "member" };
   }
 
   const user = await prisma.user.findUnique({
     where: {
       email: session.user.email
-    }, select: {
+    }, 
+    select: {
       id: true,
       name: true,
       userName: true,
@@ -32,22 +60,41 @@ export async function getUserData(subcommunityId?: string) {
       interests: true,
       about: true,
       createdAt: true,
-      SubcommunityMember: subcommunityId
-        ? { where: { subcommunityId } }
-        : false,
+      createdSubcommunities: {
+        select: {
+          id: true
+        }
+      },
+      SubcommunityMember: {
+        where: { subcommunityId },
+        select: { role: true },
+      },
     }
   })
 
-  const isMember = !!user?.SubcommunityMember?.length; 
+  if (user && session.user) {
+    session.user.id = user.id;
+  }
 
-  const memberCount = subcommunityId
-  ? await prisma.subcommunityMember.count({
-      where: { subcommunityId },
-    })
-  : 0;
+  const getCommunity = await getSubCommunity()
 
-  return { session, user, isMember, memberCount }
+  const isCreator = getCommunity.some((item) => item.id === subcommunityId);
+
+  const isMember = isCreator || (user && user?.SubcommunityMember.length > 0);
+
+  let role = "member";
+  if (isCreator) {
+    role = "admin";
+  } else if (user && user?.SubcommunityMember.length > 0) {
+    role = user?.SubcommunityMember[0]?.role;
+  }
+
+  return {
+    session,
+    user,
+    isMember, 
+    role,
+  };
 }
-
 
 export const separator = (index: number, array: any, separatorType = ', ', separatorEnd = ".") => index === array.length - 1 ? separatorEnd : separatorType

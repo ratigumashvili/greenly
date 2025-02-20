@@ -60,7 +60,7 @@ async function getData(id: string) {
 export default async function SingleSubCommunityPage({ params }: { params: { id: string } }) {
     const { id } = await params
     const data = await getData(id)
-    const { session, user } = await getUserData()
+    const { session, user } = await getUserData(id)
 
     const isMember = user ? data.members.some(member => member.userId === user.id) : false;
     const isCreator = user?.email === data.User?.email;
@@ -79,11 +79,10 @@ export default async function SingleSubCommunityPage({ params }: { params: { id:
                 <div className="col-span-10 md:col-span-4 lg:col-span-3">
                     <div className="flex items-center justify-between mb-4">
                         <h2 className="font-bold text-lg">About the community</h2>
-                        {user?.id === data?.User?.id &&
+                        {isCreator &&
                             (
                                 <Button variant="secondary" size="icon" asChild>
                                     <Link href={`/g/edit?recordId=${data.id}`}>
-                                        {/* <FilePenLineIcon className="w-8 h-8" /> */}
                                         <SettingsIcon />
                                     </Link>
                                 </Button>

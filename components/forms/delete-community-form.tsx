@@ -27,6 +27,7 @@ export function DeleteCommunityForm({ subId }: { subId: string }) {
       <form action={handleDelete}>
         <input type="hidden" name="subId" value={subId} />
         <p>Here you can delete this community. Are you sure you want to proceed? Remember, this action can not be undone.
+          {" "}
           <button type="submit">
             <span className="text-base font-bold text-red-600">Delete community</span>
           </button>

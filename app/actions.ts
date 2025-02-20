@@ -5,7 +5,7 @@ import { generateUsername } from "unique-username-generator"
 import bcrypt from "bcryptjs";
 
 import { prisma } from "@/lib/prisma";
-import { authSession, signIn } from "@/lib/auth";
+import { signIn } from "@/lib/auth";
 import { getUserData } from "@/lib/utils";
 import { Prisma } from "@prisma/client";
 
@@ -419,11 +419,13 @@ export async function getSubcommunityMembers(subcommunityId: string) {
     const members = await prisma.subcommunityMember.findMany({
       where: { subcommunityId },
       select: {
-        user: {
+        role: true,
+        user: { // ✅ Ensure we fetch email
           select: {
             id: true,
             userName: true,
             name: true,
+            email: true, // ✅ Include email
           },
         },
       },
@@ -434,6 +436,94 @@ export async function getSubcommunityMembers(subcommunityId: string) {
     console.error("Error fetching members:", error);
     return { error: "Failed to fetch members" };
   }
+}
+
+export async function kickMember(subcommunityId: string, memberEmail: string) {
+  const { user, isMember, role } = await getUserData(subcommunityId);
+
+  console.log("🔹 Kick Member - User Role:", role);
+  console.log("🔹 Kick Member - Is Member?", isMember);
+
+  if (!user || !isMember) {
+    return { error: "Unauthorized" };
+  }
+
+  if (role !== "admin") {
+    console.error("❌ User is NOT an admin, cannot manage members.");
+    return { error: "Only admins can manage members" };
+  }
+
+  const targetUser = await prisma.user.findUnique({
+    where: { email: memberEmail },
+    select: { id: true },
+  });
+
+  if (!targetUser) {
+    return { error: "User not found" };
+  }
+
+  const targetMember = await prisma.subcommunityMember.findUnique({
+    where: { userId_subcommunityId: { userId: targetUser.id, subcommunityId } },
+    select: { role: true },
+  });
+
+  if (!targetMember) {
+    return { error: "User is not a member" };
+  }
+
+  if (targetMember.role === "admin") {
+    return { error: "You cannot remove another admin" };
+  }
+
+  await prisma.subcommunityMember.delete({
+    where: { userId_subcommunityId: { userId: targetUser.id, subcommunityId } },
+  });
+
+  return { success: true, message: "Member removed successfully" };
+}
+
+export async function promoteToAdmin(subcommunityId: string, memberEmail: string) {
+  const { user, isMember, role } = await getUserData(subcommunityId);
+
+  if (!user || !isMember) {
+    console.error("❌ Authorization failed: No user or not a member");
+    return { error: "Unauthorized" };
+  }
+
+  if (role !== "admin") {
+    console.error("❌ Authorization failed: User is not an admin");
+    return { error: "Only admins can promote members" };
+  }
+
+  const targetUser = await prisma.user.findUnique({
+    where: { email: memberEmail },
+    select: { id: true },
+  });
+
+  if (!targetUser) {
+    console.error("❌ User not found in database!");
+    return { error: "User not found" };
+  }
+
+  const targetMember = await prisma.subcommunityMember.findUnique({
+    where: { userId_subcommunityId: { userId: targetUser.id, subcommunityId } },
+    select: { role: true },
+  });
+
+  if (!targetMember) {
+    return { error: "User is not a member" };
+  }
+
+  if (targetMember.role === "admin") {
+    return { error: "User is already an admin" };
+  }
+
+  await prisma.subcommunityMember.update({
+    where: { userId_subcommunityId: { userId: targetUser.id, subcommunityId } },
+    data: { role: "admin" },
+  });
+
+  return { success: true, message: "User promoted to admin successfully" };
 }
 
 export async function getMemberCount(subcommunityId: string) {
@@ -448,7 +538,6 @@ export async function getMemberCount(subcommunityId: string) {
     return { error: "Failed to fetch member count" };
   }
 }
-
 
 export async function createPost(subcommunityId: string, title: string, content: string) {
   const { session, user, isMember } = await getUserData(subcommunityId);
