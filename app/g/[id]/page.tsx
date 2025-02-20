@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { FilePenLineIcon } from "lucide-react"
+import { FilePenLineIcon, UsersIcon } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
@@ -12,6 +12,7 @@ import { DeleteCommunityForm } from "@/components/forms/delete-community-form"
 import { prisma } from "@/lib/prisma"
 import { getUserData } from "@/lib/utils"
 import { JoinCommunityButton } from "@/components/forms/join-community-button"
+import { MemberCount } from "@/components/shared/member-count"
 
 async function getData(id: string) {
     const data = await prisma.subcommunity.update({
@@ -55,7 +56,7 @@ async function getData(id: string) {
 export default async function SingleSubCommunityPage({ params }: { params: { id: string } }) {
     const { id } = await params
     const data = await getData(id)
-    const { session, user } = await getUserData()
+    const { session, user} = await getUserData()
 
     const isMember = user ? data.members.some(member => member.userId === user.id) : false;
     const isCreator = user?.email === data.User?.email;
@@ -95,15 +96,17 @@ export default async function SingleSubCommunityPage({ params }: { params: { id:
                     <Separator className="my-4" />
                     <div className="flex flex-col gap-2">
                         <p className="text-sm">
-                            Created by: <Link className="text-primary hover:text-primary/90 transition" href={`mailto:${data.User?.email}`}>@{data.User?.userName}</Link>, <CreatedAt date={data.createdAt} />
+                            Created by: <Link className="text-primary hover:text-primary/90 transition" href={`mailto:${data.User?.email}`}>
+                                @{data.User?.userName}
+                            </Link>, <CreatedAt date={data.createdAt} />.
                         </p>
+                        <MemberCount subcommunityId={id} isMember={isMember} />
                     </div>
                     <Separator className="my-4" />
-                    {/* <Button className="w-max md:w-full">Join the community</Button>*/}
                     {session && !isCreator && (
                         <JoinCommunityButton subcommunityId={data.id} isMember={isMember} />
                     )}
-                
+
                 </div>
             </div>
         </section>

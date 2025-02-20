@@ -414,6 +414,47 @@ export async function leaveCommunity(subcommunityId: string) {
   }
 }
 
+export async function getMemberCount(subcommunityId: string) {
+  try {
+    const count = await prisma.subcommunityMember.count({
+      where: { subcommunityId },
+    });
+
+    return { success: true, count };
+  } catch (error) {
+    console.error("Error fetching member count:", error);
+    return { error: "Failed to fetch member count" };
+  }
+}
+
+
+export async function createPost(subcommunityId: string, title: string, content: string) {
+  const { session, user, isMember } = await getUserData(subcommunityId);
+
+  if (!session || !user?.id) {
+    return { error: "Unauthorized" };
+  }
+
+  if (!isMember) {
+    return { error: "Only community members can create posts" };
+  }
+
+  try {
+    const post = await prisma.post.create({
+      data: {
+        title,
+        content,
+        authorId: user.id,
+        subcommunityId,
+      },
+    });
+
+    return { success: true, message: "Post created successfully", post };
+  } catch (error) {
+    console.error("Create Post Error:", error);
+    return { error: "Failed to create post" };
+  }
+}
 
 
 

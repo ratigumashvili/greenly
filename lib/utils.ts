@@ -7,10 +7,13 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export async function getUserData() {
+export async function getUserData(subcommunityId?: string) {
+  
   const session = await authSession()
+
+
   if (!session?.user.email) {
-    return { session: null, use: null }
+    return { session: null, user: null, isMember: false };
   }
 
   const user = await prisma.user.findUnique({
@@ -28,9 +31,20 @@ export async function getUserData() {
       fields: true,
       interests: true,
       about: true,
-      createdAt: true
+      createdAt: true,
+      SubcommunityMember: subcommunityId
+        ? { where: { subcommunityId } }
+        : false,
     }
   })
 
-  return { session, user }
+  const isMember = !!user?.SubcommunityMember?.length; 
+
+  const memberCount = subcommunityId
+  ? await prisma.subcommunityMember.count({
+      where: { subcommunityId },
+    })
+  : 0;
+
+  return { session, user, isMember, memberCount }
 }
