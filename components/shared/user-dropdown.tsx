@@ -26,7 +26,7 @@ export function UserDropdown({ name }: UserDropdownProps) {
                 {menuSmall.map((item) => (
                     <DropdownMenuItem asChild key={item.title}>
                         <div className="flex items-center gap-2">
-                            <item.icon /> <Link href={item.url}>{item.title}</Link>
+                            <item.icon /> <Link href={item.url} className="block w-full">{item.title}</Link>
                         </div>
                     </DropdownMenuItem>
                 ))}
