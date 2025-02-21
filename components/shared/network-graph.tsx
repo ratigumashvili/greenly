@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import ForceGraph3D from "react-force-graph-3d";
 
+import { Button } from "@/components/ui/button";
+
 interface GraphNode {
     id: string;
     name: string;
@@ -71,6 +73,7 @@ const NetworkGraph = ({ user }: NetworkGraphProps) => {
     }
 
     function handleNodeClick(node: GraphNode) {
+        if (!node) return;
         setSelectedCommunity(null)
         if (node.type === "community") {
             setSelectedCommunity({ id: node.id, name: node.name });
@@ -79,7 +82,7 @@ const NetworkGraph = ({ user }: NetworkGraphProps) => {
     }
 
     return (
-        <div className="w-full max-w-7xl relative overflow-hidden">
+        <div className="w-full max-w-7xl relative overflow-hidden inset-0 pointer-events-auto">
             <ForceGraph3D
                 ref={fgRef}
                 graphData={graphData}
@@ -90,13 +93,13 @@ const NetworkGraph = ({ user }: NetworkGraphProps) => {
                 linkColor={() => "#333"}
                 onNodeClick={handleNodeClick}
                 height={600}
-                backgroundColor="#f1f1f1"
+                backgroundColor="#fafafa"
                 nodeRelSize={6}
                 showNavInfo={false}
             />
 
             {selectedCommunity && (
-                <div className="absolute right-0 top-0 w-80 h-[600px] overflow-y-auto bg-white p-4 shadow-lg">
+                <div className="absolute right-0 top-0 w-80 h-[600px] overflow-y-auto bg-white p-4 shadow-lg z-50">
                     <h2 className="text-xl font-bold mb-2">
                         Members of "{selectedCommunity.name}"
                     </h2>
@@ -111,12 +114,11 @@ const NetworkGraph = ({ user }: NetworkGraphProps) => {
                             ))
                         )}
                     </ul>
-                    <button
-                        className="mt-4 bg-red-500 text-white px-4 py-2 rounded"
+                    <Button
                         onClick={() => setSelectedCommunity(null)}
                     >
                         Close
-                    </button>
+                    </Button>
                 </div>
             )}
         </div>

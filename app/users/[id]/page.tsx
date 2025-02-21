@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma"
 
 import { PageTitle } from "@/components/shared/page-title"
 import DynamicGraph from "./graph"
+import { Separator } from "@/components/ui/separator"
 
 export interface DynamicGraphUserProps {
     id: string,
@@ -26,6 +27,12 @@ async function getSingleUser(paramsId: string) {
                 name: true,
                 userName: true,
                 email: true,
+                institution: true,
+                department: true,
+                disciplines: true,
+                fields: true,
+                interests: true,
+                about: true,
                 SubcommunityMember: {
                     select: {
                         role: true,
@@ -37,6 +44,13 @@ async function getSingleUser(paramsId: string) {
                         }
                     }
                 },
+                Post: {
+                    select: {
+                        id: true,
+                        title: true,
+                        content: true
+                    }
+                }
             }
         })
 
@@ -52,7 +66,7 @@ export default async function SingleUsersPage({ params }: { params: { id: string
     const { id } = await params
     const user = await getSingleUser(id)
 
-    if(!user) {
+    if (!user) {
         return null
     }
 
@@ -69,8 +83,9 @@ export default async function SingleUsersPage({ params }: { params: { id: string
     return (
         <section className="py-8">
             <PageTitle>{user?.name}, AKA @{user.userName}</PageTitle>
+            <Separator className="mb-4" />
             <pre>
-                {JSON.stringify(formattedUser, null, 2)}
+                {JSON.stringify(user, null, 2)}
             </pre>
             <DynamicGraph user={formattedUser as DynamicGraphUserProps} />
         </section>
