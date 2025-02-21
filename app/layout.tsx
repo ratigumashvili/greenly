@@ -5,21 +5,12 @@ import { Navbar } from "@/components/shared/navbar";
 import { Footer } from "@/components/shared/footer";
 import { Toaster } from "@/components/ui/sonner";
 import { ConfirmModal } from "@/components/shared/confirm-modal";
-
 import { SidebarProvider } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/shared/app-sidebar"
 
+import { firaGo } from "@/lib/fonts"
+
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -34,13 +25,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      className={`${firaGo.variable} font-firaGo`}
       >
         <SidebarProvider className="flex min-h-screen w-full">
           <AppSidebar />
           <div className="flex flex-col flex-1 w-full">
             <Navbar />
-            <main className="flex-1 h-full min-h-[calc(100%-20vh)] w-full max-w-7xl mx-auto pr-4 pl-16 md:px-16 xl:px-4">
+            <main className="flex-1 h-full w-full max-w-7xl mx-auto pr-4 pl-16 md:px-16 xl:px-4">
               {children}
               <ConfirmModal />
               <Toaster />

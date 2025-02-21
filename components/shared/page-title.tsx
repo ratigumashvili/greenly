@@ -6,5 +6,5 @@ interface PageTitleProps {
 }
 
 export function PageTitle({ children, classNames }: PageTitleProps) {
-    return <h2 className={cn("text-2xl font-extrabold tracking-tight mb-4", classNames)}>{children}</h2>
+    return <h2 className={cn("text-2xl font-bold mb-4", classNames)}>{children}</h2>
 }

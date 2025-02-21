@@ -114,7 +114,7 @@ const NetworkGraph = ({ user }: NetworkGraphProps) => {
                             <p>Loading...</p>
                         ) : (
                             communityMembers.map((member) => (
-                                <li key={member.id} className="p-2 border-b last:border-b-0">
+                                <li key={member.id} className="py-2 border-b last:border-b-0 text-base">
                                     <Link href={`/users/${member.id}`}>{member.name}</Link>
                                 </li>
                             ))

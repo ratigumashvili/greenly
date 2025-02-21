@@ -17,7 +17,7 @@ export default async function Home() {
         </div>
 
         <div className="flex flex-col gap-4 md:flex-row items-center justify-between mt-6 mb-4">
-          <h2 className="font-bold tracking-tighter text-xl">Most Popular Communities</h2>
+          <h2 className="font-bold text-xl">Most Popular Communities</h2>
           <div className="flex items-center justify-center gap-3">
             <Button asChild size="lg" variant="secondary">
               <Link href={"/g"}>View all</Link>
