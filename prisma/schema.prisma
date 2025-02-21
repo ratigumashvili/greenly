@@ -80,6 +80,7 @@ model Post {
 
   authorId       String
   subcommunityId String
+  files          String[] @default([])
 
   author       User         @relation(fields: [authorId], references: [id], onDelete: Cascade)
   subcommunity Subcommunity @relation(fields: [subcommunityId], references: [id], onDelete: Cascade)

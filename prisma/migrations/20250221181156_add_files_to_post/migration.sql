@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Post" ALTER COLUMN "files" SET DEFAULT ARRAY[]::TEXT[];

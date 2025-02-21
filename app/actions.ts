@@ -539,7 +539,7 @@ export async function getMemberCount(subcommunityId: string) {
   }
 }
 
-export async function createPost(subcommunityId: string, title: string, content: string) {
+export async function createPost(subcommunityId: string, title: string, content: string, uploadedFiles: string[]) {
   const { session, user, isMember } = await getUserData(subcommunityId);
 
   if (!session || !user?.id) {
@@ -557,6 +557,7 @@ export async function createPost(subcommunityId: string, title: string, content:
         content,
         authorId: user.id,
         subcommunityId,
+        files: uploadedFiles.length > 0 ? uploadedFiles : [],
       },
     });
 
