@@ -33,7 +33,7 @@ export default async function UsersPage() {
     return (
         <section className="py-8">
             <PageTitle>Registered users</PageTitle>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {users && users.length !== 0 && users.map((user) => (
                     <Card key={user.id}>
                         <CardContent className="pt-4">
