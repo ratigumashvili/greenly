@@ -539,19 +539,16 @@ export async function getMemberCount(subcommunityId: string) {
   }
 }
 
-interface createPostProps {
-  subcommunityId: string,
-  authorId: string,
-  title: string,
-  content: string,
-  uploadedFiles: string
-}
-
 // export async function createPost(formData: FormData) {
+//   const subcommunityId = formData.get("subcommunityId") as string;
+//   const title = formData.get("title") as string;
+//   const content = (formData.get("content") as string) || "";
+//   // const imagesUrl = JSON.parse(formData.get("imagesUrl") as string || "[]"); // ✅ Convert back to array
+//   // const files = formData.getAll("files") as string[];
 
-//   const subcommunityId = formData.get("subcommunityId") as string
-//   const title = formData.get("title") as string
-//   const content = formData.get("content") as string
+//   if (!title || !subcommunityId) {
+//     return { error: "Title and subcommunity are required." };
+//   }
 
 //   const { session, user, isMember } = await getUserData(subcommunityId);
 
@@ -568,24 +565,27 @@ interface createPostProps {
 //       data: {
 //         title,
 //         content,
+//         // imagesUrl,
+//         // files,
 //         authorId: user.id,
 //         subcommunityId,
-//         // files: uploadedFiles.length > 0 ? uploadedFiles : [],
 //       },
 //     });
 
 //     return { success: true, message: "Post created successfully", post };
 //   } catch (error) {
 //     console.error("Create Post Error:", error);
-//     return { error: "Failed to create post" };
+//     return { error: "Failed to create post. Please try again." };
 //   }
 // }
 
 export async function createPost(formData: FormData) {
   const subcommunityId = formData.get("subcommunityId") as string;
   const title = formData.get("title") as string;
-  const content = formData.get("content") as string || "";
-  const files = formData.getAll("files") as string[];
+  const content = (formData.get("content") as string) || "";
+
+  const imagesUrl = formData.get("imagesUrl") ? JSON.parse(formData.get("imagesUrl") as string) : [];
+  // const files = formData.get("files") ? JSON.parse(formData.get("files") as string) : [];
 
   if (!title || !subcommunityId) {
     return { error: "Title and subcommunity are required." };
@@ -606,7 +606,8 @@ export async function createPost(formData: FormData) {
       data: {
         title,
         content,
-        files,
+        imagesUrl, 
+        // files,     
         authorId: user.id,
         subcommunityId,
       },
@@ -618,6 +619,8 @@ export async function createPost(formData: FormData) {
     return { error: "Failed to create post. Please try again." };
   }
 }
+
+
 
 
 

@@ -212,7 +212,7 @@ const Tiptap = () => {
         <section>
             <input type="hidden" name="content" value={json ? JSON.stringify(json) : ""} />
             <MenuBar editor={editor} />
-            <EditorContent editor={editor} className="border rounded-lg my-4 p-2 min-h-[400px] h-full" />
+            <EditorContent editor={editor} className="border rounded-lg my-4 p-2 min-h-[250px] h-full" />
         </section>
     )
 }
