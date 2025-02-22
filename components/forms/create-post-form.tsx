@@ -26,12 +26,12 @@ export function CreatePostForm({ id }: { id: string }) {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setIsLoading(true);
-    
+
         const formData = new FormData(event.currentTarget);
 
-        formData.set("imagesUrl", JSON.stringify(imageUrls)); 
+        formData.set("imagesUrl", JSON.stringify(imageUrls));
         formData.set("file", JSON.stringify(fileUrl));
-    
+
         try {
             const response = await createPost(formData);
             if (response?.error) {
@@ -47,7 +47,7 @@ export function CreatePostForm({ id }: { id: string }) {
             setIsLoading(false);
         }
     };
-    
+
 
 
     return (
@@ -81,11 +81,17 @@ export function CreatePostForm({ id }: { id: string }) {
                     </div>
 
                 </CardContent>
-                <CardFooter>
-                    <Button asChild variant="secondary" className="mr-2">
+                <CardFooter className="flex gap-2 justify-end">
+                    <Button asChild variant="secondary" size="lg">
                         <Link href={`/g/${id}`}>Cancel</Link>
                     </Button>
-                    <SubmitButton title="Create post" pendingTitle="Creating..." isLoading={isLoading} />
+                    <SubmitButton
+                        title="Create post"
+                        pendingTitle="Creating..."
+                        isLoading={isLoading}
+                        size="lg"
+                        classNames="w-full sm:w-max"
+                    />
                 </CardFooter>
             </Card>
         </form>

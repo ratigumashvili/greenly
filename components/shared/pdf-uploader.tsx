@@ -32,7 +32,7 @@ export default function PdfUploader({ onUploadComplete }: { onUploadComplete: (u
                 endpoint="pdfUploader"
                 onClientUploadComplete={handleUploadComplete}
                 onUploadError={handleUploadError}
-                className="-z-10"
+                className="ut-button:bg-primary ut-button:ut-readying:bg-primary/50 ut-button:ut-uploading:bg-primary/50 ut-button:ut-uploading:after:bg-primary ut-label:text-primary"
             />
         </div>
     );
