@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Typography from '@tiptap/extension-typography'
 import Highlight from '@tiptap/extension-highlight'
 import Link from "@tiptap/extension-link";
-import { useEditor, EditorContent, type Editor } from '@tiptap/react'
+import { useEditor, EditorContent, type Editor, JSONContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import {
     BoldIcon,
@@ -174,8 +174,8 @@ export const MenuBar = ({ editor }: { editor: Editor | null }) => {
                     onChange={(e) => setUrl(e.target.value)}
                 />
                 <DialogFooter>
-                    <Button onClick={handleConfirm}>Confirm</Button>
-                    <Button variant="secondary" onClick={() => setDialogOpen(false)}>
+                    <Button type="button" onClick={handleConfirm}>Confirm</Button>
+                    <Button type="button" variant="secondary" onClick={() => setDialogOpen(false)}>
                         Cancel
                     </Button>
                 </DialogFooter>
@@ -185,6 +185,8 @@ export const MenuBar = ({ editor }: { editor: Editor | null }) => {
 }
 
 const Tiptap = () => {
+    const [json, setJson] = useState<JSONContent | null>(null);
+
     const editor = useEditor({
         extensions: [
             StarterKit,
@@ -195,16 +197,20 @@ const Tiptap = () => {
                 autolink: true,
                 linkOnPaste: true,
             }),],
-        content: '<p>#Hello World! 🌎️</p>',
+        content: json ?? '<p>Create your post</p>',
         editorProps: {
             attributes: {
                 class: "prose"
             }
+        },
+        onUpdate: ({editor}) => {
+            setJson(editor.getJSON());
         }
     })
 
     return (
         <section>
+            <input type="hidden" name="content" value={json ? JSON.stringify(json) : ""} />
             <MenuBar editor={editor} />
             <EditorContent editor={editor} className="border rounded-lg my-4 p-2 min-h-[400px] h-full" />
         </section>

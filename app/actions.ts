@@ -539,7 +539,58 @@ export async function getMemberCount(subcommunityId: string) {
   }
 }
 
-export async function createPost(subcommunityId: string, title: string, content: string, uploadedFiles: string[]) {
+interface createPostProps {
+  subcommunityId: string,
+  authorId: string,
+  title: string,
+  content: string,
+  uploadedFiles: string
+}
+
+// export async function createPost(formData: FormData) {
+
+//   const subcommunityId = formData.get("subcommunityId") as string
+//   const title = formData.get("title") as string
+//   const content = formData.get("content") as string
+
+//   const { session, user, isMember } = await getUserData(subcommunityId);
+
+//   if (!session || !user?.id) {
+//     return { error: "Unauthorized" };
+//   }
+
+//   if (!isMember) {
+//     return { error: "Only community members can create posts" };
+//   }
+
+//   try {
+//     const post = await prisma.post.create({
+//       data: {
+//         title,
+//         content,
+//         authorId: user.id,
+//         subcommunityId,
+//         // files: uploadedFiles.length > 0 ? uploadedFiles : [],
+//       },
+//     });
+
+//     return { success: true, message: "Post created successfully", post };
+//   } catch (error) {
+//     console.error("Create Post Error:", error);
+//     return { error: "Failed to create post" };
+//   }
+// }
+
+export async function createPost(formData: FormData) {
+  const subcommunityId = formData.get("subcommunityId") as string;
+  const title = formData.get("title") as string;
+  const content = formData.get("content") as string || "";
+  const files = formData.getAll("files") as string[];
+
+  if (!title || !subcommunityId) {
+    return { error: "Title and subcommunity are required." };
+  }
+
   const { session, user, isMember } = await getUserData(subcommunityId);
 
   if (!session || !user?.id) {
@@ -555,18 +606,21 @@ export async function createPost(subcommunityId: string, title: string, content:
       data: {
         title,
         content,
+        files,
         authorId: user.id,
         subcommunityId,
-        files: uploadedFiles.length > 0 ? uploadedFiles : [],
       },
     });
 
     return { success: true, message: "Post created successfully", post };
   } catch (error) {
     console.error("Create Post Error:", error);
-    return { error: "Failed to create post" };
+    return { error: "Failed to create post. Please try again." };
   }
 }
+
+
+
 
 
 

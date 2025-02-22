@@ -1,9 +1,8 @@
 import { redirect } from "next/navigation";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { PageTitle } from "@/components/shared/page-title";
 
 import { prisma } from "@/lib/prisma";
@@ -11,6 +10,9 @@ import { getUserData } from "@/lib/utils"
 import { summaryOfRules } from "@/lib/constants";
 import Link from "next/link";
 import Tiptap from "@/components/shared/tip-tap";
+import { Button } from "@/components/ui/button";
+import { createPost } from "@/app/actions";
+import { CreatePostForm } from "@/components/forms/create-post-form";
 
 async function getData(id: string) {
     const data = await prisma.subcommunity.update({
@@ -74,21 +76,7 @@ export default async function CreatePost({ params }: { params: { id: string } })
                     </Card>
                 </div>
                 <div className="col-span-5">
-                    <Card className="h-full">
-                        <CardContent className="pt-4">
-                            <form className="space-y-4">
-                                <div className="flex flex-col gap-2">
-                                    <Label htmlFor="title" className="text-base">Title</Label>
-                                    <Input id="title" name="title" placeholder="Provide descriptive title" className="p-4" />
-                                </div>
-                                <div className="flex flex-col gap-2">
-                                    <Label htmlFor="content" className="text-base">Content</Label>
-                                    {/* <Textarea rows={20} id="content" name="content" placeholder="Fill in your content" className="p-4" /> */}
-                                    <Tiptap />
-                                </div>
-                            </form>
-                        </CardContent>
-                    </Card>
+                    <CreatePostForm id={id} />
                 </div>
             </div>
         </section>
