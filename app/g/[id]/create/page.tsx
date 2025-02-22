@@ -10,6 +10,7 @@ import { prisma } from "@/lib/prisma";
 import { getUserData } from "@/lib/utils"
 import { summaryOfRules } from "@/lib/constants";
 import Link from "next/link";
+import Tiptap from "@/components/shared/tip-tap";
 
 async function getData(id: string) {
     const data = await prisma.subcommunity.update({
@@ -82,7 +83,8 @@ export default async function CreatePost({ params }: { params: { id: string } })
                                 </div>
                                 <div className="flex flex-col gap-2">
                                     <Label htmlFor="content" className="text-base">Content</Label>
-                                    <Textarea rows={20} id="content" name="content" placeholder="Fill in your content" className="p-4" />
+                                    {/* <Textarea rows={20} id="content" name="content" placeholder="Fill in your content" className="p-4" /> */}
+                                    <Tiptap />
                                 </div>
                             </form>
                         </CardContent>
