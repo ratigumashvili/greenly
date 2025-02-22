@@ -585,7 +585,7 @@ export async function createPost(formData: FormData) {
   const content = (formData.get("content") as string) || "";
 
   const imagesUrl = formData.get("imagesUrl") ? JSON.parse(formData.get("imagesUrl") as string) : [];
-  // const files = formData.get("files") ? JSON.parse(formData.get("files") as string) : [];
+  const file = formData.get("file") ? JSON.parse(formData.get("file") as string) : null;
 
   if (!title || !subcommunityId) {
     return { error: "Title and subcommunity are required." };
@@ -607,7 +607,7 @@ export async function createPost(formData: FormData) {
         title,
         content,
         imagesUrl, 
-        // files,     
+        file,     
         authorId: user.id,
         subcommunityId,
       },

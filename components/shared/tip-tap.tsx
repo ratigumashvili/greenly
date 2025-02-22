@@ -31,6 +31,9 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { useSidebar } from '@/components/ui/sidebar';
+
+import { useIsTablet } from "@/hooks/use-tablet";
 
 export const MenuBar = ({ editor }: { editor: Editor | null }) => {
 
@@ -187,6 +190,9 @@ export const MenuBar = ({ editor }: { editor: Editor | null }) => {
 const Tiptap = () => {
     const [json, setJson] = useState<JSONContent | null>(null);
 
+    const { state } = useSidebar()
+    const isTablet = useIsTablet()
+
     const editor = useEditor({
         extensions: [
             StarterKit,
@@ -209,7 +215,7 @@ const Tiptap = () => {
     })
 
     return (
-        <section>
+        <section className={state === "expanded" && isTablet ? "-z-10" : "z-0"}>
             <input type="hidden" name="content" value={json ? JSON.stringify(json) : ""} />
             <MenuBar editor={editor} />
             <EditorContent editor={editor} className="border rounded-lg my-4 p-2 min-h-[250px] h-full" />

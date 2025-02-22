@@ -53,8 +53,8 @@ export default async function CreatePost({ params }: { params: { id: string } })
                 <PageTitle classNames="mb-0">Create a new post</PageTitle>
                 <Link href={`/g/${id}`}>Go back</Link>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-8 gap-4">
-                <div className="col-span-3">
+            <div className="grid grid-cols-2 md:grid-cols-8 md:gap-4">
+                <div className="col-span-3 mb-4 md:mb-0">
                     <Card>
                         <CardHeader>
                             <CardTitle>
