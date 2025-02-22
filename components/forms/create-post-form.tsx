@@ -48,8 +48,6 @@ export function CreatePostForm({ id }: { id: string }) {
         }
     };
 
-
-
     return (
         <form className="h-full" onSubmit={handleSubmit}>
             <input type="hidden" name="subcommunityId" value={id} />
