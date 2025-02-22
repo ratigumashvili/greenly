@@ -9,6 +9,7 @@ import { PageTitle } from "@/components/shared/page-title";
 import { prisma } from "@/lib/prisma";
 import { getUserData } from "@/lib/utils"
 import { summaryOfRules } from "@/lib/constants";
+import Link from "next/link";
 
 async function getData(id: string) {
     const data = await prisma.subcommunity.update({
@@ -45,7 +46,10 @@ export default async function CreatePost({ params }: { params: { id: string } })
 
     return (
         <section className="py-8">
-            <PageTitle>Create a new post</PageTitle>
+            <div className="flex items-center justify-between mb-4">
+                <PageTitle classNames="mb-0">Create a new post</PageTitle>
+                <Link href={`/g/${id}`}>Go back</Link>
+            </div>
             <div className="grid grid-cols-2 md:grid-cols-8 gap-4">
                 <div className="col-span-3">
                     <Card>
