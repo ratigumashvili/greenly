@@ -24,6 +24,7 @@
     "@tiptap/pm": "^2.11.5",
     "@tiptap/react": "^2.11.5",
     "@tiptap/starter-kit": "^2.11.5",
+    "@uploadthing/react": "^7.3.0",
     "bcryptjs": "^3.0.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -41,6 +42,7 @@
     "tailwindcss-animate": "^1.0.7",
     "three": "^0.173.0",
     "unique-username-generator": "^1.4.0",
+    "uploadthing": "^7.5.2",
     "zustand": "^5.0.3"
   },
   "devDependencies": {
