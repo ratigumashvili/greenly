@@ -36,7 +36,11 @@ async function getCommunityPosts(communityId: string) {
     return data
 }
 
-export async function Feed({ id }: { id: string }) {
+interface FeedProps {
+    id: string,
+}
+
+export async function Feed({ id }: FeedProps) {
     const post = await getCommunityPosts(id)
 
     if (!post || post.Post.length === 0) {
@@ -49,7 +53,7 @@ export async function Feed({ id }: { id: string }) {
                     <CardHeader>
                         <CardTitle
                             className="text-xl">
-                            <Link href={`/g/posts/${item.id}`} className="text-primary">{item.title}</Link>
+                            <Link href={`/g/posts/${item.id}?communityId=${id}`} className="text-primary">{item.title}</Link>
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
