@@ -5,6 +5,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { CreatedAt } from "@/components/shared/created-at"
 
 import { prisma } from "@/lib/prisma"
+import { Button } from "@/components/ui/button"
 
 async function getCommunityPosts(communityId: string) {
     const data = await prisma.subcommunity.findUnique({
@@ -55,7 +56,7 @@ export async function Feed({ id }: { id: string }) {
                         content
                     </CardContent>
                     <CardFooter>
-                        <div className="w-full flex items-center justify-between text-sm">
+                        <div className="w-full flex flex-col sm:flex-row gap-4 items-center justify-between text-sm">
                             <div className="flex items-center gap-2">
                                 <p>Author:
                                     <Link href={`/users/${item.author.id}`} className="text-primary hover:text-primary/90 transition">
@@ -64,9 +65,13 @@ export async function Feed({ id }: { id: string }) {
                                 </p>
                                 <CreatedAt date={item.createdAt} />
                             </div>
-                            <div className="flex items-center gap-2">
-                                <ShareIcon className="w-4 h-4 text-muted-foreground" />
-                                <MessageCircleIcon className="w-4 h-4 text-muted-foreground" />
+                            <div className="flex items-center gap-1">
+                                <Button variant="ghost" size="icon">
+                                    <ShareIcon className="w-4 h-4 text-muted-foreground" />
+                                </Button>
+                                <Button variant="ghost" size="icon">
+                                    <MessageCircleIcon className="w-4 h-4 text-muted-foreground" />
+                                </Button>
                             </div>
                         </div>
                     </CardFooter>
