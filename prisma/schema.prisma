@@ -21,6 +21,7 @@ model User {
   fields                String?
   interests             String?
   about                 String?
+  vote                  Vote[]
   createdAt             DateTime             @default(now())
   createdSubcommunities Subcommunity[]
   SubcommunityMember    SubcommunityMember[]
@@ -80,9 +81,24 @@ model Post {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  vote      Vote[]
 
   authorId       String
   subcommunityId String
   author         User         @relation(fields: [authorId], references: [id], onDelete: Cascade)
   subcommunity   Subcommunity @relation(fields: [subcommunityId], references: [id], onDelete: Cascade)
+}
+
+enum TypeOfVote {
+  UP
+  DOWN
+}
+
+model Vote {
+  id       String     @id @default(uuid())
+  Post     Post?      @relation(fields: [postId], references: [id])
+  postId   String?
+  User     User?      @relation(fields: [userId], references: [id])
+  userId   String?
+  voteType TypeOfVote
 }

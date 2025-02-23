@@ -75,10 +75,7 @@ export default async function SingleSubCommunityPage({ params }: { params: { id:
             <PageTitle>{data.name}</PageTitle>
             <div className="grid grid-cols-10 gap-4">
                 <div className="col-span-10 md:col-span-6 lg:col-span-7">
-                    <Feed /> 
-                    <pre>MEMBER: {JSON.stringify(isMember, null, 2)}</pre>
-                    <pre>CREATOR: {JSON.stringify(isCreator, null, 2)}</pre>
-                    <pre>ROLE: {JSON.stringify(isAdmin, null, 2)}</pre>
+                    <Feed id={id} />
                 </div>
                 <div className="col-span-10 md:col-span-4 lg:col-span-3">
                     <div className="flex items-center justify-between mb-4">

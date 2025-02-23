@@ -420,12 +420,12 @@ export async function getSubcommunityMembers(subcommunityId: string) {
       where: { subcommunityId },
       select: {
         role: true,
-        user: { // ✅ Ensure we fetch email
+        user: { 
           select: {
             id: true,
             userName: true,
             name: true,
-            email: true, // ✅ Include email
+            email: true,
           },
         },
       },
@@ -539,46 +539,6 @@ export async function getMemberCount(subcommunityId: string) {
   }
 }
 
-// export async function createPost(formData: FormData) {
-//   const subcommunityId = formData.get("subcommunityId") as string;
-//   const title = formData.get("title") as string;
-//   const content = (formData.get("content") as string) || "";
-//   // const imagesUrl = JSON.parse(formData.get("imagesUrl") as string || "[]"); // ✅ Convert back to array
-//   // const files = formData.getAll("files") as string[];
-
-//   if (!title || !subcommunityId) {
-//     return { error: "Title and subcommunity are required." };
-//   }
-
-//   const { session, user, isMember } = await getUserData(subcommunityId);
-
-//   if (!session || !user?.id) {
-//     return { error: "Unauthorized" };
-//   }
-
-//   if (!isMember) {
-//     return { error: "Only community members can create posts" };
-//   }
-
-//   try {
-//     const post = await prisma.post.create({
-//       data: {
-//         title,
-//         content,
-//         // imagesUrl,
-//         // files,
-//         authorId: user.id,
-//         subcommunityId,
-//       },
-//     });
-
-//     return { success: true, message: "Post created successfully", post };
-//   } catch (error) {
-//     console.error("Create Post Error:", error);
-//     return { error: "Failed to create post. Please try again." };
-//   }
-// }
-
 export async function createPost(formData: FormData) {
   const subcommunityId = formData.get("subcommunityId") as string;
   const title = formData.get("title") as string;
@@ -606,8 +566,8 @@ export async function createPost(formData: FormData) {
       data: {
         title,
         content,
-        imagesUrl, 
-        file,     
+        imagesUrl,
+        file,
         authorId: user.id,
         subcommunityId,
       },
@@ -618,6 +578,16 @@ export async function createPost(formData: FormData) {
     console.error("Create Post Error:", error);
     return { error: "Failed to create post. Please try again." };
   }
+}
+
+export async function handleVote(formData: FormData) {
+  const { session, user } = await getUserData();
+
+  if (!session || !user?.id) {
+    return { error: "Unauthorized" };
+  }
+
+  const postId = formData.get("postId") as string
 }
 
 
