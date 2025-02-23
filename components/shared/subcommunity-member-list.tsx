@@ -8,6 +8,7 @@ import { MemberCount } from "@/components/shared/member-count"
 
 import { separator } from "@/lib/utils"
 import Link from "next/link";
+import { Button } from "../ui/button";
 
 interface SubcommunityMemberListProps {
   subcommunityId: string;
@@ -16,6 +17,7 @@ interface SubcommunityMemberListProps {
 
 export function SubcommunityMemberList({ subcommunityId, isMember }: SubcommunityMemberListProps) {
   const [members, setMembers] = useState<{ id: string; userName: string; name?: string }[]>([]);
+  const [showAll, setShowAll] = useState(false)
 
   useEffect(() => {
     async function fetchMembers() {
@@ -36,7 +38,7 @@ export function SubcommunityMemberList({ subcommunityId, isMember }: Subcommunit
         </CardTitle>
       </CardHeader>
       <CardContent className="p-4 pt-0">
-        {members && members.length !== 0 && (
+        {members && members.length !== 0 && !showAll ? (
           <>
             {members.slice(0, 3).map((member, index) => (
               <span key={member.id}>
@@ -44,7 +46,17 @@ export function SubcommunityMemberList({ subcommunityId, isMember }: Subcommunit
                 {separator(index, members.slice(0, 3), ", ", "...")}
               </span>
             ))}
-            {members.length > 3 && <span>and {members.length - 3} more</span>}
+            {members.length > 3 && <span className="cursor-pointer text-muted-foreground" onClick={() => setShowAll(!showAll)}> and {members.length - 3} more</span>}
+          </>
+        ) : (
+          <>
+            {members.map((member, index) => (
+              <span key={member.id}>
+                <Link href={`/users/${member.id}`}>@{member.userName}</Link>
+                {separator(index, members, ", ", ". ")}
+              </span>
+            ))}
+            <span className="cursor-pointer text-muted-foreground" onClick={() => setShowAll(!showAll)}>Show less</span>
           </>
         )}
       </CardContent>

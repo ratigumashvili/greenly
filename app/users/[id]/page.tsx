@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma"
 import { PageTitle } from "@/components/shared/page-title"
 import DynamicGraph from "./graph"
 import { Separator } from "@/components/ui/separator"
+import { UsersPosts } from "./posts"
 
 export interface DynamicGraphUserProps {
     id: string,
@@ -12,7 +13,12 @@ export interface DynamicGraphUserProps {
     SubcommunityMember: {
         subcommunityId: string,
         subcommunityName: string,
-        role: "admin" | "member"
+        role: "admin" | "member",
+    }[],
+    Posts: {
+        postTitle: string,
+        postId: string
+        subcommunityId: string
     }[]
 }
 
@@ -45,10 +51,13 @@ async function getSingleUser(paramsId: string) {
                     }
                 },
                 Post: {
+                    orderBy: {
+                        createdAt: "desc"
+                    },
                     select: {
                         id: true,
                         title: true,
-                        content: true
+                        subcommunityId: true
                     }
                 }
             }
@@ -78,6 +87,11 @@ export default async function SingleUsersPage({ params }: { params: { id: string
             subcommunityName: sc.subcommunity.name,
             role: sc.role,
         })),
+        Posts: user.Post.map((post) => ({
+            postTitle: post.title,
+            postId: post.id,
+            subcommunityId: post.subcommunityId
+        }))
     };
 
     return (
@@ -87,6 +101,7 @@ export default async function SingleUsersPage({ params }: { params: { id: string
             <pre>
                 {JSON.stringify(user, null, 2)}
             </pre>
+            <UsersPosts user={formattedUser as DynamicGraphUserProps} />
             <DynamicGraph user={formattedUser as DynamicGraphUserProps} />
         </section>
     )

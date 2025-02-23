@@ -8,7 +8,7 @@ export function Footer() {
         <footer className="w-full max-w-7xl mx-auto p-8 flex flex-col items-center justify-center gap-4 md:flex-row md:justify-between pr-4 pl-16 md:px-16 xl:px-4 border-t">
             <div className="flex items-center gap-3">
                 <Image src={'/isu-logo-green.png'} width={100} height={100} alt="Logo" />
-                <h2 className="hidden md:block font-bold text-3xl text-primary uppercase">
+                <h2 className="hidden md:block font-bold text-3xl uppercase">
                     Ilia State <br />University
                 </h2>
             </div>
