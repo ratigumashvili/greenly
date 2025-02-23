@@ -7,7 +7,7 @@ import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { signIn } from "@/lib/auth";
 import { getUserData } from "@/lib/utils";
-import { Prisma } from "@prisma/client";
+import { Prisma, TypeOfVote } from "@prisma/client";
 
 export async function loginWithCredentials(email: string, password: string) {
   try {
@@ -420,7 +420,7 @@ export async function getSubcommunityMembers(subcommunityId: string) {
       where: { subcommunityId },
       select: {
         role: true,
-        user: { 
+        user: {
           select: {
             id: true,
             userName: true,
@@ -584,24 +584,44 @@ export async function handleVote(formData: FormData) {
   const { session, user } = await getUserData();
 
   if (!session || !user?.id) {
-    return { error: "Unauthorized" };
+    return ;
   }
 
   const postId = formData.get("postId") as string
+  const direction = formData.get("direction") as TypeOfVote
+
+  const vote = await prisma.vote.findFirst({
+    where: {
+      postId: postId,
+      userId: user.id
+    }
+  })
+
+  if (vote) {
+    if(vote.voteType === direction) {
+      await prisma.vote.delete({
+        where: {
+          id: vote.id
+        }
+      })
+    } else {
+      await prisma.vote.update({
+        where: {
+          id: vote.id
+        }, 
+        data: {
+          voteType: direction
+        }
+      })
+    }
+  }
+
+  await prisma.vote.create({
+    data: {
+      voteType: direction,
+      userId: user.id,
+      postId: postId
+    }
+  })
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

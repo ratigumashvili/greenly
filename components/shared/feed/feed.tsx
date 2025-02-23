@@ -6,6 +6,7 @@ import { CreatedAt } from "@/components/shared/created-at"
 
 import { prisma } from "@/lib/prisma"
 import { Button } from "@/components/ui/button"
+import { handleVote } from "@/app/actions"
 
 async function getCommunityPosts(communityId: string) {
     const data = await prisma.subcommunity.findUnique({
@@ -70,6 +71,13 @@ export async function Feed({ id }: FeedProps) {
                                 <CreatedAt date={item.createdAt} />
                             </div>
                             <div className="flex items-center gap-1">
+                                <form action={handleVote}>
+                                    <input type="hidden" name="postId" value={item.id} />
+                                    <input type="hidden" name="direction" value="UP" />
+                                <Button variant="ghost" size="icon">
+                                    up
+                                </Button>    
+                                </form>
                                 <Button variant="ghost" size="icon">
                                     <ShareIcon className="w-4 h-4 text-muted-foreground" />
                                 </Button>
