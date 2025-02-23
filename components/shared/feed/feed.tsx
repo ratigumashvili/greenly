@@ -1,13 +1,15 @@
 import Link from "next/link"
 import { ArrowBigDownIcon, ArrowBigUpIcon, MessageCircleIcon, ShareIcon } from "lucide-react"
 
+import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { CreatedAt } from "@/components/shared/created-at"
-
-import { prisma } from "@/lib/prisma"
-import { Button } from "@/components/ui/button"
-import { handleVote } from "@/app/actions"
 import { SubmitButton } from "@/components/forms/submit-button"
+import { CopyFeedItem } from "@/components/shared/feed/copy-feed-item"
+import { RenderToJson } from "@/components/shared/feed/render-to-json"
+
+import { handleVote } from "@/app/actions"
+import { prisma } from "@/lib/prisma"
 
 async function getCommunityPosts(communityId: string) {
     const data = await prisma.subcommunity.findUnique({
@@ -19,7 +21,7 @@ async function getCommunityPosts(communityId: string) {
                 select: {
                     id: true,
                     title: true,
-                    // content: true,
+                    content: true,
                     // file: true,
                     // imagesUrl: true,
                     createdAt: true,
@@ -33,13 +35,12 @@ async function getCommunityPosts(communityId: string) {
                     vote: {
                         select: {
                             id: true,
-                            voteType: true,
-                            userId: true
+                            voteType: true
                         }
                     }
                 }
             }
-        }
+        },
     })
 
     return data
@@ -48,6 +49,7 @@ async function getCommunityPosts(communityId: string) {
 interface FeedProps {
     id: string,
 }
+
 
 export async function Feed({ id }: FeedProps) {
     const post = await getCommunityPosts(id)
@@ -75,7 +77,9 @@ export async function Feed({ id }: FeedProps) {
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
-                            content
+                            
+                            <RenderToJson data={"hello"} />
+                            
                         </CardContent>
                         <CardFooter>
                             <div className="w-full flex flex-col sm:flex-row gap-4 items-center justify-between text-sm">
@@ -92,9 +96,6 @@ export async function Feed({ id }: FeedProps) {
                                         <input type="hidden" name="postId" value={item.id} />
                                         <input type="hidden" name="direction" value="UP" />
                                         <input type="hidden" name="subcommunity" value={id} />
-                                        {/* <Button variant="ghost" size="icon">
-                                            <ArrowBigUpIcon className="w-4 h-4 text-muted-foreground" />
-                                        </Button> */}
                                         <SubmitButton variant="ghost" size="icon" classNames="w-9 h-9">
                                             <ArrowBigUpIcon className="w-4 h-4 text-muted-foreground" />
                                         </SubmitButton>
@@ -108,9 +109,10 @@ export async function Feed({ id }: FeedProps) {
                                             <ArrowBigDownIcon className="w-4 h-4 text-muted-foreground" />
                                         </SubmitButton>
                                     </form>
-                                    <Button variant="ghost" size="icon">
+                                    {/* <Button variant="ghost" size="icon">
                                         <ShareIcon className="w-4 h-4 text-muted-foreground" />
-                                    </Button>
+                                    </Button> */}
+                                    <CopyFeedItem communityId={id} postId={item.id} />
                                     <Button variant="ghost" size="icon">
                                         <MessageCircleIcon className="w-4 h-4 text-muted-foreground" />
                                     </Button>
