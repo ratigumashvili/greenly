@@ -8,6 +8,7 @@ import { prisma } from "@/lib/prisma";
 import { signIn } from "@/lib/auth";
 import { getUserData } from "@/lib/utils";
 import { Prisma, TypeOfVote } from "@prisma/client";
+import { Vote } from "lucide-react";
 
 export async function loginWithCredentials(email: string, password: string) {
   try {
@@ -589,30 +590,34 @@ export async function handleVote(formData: FormData) {
 
   const postId = formData.get("postId") as string
   const direction = formData.get("direction") as TypeOfVote
+  const subcommunity = formData.get("subcommunity") as string
 
-  const vote = await prisma.vote.findFirst({
+  const existingVote = await prisma.vote.findFirst({
     where: {
       postId: postId,
       userId: user.id
     }
   })
 
-  if (vote) {
-    if(vote.voteType === direction) {
+  if (existingVote) {
+    if(existingVote.voteType === direction) {
       await prisma.vote.delete({
         where: {
-          id: vote.id
+          id: existingVote.id
         }
       })
-    } else {
+      return revalidatePath(`/g/${subcommunity}`)
+    } 
+    else {
       await prisma.vote.update({
         where: {
-          id: vote.id
-        }, 
+          id: existingVote.id,
+        },
         data: {
-          voteType: direction
-        }
-      })
+          voteType: direction,
+        },
+      });
+      return revalidatePath(`/g/${subcommunity}`);
     }
   }
 
@@ -623,5 +628,7 @@ export async function handleVote(formData: FormData) {
       postId: postId
     }
   })
+
+  return revalidatePath(`/g/${subcommunity}`)
 }
 

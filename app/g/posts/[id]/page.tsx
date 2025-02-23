@@ -24,6 +24,17 @@ async function getSinglePost(postId: string) {
                     id: true,
                     userName: true
                 }
+            },
+            vote: {
+                select: {
+                    id: true,
+                    voteType: true,
+                    User: {
+                        select: {
+                            id: true
+                        }
+                    },
+                }
             }
         }
     })
@@ -48,6 +59,7 @@ export default async function SinglePostPage(
     if (!post || !id) {
         return null
     }
+    
     return (
         <section className="py-8">
             <div className="grid grid-cols-10 gap-4">
