@@ -8,8 +8,8 @@ import { cn } from "@/lib/utils"
 
 interface SubmitButtonProps {
     children?: React.ReactNode
-    title: string,
-    pendingTitle: string,
+    title?: string,
+    pendingTitle?: string,
     classNames?: string,
     variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link" | null | undefined,
     size?: "default" | "sm" | "lg" | "icon" | null | undefined,
@@ -29,7 +29,7 @@ export function SubmitButton({ children, title, pendingTitle, classNames, varian
                 disabled={pending || isLoading}
                 className={cn("w-full disabled:opacity-50 disabled:cursor-not-allowed", classNames)}
             >
-                <Loader2Icon className="animate-spin" /> <span className="ml-2">{pendingTitle}</span>
+                <Loader2Icon className="animate-spin" /> {pendingTitle && <span className="ml-2">{pendingTitle}</span>}
             </Button>
         ) : (
             <Button

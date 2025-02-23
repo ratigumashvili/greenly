@@ -7,6 +7,7 @@ import { CreatedAt } from "@/components/shared/created-at"
 import { prisma } from "@/lib/prisma"
 import { Button } from "@/components/ui/button"
 import { handleVote } from "@/app/actions"
+import { SubmitButton } from "@/components/forms/submit-button"
 
 async function getCommunityPosts(communityId: string) {
     const data = await prisma.subcommunity.findUnique({
@@ -91,18 +92,21 @@ export async function Feed({ id }: FeedProps) {
                                         <input type="hidden" name="postId" value={item.id} />
                                         <input type="hidden" name="direction" value="UP" />
                                         <input type="hidden" name="subcommunity" value={id} />
-                                        <Button variant="ghost" size="icon">
+                                        {/* <Button variant="ghost" size="icon">
                                             <ArrowBigUpIcon className="w-4 h-4 text-muted-foreground" />
-                                        </Button>
+                                        </Button> */}
+                                        <SubmitButton variant="ghost" size="icon" classNames="w-9 h-9">
+                                            <ArrowBigUpIcon className="w-4 h-4 text-muted-foreground" />
+                                        </SubmitButton>
                                     </form>
                                     <p>{count}</p>
                                     <form action={handleVote}>
                                         <input type="hidden" name="postId" value={item.id} />
                                         <input type="hidden" name="direction" value="DOWN" />
                                         <input type="hidden" name="subcommunity" value={id} />
-                                        <Button variant="ghost" size="icon">
+                                        <SubmitButton variant="ghost" size="icon" classNames="w-9 h-9">
                                             <ArrowBigDownIcon className="w-4 h-4 text-muted-foreground" />
-                                        </Button>
+                                        </SubmitButton>
                                     </form>
                                     <Button variant="ghost" size="icon">
                                         <ShareIcon className="w-4 h-4 text-muted-foreground" />
