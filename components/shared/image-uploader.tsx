@@ -34,3 +34,4 @@ export default function ImageUploader({ onUploadComplete }: { onUploadComplete: 
         </div>
     );
 }
+
