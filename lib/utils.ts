@@ -3,6 +3,15 @@ import { twMerge } from "tailwind-merge"
 import { prisma } from "@/lib/prisma"
 import { authSession } from "@/lib/auth"
 
+import { generateHTML } from "@tiptap/html";
+import StarterKit from "@tiptap/starter-kit";
+import Link from "@tiptap/extension-link";
+import Bold from "@tiptap/extension-bold";
+import Italic from "@tiptap/extension-italic";
+import BulletList from "@tiptap/extension-bullet-list";
+import OrderedList from "@tiptap/extension-ordered-list";
+import ListItem from "@tiptap/extension-list-item";
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
@@ -98,3 +107,40 @@ export async function getUserData(subcommunityId?: string) {
 }
 
 export const separator = (index: number, array: any, separatorType: string = ', ', separatorEnd: string = ".") => index === array.length - 1 ? separatorEnd : separatorType
+
+export function tiptapJsonToHtml(content: string | object | null): string {
+  try {
+      let json;
+
+      if (!content) {
+          console.error("❌ No content provided");
+          return "<p>Invalid content</p>";
+      }
+
+      // If content is a string, parse it into an object
+      if (typeof content === "string") {
+          json = JSON.parse(content); // ✅ Parse properly
+      } else {
+          json = content;
+      }
+
+      // Ensure JSON is valid before passing to Tiptap
+      if (!json || typeof json !== "object" || !json.type) {
+          console.error("❌ Invalid JSON structure:", json);
+          return "<p>Invalid content</p>";
+      }
+
+      return generateHTML(json, [
+          StarterKit,
+          Link.configure({ openOnClick: true }),
+          Bold,
+          Italic,
+          BulletList,
+          OrderedList,
+          ListItem,
+      ]);
+  } catch (error) {
+      console.error("❌ Error parsing Tiptap JSON:", error);
+      return "<p>Invalid content</p>";
+  }
+}

@@ -6,7 +6,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { CreatedAt } from "@/components/shared/created-at"
 import { SubmitButton } from "@/components/forms/submit-button"
 import { CopyFeedItem } from "@/components/shared/feed/copy-feed-item"
-import { RenderToJson } from "@/components/shared/feed/render-to-json"
+import PostContent from "@/components/shared/feed/post-content"
 
 import { handleVote } from "@/app/actions"
 import { prisma } from "@/lib/prisma"
@@ -78,8 +78,10 @@ export async function Feed({ id }: FeedProps) {
                         </CardHeader>
                         <CardContent>
                             
-                            <RenderToJson data={"hello"} />
-                            
+                        {/* <PostContent content={item.content ? JSON.stringify(item.content) : "{}"} /> */}
+                        <PostContent content={item.content || "{}"} />
+
+
                         </CardContent>
                         <CardFooter>
                             <div className="w-full flex flex-col sm:flex-row gap-4 items-center justify-between text-sm">
