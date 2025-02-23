@@ -75,7 +75,7 @@ model SubcommunityMember {
 model Post {
   id        String   @id @default(uuid())
   title     String
-  content   Json?
+  content   Json
   file      String?
   imagesUrl String[] @default([])
 

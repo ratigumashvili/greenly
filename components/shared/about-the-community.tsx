@@ -94,13 +94,8 @@ export async function AboutTheCommunity({id}: {id: string}) {
                 </p>
                 <SubcommunityMemberList subcommunityId={id} isMember={isMember} />
             </div>
-            {session && !isCreator && (
+            {session && (
                 <JoinCommunityButton subcommunityId={data.id} isMember={isMember} />
-            )}
-            {isCreator && (
-                <Button asChild className="w-full">
-                    <Link href={`/g/${id}/create`}>Create post</Link>
-                </Button>
             )}
         </div>
     )

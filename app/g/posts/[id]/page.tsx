@@ -5,6 +5,7 @@ import { AboutTheCommunity } from "@/components/shared/about-the-community"
 import { CreatedAt } from "@/components/shared/created-at"
 
 import { prisma } from "@/lib/prisma"
+import PostContent from "@/components/shared/feed/post-content"
 
 async function getSinglePost(postId: string) {
     const data = await prisma.post.findFirst({
@@ -34,6 +35,12 @@ async function getSinglePost(postId: string) {
                             id: true
                         }
                     },
+                }
+            },
+            subcommunity: {
+                select: {
+                    id: true,
+                    name: true
                 }
             }
         }
@@ -67,10 +74,10 @@ export default async function SinglePostPage(
                     <h2 className="text-2xl font-bold mb-4">{post.title}</h2>
                     <p className="text-sm">
                         By: <Link href={`/users/${post.author.id}`} className="text-primary hover:text-primary/90 transition">{post.author.userName}</Link>,
-                        <span className="pl-1"><CreatedAt date={post.createdAt} /></span>
+                        <span className="pl-1"><CreatedAt date={post.createdAt} /></span>, in <Link href={`/g/${post.subcommunity.id}`} className="text-primary hover:text-primary/90 transition">{post.subcommunity.name}</Link>
                     </p>
                     <Separator className="my-4" />
-                    main content
+                    <PostContent content={post.content || "{}"} />
                 </div>
                 <div className="col-span-10 md:col-span-4 lg:col-span-3">
                     <AboutTheCommunity id={communityId} />

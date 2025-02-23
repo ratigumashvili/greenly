@@ -13,6 +13,7 @@ import { prisma } from "@/lib/prisma"
 // import { getUserData } from "@/lib/utils"
 // import { JoinCommunityButton } from "@/components/forms/join-community-button"
 import { AboutTheCommunity } from "@/components/shared/about-the-community"
+import { getUserData } from "@/lib/utils";
 
 
 
@@ -35,7 +36,7 @@ async function getData(id: string) {
 export default async function SingleSubCommunityPage({ params }: { params: { id: string } }) {
     const { id } = await params
     const data = await getData(id)
-    // const { session, user } = await getUserData(id)
+    const { session, user } = await getUserData(id)
 
     // const isMember = user ? data.members.some(member => member.userId === user.id) : false;
     // const isCreator = user?.email === data.User?.email;

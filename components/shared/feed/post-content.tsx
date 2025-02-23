@@ -1,17 +1,17 @@
 "use client"
 
-import { tiptapJsonToHtml } from "@/lib/utils";
+import { cn, tiptapJsonToHtml } from "@/lib/utils";
 
-export default function PostContent({ content }: { content: any }) {
+export default function PostContent({ content, className }: { content: any, className?: string }) {
     let parsedContent: string = "";
 
     if (typeof content === "string") {
-        parsedContent = content; // Already a string
+        parsedContent = content;
     } else if (typeof content === "object" && content !== null) {
-        parsedContent = JSON.stringify(content); // Convert JSON object to string
+        parsedContent = JSON.stringify(content);
     } else {
-        parsedContent = "{}"; // Fallback for invalid content
+        parsedContent = "{}";
     }
 
-    return <div className="line-clamp-3" dangerouslySetInnerHTML={{ __html: tiptapJsonToHtml(parsedContent) }} />;
+    return <div className={cn("[&_p]:mb-3", className)} dangerouslySetInnerHTML={{ __html: tiptapJsonToHtml(parsedContent) }} />;
 }

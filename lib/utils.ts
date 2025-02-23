@@ -113,20 +113,18 @@ export function tiptapJsonToHtml(content: string | object | null): string {
       let json;
 
       if (!content) {
-          console.error("❌ No content provided");
+          console.error("No content provided");
           return "<p>Invalid content</p>";
       }
 
-      // If content is a string, parse it into an object
       if (typeof content === "string") {
-          json = JSON.parse(content); // ✅ Parse properly
+          json = JSON.parse(content);
       } else {
           json = content;
       }
 
-      // Ensure JSON is valid before passing to Tiptap
       if (!json || typeof json !== "object" || !json.type) {
-          console.error("❌ Invalid JSON structure:", json);
+          console.error("Invalid JSON structure:", json);
           return "<p>Invalid content</p>";
       }
 
@@ -140,7 +138,7 @@ export function tiptapJsonToHtml(content: string | object | null): string {
           ListItem,
       ]);
   } catch (error) {
-      console.error("❌ Error parsing Tiptap JSON:", error);
+      console.error("Error parsing Tiptap JSON:", error);
       return "<p>Invalid content</p>";
   }
 }

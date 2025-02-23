@@ -18,12 +18,13 @@ async function getCommunityPosts(communityId: string) {
         },
         select: {
             Post: {
+                orderBy: {
+                    createdAt: "desc"
+                },
                 select: {
                     id: true,
                     title: true,
                     content: true,
-                    // file: true,
-                    // imagesUrl: true,
                     createdAt: true,
                     updatedAt: true,
                     author: {
@@ -78,9 +79,7 @@ export async function Feed({ id }: FeedProps) {
                         </CardHeader>
                         <CardContent>
                             
-                        {/* <PostContent content={item.content ? JSON.stringify(item.content) : "{}"} /> */}
-                        <PostContent content={item.content || "{}"} />
-
+                        <PostContent content={item.content || "{}"} className="line-clamp-3" />
 
                         </CardContent>
                         <CardFooter>
@@ -93,6 +92,7 @@ export async function Feed({ id }: FeedProps) {
                                     </p>
                                     <CreatedAt date={item.createdAt} />
                                 </div>
+
                                 <div className="flex items-center gap-1">
                                     <form action={handleVote}>
                                         <input type="hidden" name="postId" value={item.id} />
@@ -111,14 +111,14 @@ export async function Feed({ id }: FeedProps) {
                                             <ArrowBigDownIcon className="w-4 h-4 text-muted-foreground" />
                                         </SubmitButton>
                                     </form>
-                                    {/* <Button variant="ghost" size="icon">
-                                        <ShareIcon className="w-4 h-4 text-muted-foreground" />
-                                    </Button> */}
+
                                     <CopyFeedItem communityId={id} postId={item.id} />
+
                                     <Button variant="ghost" size="icon">
                                         <MessageCircleIcon className="w-4 h-4 text-muted-foreground" />
                                     </Button>
                                 </div>
+
                             </div>
                         </CardFooter>
                     </Card>
