@@ -57,8 +57,8 @@ export function PostCommentItem({
     };
 
     return (
-        <Card key={comment.id} className="py-4 mb-4">
-            <CardContent className="flex items-start justify-between">
+        <div key={comment.id} className="py-4 mb-4">
+            <div className="flex items-start justify-between">
                 <div>
                     <p className="font-semibold">@{comment.author.userName}:</p>
                     <p>{comment.content}</p>
@@ -66,7 +66,7 @@ export function PostCommentItem({
 
                 <DropdownMenu>
                     <DropdownMenuTrigger>
-                        <EllipsisIcon />
+                        <EllipsisIcon className="text-muted-foreground" />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-20">
                         <DropdownMenuItem
@@ -87,7 +87,7 @@ export function PostCommentItem({
                     </DropdownMenuContent>
                 </DropdownMenu>
 
-            </CardContent>
+            </div>
 
             {isReplying === comment.id && (
                 <CreatePostCommentForm
@@ -116,7 +116,7 @@ export function PostCommentItem({
                     ))}
                 </div>
             )}
-        </Card>
+        </div>
     );
 }
 

@@ -85,15 +85,6 @@ export default async function SinglePostPage(
 
     return (
         <section className="py-8">
-            <pre>
-                subAdmin {JSON.stringify(user?.SubcommunityMember[0].role === "admin", null, 2)}
-            </pre>
-            <pre>
-                isAdmin {JSON.stringify(user?.isAdmin, null, 2)}
-            </pre>
-            <pre>
-                userId {JSON.stringify(userId, null, 2)}
-            </pre>
             <div className="grid grid-cols-10 gap-4">
                 <div className="col-span-10 md:col-span-6 lg:col-span-7">
                     <h2 className="text-2xl font-bold mb-4">{post.title}</h2>

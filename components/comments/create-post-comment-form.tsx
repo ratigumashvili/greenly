@@ -10,12 +10,12 @@ import { Button } from "@/components/ui/button";
 import { createComment } from "@/app/actions"
 import { useRouter } from "next/navigation";
 
-export function CreatePostCommentForm({ 
-    postId, 
-    subcommunityId, 
-    parentId, 
-    onReplySuccess 
-}: { 
+export function CreatePostCommentForm({
+    postId,
+    subcommunityId,
+    parentId,
+    onReplySuccess
+}: {
     postId: string;
     subcommunityId: string;
     parentId?: string | null;
@@ -63,7 +63,16 @@ export function CreatePostCommentForm({
             </div>
 
             <div className="flex gap-2">
-                <Button type="button" variant="secondary" size="lg" onClick={() => setText("")} className="w-full md:w-max">
+                <Button
+                    type="button"
+                    variant="secondary"
+                    size="lg"
+                    onClick={() => {
+                        setText("");
+                        onReplySuccess?.();
+                    }}
+                    className="w-full md:w-max"
+                    >
                     Cancel
                 </Button>
                 <SubmitButton isLoading={isLoading} title="Post comment" pendingTitle="Posting..." classNames="w-full md:w-max" size="lg" />
