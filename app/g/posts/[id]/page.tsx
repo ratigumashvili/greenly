@@ -1,5 +1,4 @@
 import Link from "next/link"
-import { v4 as uuidv4 } from 'uuid';
 
 import { Separator } from "@/components/ui/separator"
 import { AboutTheCommunity } from "@/components/shared/about-the-community"
@@ -16,6 +15,9 @@ async function getSinglePost(postId: string) {
     const data = await prisma.post.findFirst({
         where: {
             id: postId
+        },
+        orderBy: {
+            createdAt: "desc"
         },
         select: {
             id: true,
