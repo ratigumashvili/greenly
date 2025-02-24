@@ -98,3 +98,7 @@ body {
 .ProseMirror:focus {
   outline:none
 }
+
+.data-list {
+  @apply grid grid-cols-1 sm:grid-cols-2 gap-2 [&>dt]:font-medium [&>dt]:col-span-1 [&>dd]:col-span-1 [&>dd>a]:text-teal-600 [&>dd>a:hover]:text-teal-700;
+}

@@ -1,11 +1,10 @@
-import dynamic from "next/dynamic"
-
 import { prisma } from "@/lib/prisma"
 
 import { PageTitle } from "@/components/shared/page-title"
-import DynamicGraph from "./graph"
 import { Separator } from "@/components/ui/separator"
-import { UsersPosts } from "./posts"
+
+import DynamicGraph from "@/app/users/[id]/graph"
+import { UsersPosts } from "@/app/users/[id]/posts"
 
 export interface DynamicGraphUserProps {
     id: string,
@@ -98,9 +97,30 @@ export default async function SingleUsersPage({ params }: { params: { id: string
         <section className="py-8">
             <PageTitle>{user?.name}, AKA @{user.userName}</PageTitle>
             <Separator className="mb-4" />
-            <pre>
-                {JSON.stringify(user, null, 2)}
-            </pre>
+
+            <section className="mb-10">
+                <dl className="data-list">
+                    <dt>Name:</dt>
+                    <dd>{user?.name}</dd>
+                    <dt>Username:</dt>
+                    <dd>{user?.userName}</dd>
+                    <dt>Email:</dt>
+                    <dd>{user.email}</dd>
+                    <dt>institution:</dt>
+                    <dd>{user?.institution}</dd>
+                    <dt>Department:</dt>
+                    <dd>{user?.department}</dd>
+                    <dt>Disciplines:</dt>
+                    <dd>{user?.disciplines}</dd>
+                    <dt>Fields:</dt>
+                    <dd>{user?.fields}</dd>
+                    <dt>Interests:</dt>
+                    <dd>{user?.interests}</dd>
+                    <dt>About:</dt>
+                    <dd>{user?.about}</dd>
+                </dl>
+            </section>
+
             <UsersPosts user={formattedUser as DynamicGraphUserProps} />
             <DynamicGraph user={formattedUser as DynamicGraphUserProps} />
         </section>
