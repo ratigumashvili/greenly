@@ -63,11 +63,10 @@ export async function AboutTheCommunity({id}: {id: string}) {
         const isAdmin = user?.SubcommunityMember[0]?.role === "admin"
 
     return (
-        <div className="col-span-10 md:col-span-4 lg:col-span-3">
-            
+        <div className="col-span-10 md:col-span-4 lg:col-span-3">            
             <div className="flex items-center justify-between mb-4">
                 <h2 className="font-bold text-lg">About the community</h2>
-                {(isCreator || isAdmin) &&
+                {(isCreator || isAdmin || user?.isAdmin) &&
                     (
                         <Button variant="secondary" size="icon" asChild>
                             <Link href={`/g/edit?recordId=${data.id}`}>
