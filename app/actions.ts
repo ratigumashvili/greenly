@@ -585,7 +585,7 @@ export async function handleVote(formData: FormData) {
   const { session, user } = await getUserData();
 
   if (!session || !user?.id) {
-    return ;
+    return;
   }
 
   const postId = formData.get("postId") as string
@@ -600,14 +600,14 @@ export async function handleVote(formData: FormData) {
   })
 
   if (existingVote) {
-    if(existingVote.voteType === direction) {
+    if (existingVote.voteType === direction) {
       await prisma.vote.delete({
         where: {
           id: existingVote.id
         }
       })
       return revalidatePath(`/g/${subcommunity}`)
-    } 
+    }
     else {
       await prisma.vote.update({
         where: {
@@ -640,9 +640,9 @@ export async function getCommentsForPost(postId: string) {
 
   try {
     const comments = await prisma.comment.findMany({
-      where: { 
-        postId, 
-        parentId: null 
+      where: {
+        postId,
+        parentId: null
       },
       orderBy: {
         createdAt: "desc"
@@ -696,19 +696,35 @@ export async function createComment(formData: FormData) {
     parentId = null;
   }
 
-  console.log("🔍 parentId before Prisma create:", parentId);
-  console.log("🔍 Creating comment with:", { content, postId, parentId, authorId: user.id });
-
   try {
+    let depth = 1;
+
     if (parentId) {
       const parentComment = await prisma.comment.findUnique({
         where: { id: parentId },
-        select: { id: true }
+        select: {
+          parent: {
+            select: {
+              parent: {
+                select: { id: true },
+              }
+            }
+          }
+        }
       });
 
       if (!parentComment) {
         console.error("Parent comment does not exist!");
         return { error: "Parent comment does not exist." };
+      }
+
+      if (parentComment?.parent?.parent) {
+        return { error: "You cannot reply more than 3 levels deep." };
+      }
+
+      depth = 2;
+      if (parentComment?.parent) {
+        depth = 3;
       }
     }
 
