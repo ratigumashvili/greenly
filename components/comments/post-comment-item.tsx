@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { EllipsisIcon } from "lucide-react";
 
 import { CreatePostCommentForm } from "@/components/comments/create-post-comment-form";
-import { Card, CardContent } from "@/components/ui/card";
+import { PostVoting } from "@/components/comments/post-voting";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -57,9 +57,12 @@ export function PostCommentItem({
     };
 
     return (
-        <div key={comment.id} className="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm">
+        <div key={comment.id} className="pl-8 p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
             <div className="flex items-start justify-between">
-                <div>
+                <div className="relative pl-6">
+                    <div className="absolute -top-4 -left-8 -bottom-4 w-8 min-h-full bg-slate-100/70 flex flex-col items-center justify-center">
+                        <PostVoting />
+                    </div>
                     <p className="font-semibold text-gray-900">@{comment.author.userName}</p>
                     <p className="text-gray-700">{comment.content}</p>
                 </div>
