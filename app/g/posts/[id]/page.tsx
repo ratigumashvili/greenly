@@ -6,6 +6,7 @@ import { CreatedAt } from "@/components/shared/created-at"
 
 import { prisma } from "@/lib/prisma"
 import PostContent from "@/components/shared/feed/post-content"
+import { PostGridGallery } from "@/components/shared/post-grid-gallery"
 
 async function getSinglePost(postId: string) {
     const data = await prisma.post.findFirst({
@@ -66,7 +67,7 @@ export default async function SinglePostPage(
     if (!post || !id) {
         return null
     }
-    
+
     return (
         <section className="py-8">
             <div className="grid grid-cols-10 gap-4">
@@ -78,6 +79,19 @@ export default async function SinglePostPage(
                     </p>
                     <Separator className="my-4" />
                     <PostContent content={post.content || "{}"} />
+
+                    {post.imagesUrl.length > 0 && (
+                        <section className="my-4">
+                            <PostGridGallery
+                                images={post.imagesUrl.map((url) => ({
+                                    src: url,
+                                    width: 1450,
+                                    height: 600,
+                                }))}
+                            />
+                        </section>
+                    )}
+
                 </div>
                 <div className="col-span-10 md:col-span-4 lg:col-span-3">
                     <AboutTheCommunity id={communityId} />

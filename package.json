@@ -37,6 +37,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-force-graph-3d": "^1.26.0",
+    "react-image-gallery": "^1.4.0",
     "react-time-ago": "^7.3.3",
     "sonner": "^1.7.4",
     "tailwind-merge": "^3.0.1",
@@ -44,6 +45,7 @@
     "three": "^0.173.0",
     "unique-username-generator": "^1.4.0",
     "uploadthing": "^7.5.2",
+    "yet-another-react-lightbox": "^3.21.7",
     "zustand": "^5.0.3"
   },
   "devDependencies": {
