@@ -745,12 +745,6 @@ export async function createComment(formData: FormData) {
 }
 
 
-
-
-
-
-
-
 export async function deleteComment(idToDelete: string) {
   const { session, user } = await getUserData("");
 

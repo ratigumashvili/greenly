@@ -77,7 +77,7 @@ export default async function SinglePostPage(
 
     const userId = user?.id as string
     const isAdmin = user?.isAdmin as boolean
-    const subAdmin = user?.SubcommunityMember[0].role === "admin"
+    const subAdmin = user?.SubcommunityMember[0]?.role === "admin"
 
     if (!post || !id) {
         return null
@@ -107,7 +107,7 @@ export default async function SinglePostPage(
                         </section>
                     )}
 
-                    <Separator className="my-4" />
+                    <Separator className="my-8" />
 
                         <h2 className="text-xl font-bold">Comments</h2>
                         <PostCommentSection
