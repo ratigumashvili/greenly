@@ -6,7 +6,7 @@ import { AboutTheCommunity } from "@/components/shared/about-the-community"
 import { CreatedAt } from "@/components/shared/created-at"
 import { PostGridGallery } from "@/components/shared/post-grid-gallery"
 import PostContent from "@/components/shared/feed/post-content"
-import { CommentSection } from "@/components/comments/post-comment-section";
+import { PostCommentSection } from "@/components/comments/post-comment-section";
 
 import { prisma } from "@/lib/prisma"
 import { getCommentsForPost } from "@/app/actions"
@@ -100,7 +100,7 @@ export default async function SinglePostPage(
                     <Separator className="my-4" />
 
                         <h2 className="text-xl font-bold">Comments</h2>
-                        <CommentSection
+                        <PostCommentSection
                             postId={id}
                             communityId={communityId}
                             initialComments={comments}

@@ -1,6 +1,6 @@
 import { CreatePostCommentForm } from "@/components/comments/create-post-comment-form";
 
-export function CommentItem({ 
+export function PostCommentItem({ 
     comment, 
     handleReplyClick, 
     isReplying, 
@@ -33,7 +33,7 @@ export function CommentItem({
             {comment.replies?.length > 0 && (
                 <div className="ml-4">
                     {comment.replies.map((reply: any) => (
-                        <CommentItem 
+                        <PostCommentItem 
                             key={reply.id} 
                             comment={reply} 
                             handleReplyClick={handleReplyClick} 

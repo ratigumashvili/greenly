@@ -4,9 +4,9 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { CreatePostCommentForm } from "@/components/comments/create-post-comment-form";
-import { CommentItem } from "@/components/comments/post-comment-item";
+import { PostCommentItem } from "@/components/comments/post-comment-item";
 
-export function CommentSection({ 
+export function PostCommentSection({ 
     postId, 
     communityId,
     initialComments
@@ -34,7 +34,7 @@ export function CommentSection({
             <div className="mt-4">
                 {initialComments.length > 0 ? (
                     initialComments.map((comment) => (
-                        <CommentItem
+                        <PostCommentItem
                             key={comment.id} 
                             comment={comment} 
                             handleReplyClick={handleReplyClick} 
