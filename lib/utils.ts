@@ -131,11 +131,6 @@ export function tiptapJsonToHtml(content: string | object | null): string {
       return generateHTML(json, [
           StarterKit,
           Link.configure({ openOnClick: true }),
-          Bold,
-          Italic,
-          BulletList,
-          OrderedList,
-          ListItem,
       ]);
   } catch (error) {
       console.error("Error parsing Tiptap JSON:", error);
