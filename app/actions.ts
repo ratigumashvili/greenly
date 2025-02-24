@@ -632,3 +632,151 @@ export async function handleVote(formData: FormData) {
   return revalidatePath(`/g/${subcommunity}`)
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+export async function getCommentsForPost(postId: string) {
+  console.log("Checking Prisma Client:", prisma); // ✅ Add this debug log
+
+  if (!prisma) {
+    console.error("Prisma is undefined! Ensure it's imported correctly.");
+    return [];
+  }
+
+  try {
+    const comments = await prisma.comment.findMany({
+      where: { postId },
+      include: {
+        author: {
+          select: { id: true, userName: true }
+        },
+        votes: {
+          select: { id: true, userId: true, voteType: true, commentId: true }
+        },
+        replies: {
+          include: {
+            author: {
+              select: { id: true, userName: true }
+            },
+            votes: {
+              select: { id: true, userId: true, voteType: true, commentId: true }
+            },
+            replies: {  // Nested replies
+              include: {
+                author: {
+                  select: { id: true, userName: true }
+                },
+                votes: {
+                  select: { id: true, userId: true, voteType: true, commentId: true }
+                },
+              },
+            },
+          }
+        },
+      }
+    });
+
+    return comments;
+  } catch (error) {
+    console.error("Error fetching comments:", error);
+    return [];
+  }
+}
+
+
+export async function createComment(formData: FormData) {
+  const { session, user, isMember } = await getUserData(formData.get("postId") as string);
+  
+  if (!session || !user?.id) {
+    return { error: "Unauthorized" };
+  }
+
+  if (!isMember) {
+    return { error: "Only members can comment." };
+  }
+
+  const content = formData.get("content") as string;
+  const postId = formData.get("postId") as string;
+  const parentId = formData.get("parentId") as string | null; // Null if it's a top-level comment
+
+  if (!content || !postId) {
+    return { error: "Content and post ID are required." };
+  }
+
+  try {
+    const comment = await prisma.comment.create({
+      data: {
+        content,
+        authorId: user.id,
+        postId,
+        parentId, // Allows nesting for replies
+      },
+    });
+
+    return { success: true, message: "Comment created successfully", comment };
+  } catch (error) {
+    console.error("Create Comment Error:", error);
+    return { error: "Failed to create comment." };
+  }
+}
+
+
+export async function handleCommentVote(formData: FormData) {
+  const { session, user, isMember } = await getUserData(formData.get("postId") as string);
+
+  if (!session || !user?.id) {
+    return { error: "Unauthorized" };
+  }
+
+  if (!isMember) {
+    return { error: "Only members can vote." };
+  }
+
+  const commentId = formData.get("commentId") as string;
+  const direction = formData.get("direction") as "UP" | "DOWN";
+
+  if (!commentId) {
+    return { error: "Comment ID is required." };
+  }
+
+  const existingVote = await prisma.commentVote.findFirst({
+    where: {
+      commentId,
+      userId: user.id,
+    },
+  });
+
+  if (existingVote) {
+    if (existingVote.voteType === direction) {
+      // Remove the vote if the user clicks the same vote again
+      await prisma.commentVote.delete({ where: { id: existingVote.id } });
+    } else {
+      // Update vote if changing from UP to DOWN or vice versa
+      await prisma.commentVote.update({
+        where: { id: existingVote.id },
+        data: { voteType: direction },
+      });
+    }
+  } else {
+    // Create a new vote if the user hasn't voted yet
+    await prisma.commentVote.create({
+      data: {
+        voteType: direction,
+        userId: user.id,
+        commentId,
+      },
+    });
+  }
+
+  return { success: true, message: "Vote updated successfully" };
+}
+
