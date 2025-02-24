@@ -38,6 +38,11 @@ async function getCommunityPosts(communityId: string) {
                             id: true,
                             voteType: true
                         }
+                    },
+                    Comment: {
+                        select: {
+                            id: true
+                        }
                     }
                 }
             }
@@ -114,9 +119,10 @@ export async function Feed({ id }: FeedProps) {
 
                                     <CopyFeedItem communityId={id} postId={item.id} />
 
-                                    <Button variant="ghost" size="icon">
-                                        <MessageCircleIcon className="w-4 h-4 text-muted-foreground" />
-                                    </Button>
+                                    <span className="text-muted-foreground flex items-center gap-1">
+                                        <MessageCircleIcon className="w-4 h-4" /> 
+                                        {item?.Comment?.length}
+                                    </span>
                                 </div>
 
                             </div>
