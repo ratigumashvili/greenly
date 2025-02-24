@@ -3,6 +3,7 @@ import { Feed } from "@/components/shared/feed/feed"
 import { AboutTheCommunity } from "@/components/shared/about-the-community"
 
 import { prisma } from "@/lib/prisma"
+import { getCommentsForPost } from "@/app/actions";
 
 async function getData(id: string) {
     const data = await prisma.subcommunity.update({
@@ -22,6 +23,7 @@ async function getData(id: string) {
 export default async function SingleSubCommunityPage({ params }: { params: { id: string } }) {
     const { id } = await params
     const data = await getData(id)
+    
 
     if (!data) {
         return null

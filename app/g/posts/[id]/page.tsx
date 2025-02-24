@@ -1,12 +1,16 @@
 import Link from "next/link"
-import { Separator } from "@/components/ui/separator"
+import { v4 as uuidv4 } from 'uuid';
 
+import { Separator } from "@/components/ui/separator"
 import { AboutTheCommunity } from "@/components/shared/about-the-community"
 import { CreatedAt } from "@/components/shared/created-at"
+import { PostGridGallery } from "@/components/shared/post-grid-gallery"
+import PostContent from "@/components/shared/feed/post-content"
+import { CommentSection } from "@/components/comments/post-comment-section";
 
 import { prisma } from "@/lib/prisma"
-import PostContent from "@/components/shared/feed/post-content"
-import { PostGridGallery } from "@/components/shared/post-grid-gallery"
+import { getCommentsForPost } from "@/app/actions"
+
 
 async function getSinglePost(postId: string) {
     const data = await prisma.post.findFirst({
@@ -63,6 +67,7 @@ export default async function SinglePostPage(
     const communityId = (await searchParams).communityId ?? "";
 
     const post = await getSinglePost(id)
+    const comments = await getCommentsForPost(id)
 
     if (!post || !id) {
         return null
@@ -91,6 +96,32 @@ export default async function SinglePostPage(
                             />
                         </section>
                     )}
+
+                    <Separator className="my-4" />
+
+                    <pre>
+                        {JSON.stringify(comments, null, 2)}
+                    </pre>
+
+                    <section>
+                        <h2 className="text-xl font-bold">Comments</h2>
+                        {comments.length > 0 ? (
+                            comments.map((comment) => (
+                                <div key={comment.id} className="py-4 border-b last:border-b-0">
+                                    <p className="font-semibold">@{comment.author.userName}:</p>
+                                    <p>{comment.content}</p>
+                                </div>
+                            ))
+                        ) : (
+                            <p className="text-gray-500">No comments yet.</p>
+                        )}
+
+                        <CommentSection
+                            postId={id}
+                            communityId={communityId}
+                            // parentId={null} 
+                        />
+                    </section>
 
                 </div>
                 <div className="col-span-10 md:col-span-4 lg:col-span-3">

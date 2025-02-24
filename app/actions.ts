@@ -645,10 +645,11 @@ export async function handleVote(formData: FormData) {
 
 
 export async function getCommentsForPost(postId: string) {
-  console.log("Checking Prisma Client:", prisma); // ✅ Add this debug log
+  console.log("Checking Prisma Client:", prisma); // ✅ Debugging Prisma client
+  console.log("Fetching comments for postId:", postId); // ✅ Debugging postId
 
   if (!prisma) {
-    console.error("Prisma is undefined! Ensure it's imported correctly.");
+    console.error("❌ Prisma is undefined! Ensure it's imported correctly.");
     return [];
   }
 
@@ -656,46 +657,36 @@ export async function getCommentsForPost(postId: string) {
     const comments = await prisma.comment.findMany({
       where: { postId },
       include: {
-        author: {
-          select: { id: true, userName: true }
-        },
-        votes: {
-          select: { id: true, userId: true, voteType: true, commentId: true }
-        },
+        author: { select: { id: true, userName: true } },
+        votes: { select: { id: true, userId: true, voteType: true, commentId: true } },
         replies: {
           include: {
-            author: {
-              select: { id: true, userName: true }
-            },
-            votes: {
-              select: { id: true, userId: true, voteType: true, commentId: true }
-            },
-            replies: {  // Nested replies
+            author: { select: { id: true, userName: true } },
+            votes: { select: { id: true, userId: true, voteType: true, commentId: true } },
+            replies: {
               include: {
-                author: {
-                  select: { id: true, userName: true }
-                },
-                votes: {
-                  select: { id: true, userId: true, voteType: true, commentId: true }
-                },
+                author: { select: { id: true, userName: true } },
+                votes: { select: { id: true, userId: true, voteType: true, commentId: true } },
               },
             },
-          }
+          },
         },
-      }
+      },
     });
 
+    console.log("✅ Comments fetched successfully:", comments.length);
     return comments;
   } catch (error) {
-    console.error("Error fetching comments:", error);
+    console.error("❌ Error fetching comments:", error);
     return [];
   }
 }
 
 
+
 export async function createComment(formData: FormData) {
-  const { session, user, isMember } = await getUserData(formData.get("postId") as string);
-  
+  const { session, user, isMember } = await getUserData(formData.get("subcommunityId") as string);
+
   if (!session || !user?.id) {
     return { error: "Unauthorized" };
   }
@@ -706,28 +697,104 @@ export async function createComment(formData: FormData) {
 
   const content = formData.get("content") as string;
   const postId = formData.get("postId") as string;
-  const parentId = formData.get("parentId") as string | null; // Null if it's a top-level comment
+  let parentId = formData.get("parentId") as string | null; // Nullable for top-level comments
 
   if (!content || !postId) {
     return { error: "Content and post ID are required." };
   }
 
+  // ✅ Ensure `parentId` is either `null` or a valid UUID
+  if (!parentId || parentId.trim() === "" || parentId === "null") {
+    parentId = null;
+  }
+
+  // 🚀 **Debug Logs Before Creating Comment**
+  console.log("🔍 parentId before Prisma create:", parentId);
+  console.log("🔍 Creating comment with:", { content, postId, parentId, authorId: user.id });
+
   try {
+    // **Check if Parent ID Exists Before Creating a Reply**
+    if (parentId) {
+      const parentComment = await prisma.comment.findUnique({
+        where: { id: parentId },
+        select: { id: true }
+      });
+
+      if (!parentComment) {
+        console.error("❌ Parent comment does not exist!");
+        return { error: "Parent comment does not exist." };
+      }
+    }
+
+    // ✅ Proceed with creating the comment
     const comment = await prisma.comment.create({
       data: {
         content,
         authorId: user.id,
         postId,
-        parentId, // Allows nesting for replies
+        parentId, // Either `null` for top-level or a valid parent comment ID
       },
     });
 
     return { success: true, message: "Comment created successfully", comment };
   } catch (error) {
-    console.error("Create Comment Error:", error);
+    console.error("❌ Create Comment Error:", error);
     return { error: "Failed to create comment." };
   }
 }
+
+
+
+
+
+// export async function createComment(formData: FormData) {
+//   const subcommunityId = formData.get("subcommunityId") as string;
+//   const postId = formData.get("postId") as string;
+//   const content = formData.get("content") as string;
+//   const parentId = formData.get("parentId") as string | null; // Optional for replies
+
+//   // 🚀 Ensure required fields exist before proceeding
+//   if (!subcommunityId || !postId || !content) {
+//     console.error("Missing required fields:", { subcommunityId, postId, content });
+//     return { error: "Content, post ID, and community ID are required." };
+//   }
+
+//   // ✅ Get user data & check membership
+//   const { session, user, isMember } = await getUserData(subcommunityId);
+
+//   if (!session || !user?.id) {
+//     console.error("Unauthorized attempt to comment");
+//     return { error: "Unauthorized" };
+//   }
+
+//   console.log("User Membership Status:", { isMember });
+
+//   if (!isMember) {
+//     console.warn(`User ${user.id} is not a member of community ${subcommunityId}`);
+//     return { error: "Only members can comment." };
+//   }
+
+//   try {
+//     const comment = await prisma.comment.create({
+//       data: {
+//         content,
+//         authorId: user.id, // ✅ Server ensures user authenticity
+//         postId,
+//         parentId, // Allows nesting for replies
+//       },
+//     });
+
+//     console.log("✅ Comment created successfully:", comment);
+
+//     return { success: true, message: "Comment created successfully", comment };
+//   } catch (error) {
+//     console.error("❌ Create Comment Error:", error);
+//     return { error: "Failed to create comment." };
+//   }
+// }
+
+
+
 
 
 export async function handleCommentVote(formData: FormData) {

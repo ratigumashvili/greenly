@@ -45,6 +45,7 @@
     "three": "^0.173.0",
     "unique-username-generator": "^1.4.0",
     "uploadthing": "^7.5.2",
+    "uuid": "^11.1.0",
     "yet-another-react-lightbox": "^3.21.7",
     "zustand": "^5.0.3"
   },

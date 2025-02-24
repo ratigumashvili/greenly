@@ -89,7 +89,8 @@ export async function getUserData(subcommunityId?: string) {
 
   const isCreator = getCommunity.some((item) => item.id === subcommunityId);
 
-  const isMember = isCreator || (user && user?.SubcommunityMember.length > 0);
+  // const isMember = isCreator || (user && user?.SubcommunityMember.length > 0);
+  const isMember = user && user?.SubcommunityMember.length > 0;
 
   let role = "member";
   if (isCreator) {
