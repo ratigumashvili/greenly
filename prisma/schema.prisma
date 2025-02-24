@@ -26,6 +26,8 @@ model User {
   createdSubcommunities Subcommunity[]
   SubcommunityMember    SubcommunityMember[]
   Post                  Post[]
+  comments  Comment[]     // ✅ Adds relation to comments
+  votes     CommentVote[] // ✅ Adds relation to comment votes
 }
 
 model Subcommunity {
@@ -87,6 +89,7 @@ model Post {
   subcommunityId String
   author         User         @relation(fields: [authorId], references: [id], onDelete: Cascade)
   subcommunity   Subcommunity @relation(fields: [subcommunityId], references: [id], onDelete: Cascade)
+  Comment        Comment[]
 }
 
 enum TypeOfVote {
@@ -102,3 +105,32 @@ model Vote {
   userId   String?
   voteType TypeOfVote
 }
+
+model Comment {
+  id        String      @id @default(uuid())
+  content   String
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  postId    String
+  parentId  String?     // Optional for replies
+  authorId  String
+  votes     CommentVote[]
+
+  parent    Comment?    @relation("CommentReplies", fields: [parentId], references: [id]) // ✅ Define `fields` & `references` here
+  replies   Comment[]   @relation("CommentReplies") // ✅ No `fields` or `references` here
+
+  author    User        @relation(fields: [authorId], references: [id])
+  post      Post        @relation(fields: [postId], references: [id])
+}
+
+model CommentVote {
+  id        String      @id @default(uuid())
+  commentId String
+  userId    String
+  voteType  TypeOfVote
+
+  comment   Comment     @relation(fields: [commentId], references: [id])
+  user      User        @relation(fields: [userId], references: [id])
+}
+
+
