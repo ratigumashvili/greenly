@@ -9,6 +9,8 @@ import { PostCommentSection } from "@/components/comments/post-comment-section";
 
 import { prisma } from "@/lib/prisma"
 import { getCommentsForPost } from "@/app/actions"
+import { getUserData } from "@/lib/utils"
+import { use } from "react"
 
 
 async function getSinglePost(postId: string) {
@@ -71,12 +73,27 @@ export default async function SinglePostPage(
     const post = await getSinglePost(id)
     const comments = await getCommentsForPost(id)
 
+    const {user} = await getUserData(communityId)
+
+    const userId = user?.id as string
+    const isAdmin = user?.isAdmin as boolean
+    const subAdmin = user?.SubcommunityMember[0].role === "admin"
+
     if (!post || !id) {
         return null
     }
 
     return (
         <section className="py-8">
+            <pre>
+                subAdmin {JSON.stringify(user?.SubcommunityMember[0].role === "admin", null, 2)}
+            </pre>
+            <pre>
+                isAdmin {JSON.stringify(user?.isAdmin, null, 2)}
+            </pre>
+            <pre>
+                userId {JSON.stringify(userId, null, 2)}
+            </pre>
             <div className="grid grid-cols-10 gap-4">
                 <div className="col-span-10 md:col-span-6 lg:col-span-7">
                     <h2 className="text-2xl font-bold mb-4">{post.title}</h2>
@@ -106,6 +123,9 @@ export default async function SinglePostPage(
                             postId={id}
                             communityId={communityId}
                             initialComments={comments}
+                            isAdmin={isAdmin}
+                            subAdmin={subAdmin}
+                            userId={userId}
                         />
 
                 </div>

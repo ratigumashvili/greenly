@@ -744,6 +744,65 @@ export async function createComment(formData: FormData) {
   }
 }
 
+
+
+
+
+
+
+
+export async function deleteComment(idToDelete: string) {
+  const { session, user } = await getUserData("");
+
+  if (!session || !user?.id) {
+    return { error: "Unauthorized" };
+  }
+
+  const commentId = idToDelete;
+
+  if (!commentId) {
+    return { error: "Comment ID is required." };
+  }
+
+  try {
+    const comment = await prisma.comment.findUnique({
+      where: { id: commentId },
+      select: {
+        authorId: true,
+        author: { 
+          select: { 
+            isAdmin: true 
+          } 
+        },
+      }
+    });
+
+    if (!comment) {
+      return { error: "Comment not found." };
+    }
+
+    if (user.id !== comment.authorId && !comment.author.isAdmin && !user.isAdmin) {
+      return { error: "You are not allowed to delete this comment." };
+    }
+
+    await prisma.comment.delete({
+      where: { id: commentId }
+    });
+
+    return { success: true, message: "Comment deleted successfully." };
+  } catch (error) {
+    console.error("Delete Comment Error:", error);
+    return { error: "Failed to delete comment." };
+  }
+}
+
+
+
+
+
+
+
+
 export async function handleCommentVote(formData: FormData) {
   const { session, user, isMember } = await getUserData(formData.get("postId") as string);
 

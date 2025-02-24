@@ -6,14 +6,20 @@ import { useRouter } from "next/navigation";
 import { CreatePostCommentForm } from "@/components/comments/create-post-comment-form";
 import { PostCommentItem } from "@/components/comments/post-comment-item";
 
-export function PostCommentSection({ 
-    postId, 
+export function PostCommentSection({
+    postId,
     communityId,
-    initialComments
-}: { 
+    initialComments,
+    isAdmin,
+    subAdmin,
+    userId
+}: {
     postId: string;
     communityId: string;
     initialComments: any[];
+    isAdmin: boolean;
+    subAdmin: boolean;
+    userId: string
 }) {
     const [isReplying, setIsReplying] = useState<string | null>(null);
     const router = useRouter()
@@ -35,13 +41,16 @@ export function PostCommentSection({
                 {initialComments.length > 0 ? (
                     initialComments.map((comment) => (
                         <PostCommentItem
-                            key={comment.id} 
-                            comment={comment} 
-                            handleReplyClick={handleReplyClick} 
-                            isReplying={isReplying} 
+                            key={comment.id}
+                            comment={comment}
+                            handleReplyClick={handleReplyClick}
+                            isReplying={isReplying}
                             postId={postId}
                             communityId={communityId}
                             onReplySuccess={handleReplySuccess}
+                            isAdmin={isAdmin}
+                            subAdmin={subAdmin}
+                            userId={userId}
                         />
                     ))
                 ) : (

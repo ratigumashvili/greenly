@@ -112,15 +112,15 @@ model Comment {
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
   postId    String
-  parentId  String?     // Optional for replies
+  parentId  String?     
   authorId  String
   votes     CommentVote[]
 
-  parent    Comment?    @relation("CommentReplies", fields: [parentId], references: [id]) // ✅ Define `fields` & `references` here
-  replies   Comment[]   @relation("CommentReplies") // ✅ No `fields` or `references` here
+  parent    Comment?    @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies   Comment[]   @relation("CommentReplies") 
 
-  author    User        @relation(fields: [authorId], references: [id])
-  post      Post        @relation(fields: [postId], references: [id])
+  author    User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  post      Post        @relation(fields: [postId], references: [id], onDelete: Cascade)
 }
 
 model CommentVote {
@@ -129,8 +129,8 @@ model CommentVote {
   userId    String
   voteType  TypeOfVote
 
-  comment   Comment     @relation(fields: [commentId], references: [id])
-  user      User        @relation(fields: [userId], references: [id])
+  comment   Comment     @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 
