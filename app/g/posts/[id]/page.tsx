@@ -99,29 +99,12 @@ export default async function SinglePostPage(
 
                     <Separator className="my-4" />
 
-                    <pre>
-                        {JSON.stringify(comments, null, 2)}
-                    </pre>
-
-                    <section>
                         <h2 className="text-xl font-bold">Comments</h2>
-                        {comments.length > 0 ? (
-                            comments.map((comment) => (
-                                <div key={comment.id} className="py-4 border-b last:border-b-0">
-                                    <p className="font-semibold">@{comment.author.userName}:</p>
-                                    <p>{comment.content}</p>
-                                </div>
-                            ))
-                        ) : (
-                            <p className="text-gray-500">No comments yet.</p>
-                        )}
-
                         <CommentSection
                             postId={id}
                             communityId={communityId}
-                            // parentId={null} 
+                            initialComments={comments}
                         />
-                    </section>
 
                 </div>
                 <div className="col-span-10 md:col-span-4 lg:col-span-3">
