@@ -6,14 +6,14 @@ export function CommentItem({
     isReplying, 
     postId, 
     communityId, 
-    onReplySuccess // ✅ Accept the prop
+    onReplySuccess
 }: { 
     comment: any;
     handleReplyClick: (id: string) => void;
     isReplying: string | null;
     postId: string;
     communityId: string;
-    onReplySuccess?: () => void; // ✅ Define the prop
+    onReplySuccess?: () => void;
 }) {
     return (
         <div key={comment.id} className="py-4 border-b last:border-b-0">
