@@ -1,7 +1,6 @@
 import Link from "next/link"
-import { ArrowBigDownIcon, ArrowBigUpIcon, MessageCircleIcon, ShareIcon } from "lucide-react"
+import { ArrowBigDownIcon, ArrowBigUpIcon, MessageCircleIcon } from "lucide-react"
 
-import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { CreatedAt } from "@/components/shared/created-at"
 import { SubmitButton } from "@/components/forms/submit-button"
