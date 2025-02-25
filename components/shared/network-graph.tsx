@@ -106,7 +106,7 @@ const NetworkGraph = ({ user }: NetworkGraphProps) => {
             {selectedCommunity && (
                 <div className="absolute right-0 top-0 w-80 h-[600px] overflow-y-auto bg-white p-4 shadow-lg z-[80]">
                     <h2 className="text-xl font-bold mb-2">
-                        Members of "{selectedCommunity.name}"
+                        Members of &quot;{selectedCommunity.name}&quot;
                     </h2>
                     <ul>
                         {communityMembers.length === 0 ? (

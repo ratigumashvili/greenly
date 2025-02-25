@@ -6,11 +6,6 @@ import { authSession } from "@/lib/auth"
 import { generateHTML } from "@tiptap/html";
 import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
-import Bold from "@tiptap/extension-bold";
-import Italic from "@tiptap/extension-italic";
-import BulletList from "@tiptap/extension-bullet-list";
-import OrderedList from "@tiptap/extension-ordered-list";
-import ListItem from "@tiptap/extension-list-item";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -20,7 +15,7 @@ export async function getSubCommunity() {
   const session = await authSession();
 
   if (!session?.user?.email) {
-    console.error("❌ No session found, returning empty data.");
+    console.error("No session found, returning empty data.");
     return [];
   }
 
@@ -89,7 +84,6 @@ export async function getUserData(subcommunityId?: string) {
 
   const isCreator = getCommunity.some((item) => item.id === subcommunityId);
 
-  // const isMember = isCreator || (user && user?.SubcommunityMember.length > 0);
   const isMember = user && user?.SubcommunityMember.length > 0;
 
   let role = "member";

@@ -8,7 +8,7 @@ const NetworkGraph = dynamic(() => import("@/components/shared/network-graph"), 
 export default function DynamicGraph({ user }: {user: DynamicGraphUserProps}) {
     return (
         <section>
-            <h2 className="font-bold text-xl mb-4">{user.name}'s Community Network</h2>
+            <h2 className="font-bold text-xl mb-4">{user.name}&apos;s Community Network</h2>
             <NetworkGraph user={user} />
         </section>
     );

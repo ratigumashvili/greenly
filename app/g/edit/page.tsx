@@ -73,7 +73,7 @@ export default async function EditSubCommunityPage({ searchParams }: { searchPar
         const isCreator = user?.email === data.User?.email;
 
         if((!isCreator && role !== "admin" && !user.isAdmin)) {
-            return <div className="py-8">You don't have permission to update this record.</div>;
+            return <div className="py-8">You don&apos;t have permission to update this record.</div>;
         }
 
     return (

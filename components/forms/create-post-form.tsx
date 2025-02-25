@@ -20,7 +20,7 @@ import PdfUploader from "../shared/pdf-uploader";
 export function CreatePostForm({ id }: { id: string }) {
     const [isLoading, setIsLoading] = useState(false);
     const [imageUrls, setImageUrls] = useState<string[]>([]);
-    const [fileUrl, setFileUrl] = useState<String | null>(null)
+    const [fileUrl, setFileUrl] = useState<string | null>(null)
     const router = useRouter();
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {

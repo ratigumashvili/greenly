@@ -8,7 +8,6 @@ import { MemberCount } from "@/components/shared/member-count"
 
 import { separator } from "@/lib/utils"
 import Link from "next/link";
-import { Button } from "../ui/button";
 
 interface SubcommunityMemberListProps {
   subcommunityId: string;

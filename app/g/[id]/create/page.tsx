@@ -1,17 +1,12 @@
 import { redirect } from "next/navigation";
 
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { PageTitle } from "@/components/shared/page-title";
 
 import { prisma } from "@/lib/prisma";
 import { getUserData } from "@/lib/utils"
 import { summaryOfRules } from "@/lib/constants";
 import Link from "next/link";
-import Tiptap from "@/components/shared/tip-tap";
-import { Button } from "@/components/ui/button";
-import { createPost } from "@/app/actions";
 import { CreatePostForm } from "@/components/forms/create-post-form";
 
 async function getData(id: string) {

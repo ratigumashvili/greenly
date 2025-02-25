@@ -3,7 +3,6 @@ import { Feed } from "@/components/shared/feed/feed"
 import { AboutTheCommunity } from "@/components/shared/about-the-community"
 
 import { prisma } from "@/lib/prisma"
-import { getCommentsForPost } from "@/app/actions";
 
 async function getData(id: string) {
     const data = await prisma.subcommunity.update({

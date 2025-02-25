@@ -8,7 +8,6 @@ import { prisma } from "@/lib/prisma";
 import { signIn } from "@/lib/auth";
 import { getUserData } from "@/lib/utils";
 import { Prisma, TypeOfVote } from "@prisma/client";
-import { Vote } from "lucide-react";
 
 export async function loginWithCredentials(email: string, password: string) {
   try {
@@ -176,6 +175,7 @@ export async function createSubCommunity(formData: FormData) {
         tags = JSON.parse(rawTags);
       }
     } catch (error) {
+      console.log(error)
       return { error: "Invalid tags format" };
     }
 
@@ -240,6 +240,7 @@ export async function updateSubCommunity(formData: FormData) {
         tags = JSON.parse(rawTags);
       }
     } catch (error) {
+      console.log(error)
       return { error: "Invalid tags format" };
     }
 
@@ -334,6 +335,7 @@ export async function deleteCommunity(formData: FormData) {
 
     return { success: true, redirectUrl: "/g/" };
   } catch (error) {
+    console.log(error)
     return { error: "Failed to delete subcommunity" };
   }
 }
@@ -697,9 +699,10 @@ export async function createComment(formData: FormData) {
   }
 
   try {
-    let depth = 1;
-
     if (parentId) {
+      
+      let depth = 1;
+
       const parentComment = await prisma.comment.findUnique({
         where: { id: parentId },
         select: {

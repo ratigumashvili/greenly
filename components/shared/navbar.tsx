@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import { SearchIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { UserDropdown } from "@/components/shared/user-dropdown";

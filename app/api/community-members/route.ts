@@ -21,6 +21,7 @@ export async function GET(request: Request) {
 
         return NextResponse.json({ members: members.map((m) => m.user) });
     } catch (error) {
+        console.log(error)
         return NextResponse.json({ error: "Failed to fetch members" }, { status: 500 });
     }
 }
