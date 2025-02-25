@@ -728,6 +728,7 @@ export async function createComment(formData: FormData) {
       depth = 2;
       if (parentComment?.parent) {
         depth = 3;
+        console.log(depth)
       }
     }
 
