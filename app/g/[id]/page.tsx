@@ -19,7 +19,7 @@ async function getData(id: string) {
     return data;
 }
 
-export default async function SingleSubCommunityPage({ params }: { params: { id: string } }) {
+export default async function SingleSubCommunityPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params
     const data = await getData(id)
     
