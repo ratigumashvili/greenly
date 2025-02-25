@@ -128,16 +128,13 @@ async function getSinglePost(postId: string) {
 //     )
 // }
 
-export default async function SinglePostPage({
-    params,
-    searchParams,
-}: {
-    // @ts-ignore
+type PageProps = {
     params: { id: string };
-    // @ts-ignore
     searchParams: Record<string, string | undefined>;
-}) {
-    const { id } = params; // ✅ No need to await
+};
+
+export default async function SinglePostPage({params, searchParams}: PageProps) {
+    const id = params.id; // ✅ No need to await
     const communityId = searchParams?.communityId ?? "";
 
     const post = await getSinglePost(id);
