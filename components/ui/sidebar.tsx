@@ -257,7 +257,12 @@ Sidebar.displayName = "Sidebar"
 const SidebarTrigger = React.forwardRef<
   React.ElementRef<typeof Button>,
   React.ComponentProps<typeof Button>
->(({ className, onClick, ...props }, ref) => {
+>(({ 
+  // eslint-disable-next-line
+  className, 
+  onClick, 
+  ...props 
+}, ref) => {
   const { toggleSidebar } = useSidebar()
 
   return (
