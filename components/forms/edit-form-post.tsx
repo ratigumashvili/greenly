@@ -68,7 +68,7 @@ export function EditPostForm({
     return (
         <>
             <h2 className="text-2xl font-bold mb-4">Edit post</h2>
-            
+
             <form className="space-y-4" onSubmit={handleSubmit}>
                 <div className="space-y-2">
                     <Label htmlFor="title" className="text-base">Edit title</Label>
@@ -82,8 +82,10 @@ export function EditPostForm({
                 </div>
 
                 <div className="space-y-2">
-                    <Label htmlFor="content" className="text-base">Edit content</Label>
-                    <MenuBar editor={editor} />
+                    <Label className="text-base">Edit content</Label>
+                    <div className="my-6">
+                        <MenuBar editor={editor} />
+                    </div>
                     <EditorContent editor={editor} />
                 </div>
 

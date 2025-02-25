@@ -58,7 +58,7 @@ export const MenuBar = ({ editor }: { editor: Editor | null }) => {
     };
 
 
-    return <div className='flex flex-wrap gap-2'>
+    return <div className='flex flex-wrap gap-2 my-6'>
         <Button
             type="button"
             variant={editor.isActive("heading", { level: 1 }) ? "default" : "outline"}
