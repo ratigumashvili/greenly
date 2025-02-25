@@ -132,6 +132,7 @@ export default async function SinglePostPage({
     params,
     searchParams,
 }: {
+    // @ts-ignore
     params: { id: string };
     searchParams: Record<string, string | undefined>;
 }) {
