@@ -30,7 +30,7 @@ export function PostCommentItem({
     userId,
     count
 }: {
-    comment: unknown;
+    comment: any;
     handleReplyClick: (id: string) => void;
     isReplying: string | null;
     postId: string;
