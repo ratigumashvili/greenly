@@ -13,7 +13,7 @@ export default function PdfUploader({ onUploadComplete }: { onUploadComplete: (u
     const { state } = useSidebar()
     const isTablet = useIsTablet()
 
-    const handleUploadComplete = (resp: unknown) => {
+    const handleUploadComplete = (resp: any) => {
         if (resp.length > 0) {
             const url = resp[0].url;
             onUploadComplete(url);
@@ -21,7 +21,7 @@ export default function PdfUploader({ onUploadComplete }: { onUploadComplete: (u
         }
     };
 
-    const handleUploadError = (error: unknown) => {
+    const handleUploadError = (error: any) => {
         toast.error("Upload failed: " + error);
     };
 

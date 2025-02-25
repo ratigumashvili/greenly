@@ -12,13 +12,13 @@ export default function ImageUploader({ onUploadComplete }: { onUploadComplete: 
     const { state } = useSidebar()
     const isTablet = useIsTablet()
 
-    const handleUploadComplete = (resp: unknown) => {
+    const handleUploadComplete = (resp: any) => {
         const urls = resp.map((file: { ufsUrl: string }) => file.ufsUrl);
         onUploadComplete(urls);
         toast.success("Files uploaded successfully!");
     };
 
-    const handleUploadError = (error: unknown) => {
+    const handleUploadError = (error: any) => {
         toast.error("Upload failed: " + error);
     };
 

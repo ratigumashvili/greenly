@@ -32,7 +32,7 @@ interface NetworkGraphProps {
 }
 
 const NetworkGraph = ({ user }: NetworkGraphProps) => {
-    const fgRef = useRef<unknown>(null);
+    const fgRef = useRef<any>(null);
     const [graphData, setGraphData] = useState<{ nodes: GraphNode[]; links: GraphLink[] }>({
         nodes: [],
         links: [],

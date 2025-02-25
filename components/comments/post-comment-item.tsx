@@ -123,7 +123,7 @@ export function PostCommentItem({
 
             {comment.replies?.length > 0 && (
                 <div className="ml-6 mt-3 border-l-2 border-gray-200 pl-4">
-                    {comment.replies.map((reply: unknown) => (
+                    {comment.replies.map((reply: any) => (
                         <PostCommentItem
                             key={reply.id}
                             comment={reply}
