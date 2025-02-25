@@ -31,7 +31,7 @@ export default async function SinglePostEditPage({ params }: { params: Promise<{
 
     return (
         <section className="py-8">
-            <EditPostForm />
+            <EditPostForm post={post} />
         </section>
     )
 }
