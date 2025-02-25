@@ -136,7 +136,7 @@ export default async function SinglePostPage({
     params: Awaited<{ id: string }>;
     searchParams: Record<string, string | undefined>;
 }) {
-    // @ts-expect-error
+    // @ts-expect-error Next.js 15 incorrectly infers params as a Promise, forcing it as an object
     const { id } = params;
     const communityId = searchParams?.communityId ?? "";
 
