@@ -700,7 +700,7 @@ export async function createComment(formData: FormData) {
 
   try {
     if (parentId) {
-      
+
       let depth = 1;
 
       const parentComment = await prisma.comment.findUnique({
@@ -767,10 +767,10 @@ export async function deleteComment(idToDelete: string) {
       where: { id: commentId },
       select: {
         authorId: true,
-        author: { 
-          select: { 
-            isAdmin: true 
-          } 
+        author: {
+          select: {
+            isAdmin: true
+          }
         },
       }
     });
@@ -838,3 +838,29 @@ export async function handleCommentVote(formData: FormData) {
   }
 }
 
+export async function updatePost({
+  postId,
+  title,
+  content
+}: {
+  postId: string,
+  title: string,
+  content: any
+}) {
+  try {
+    const updatedPost = prisma.post.update({
+      where: {
+        id: postId
+      },
+      data: {
+        title,
+        content
+      }
+    })
+
+    return { success: true, message: "Post updated successfully", post: updatedPost };
+  } catch (error) {
+    console.error("Error updating post:", error);
+    return { error: "Failed to update post." };
+  }
+}

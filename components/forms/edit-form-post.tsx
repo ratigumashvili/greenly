@@ -2,15 +2,18 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { EditorContent, useEditor, JSONContent } from "@tiptap/react";
 import StarterKit from '@tiptap/starter-kit'
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 import { SubmitButton } from "@/components/forms/submit-button";
 import { toast } from "sonner";
-import { Button } from "../ui/button";
-import Link from "next/link";
+
+import { updatePost } from "@/app/actions";
+import { MenuBar } from "../shared/tip-tap";
 
 export function EditPostForm({
     post
@@ -46,7 +49,7 @@ export function EditPostForm({
         const updatedContent = editor.getJSON()
 
         const response = await updatePost({
-            id: post.id,
+            postId: post.id,
             title,
             content: updatedContent
         })
@@ -62,12 +65,11 @@ export function EditPostForm({
 
     }
 
-
-
     return (
         <>
             <h2 className="text-2xl font-bold mb-4">Edit post</h2>
-            <form className="space-y-4">
+            
+            <form className="space-y-4" onSubmit={handleSubmit}>
                 <div className="space-y-2">
                     <Label htmlFor="title" className="text-base">Edit title</Label>
                     <Input
@@ -81,6 +83,7 @@ export function EditPostForm({
 
                 <div className="space-y-2">
                     <Label htmlFor="content" className="text-base">Edit content</Label>
+                    <MenuBar editor={editor} />
                     <EditorContent editor={editor} />
                 </div>
 
