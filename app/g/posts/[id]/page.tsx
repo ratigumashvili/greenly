@@ -1,8 +1,10 @@
 
 
 import Link from "next/link"
+import { SettingsIcon } from "lucide-react"
 
 import { Separator } from "@/components/ui/separator"
+import { Button } from "@/components/ui/button"
 import { AboutTheCommunity } from "@/components/shared/about-the-community"
 import { CreatedAt } from "@/components/shared/created-at"
 import { PostGridGallery } from "@/components/shared/post-grid-gallery"
@@ -76,7 +78,16 @@ export default async function SinglePostPage({ searchParams, params }: { searchP
         <section className="py-8">
             <div className="grid grid-cols-10 gap-4">
                 <div className="col-span-10 md:col-span-6 lg:col-span-7">
-                    <h2 className="text-2xl font-bold mb-4">{post.title}</h2>
+                    <div className="flex items-center justify-between">
+                        <h2 className="text-2xl font-bold mb-4">{post.title}</h2>
+                        {userId === post.author.id && (
+                            <Button asChild variant="ghost" size="icon">
+                                <Link href={`/g/posts/${post.id}/edit`}>
+                                    <SettingsIcon />
+                                </Link>
+                            </Button>
+                        )}
+                    </div>
                     <p className="text-sm">
                         By: <Link href={`/users/${post.author.id}`} className="text-primary hover:text-primary/90 transition">{post.author.userName}</Link>,
                         <span className="pl-1"><CreatedAt date={post.createdAt} /></span>, in <Link href={`/g/${post.subcommunity.id}`} className="text-primary hover:text-primary/90 transition">{post.subcommunity.name}</Link>
