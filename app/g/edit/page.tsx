@@ -8,7 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { getUserData } from "@/lib/utils";
 import { prisma } from "@/lib/prisma";
 
-export default async function EditSubCommunityPage({ searchParams }: { searchParams: { recordId: string } }) {
+export default async function EditSubCommunityPage({ searchParams }: { searchParams: Promise<{ recordId: string }>}) {
     const { recordId } = await searchParams
     const { session, user, role } = await getUserData(recordId)
 
