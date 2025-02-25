@@ -131,8 +131,12 @@ async function getSinglePost(postId: string) {
 
 export default async function SinglePostPage({
     params,
-    searchParams,
-}: Awaited<{ params: { id: string }; searchParams: Record<string, string | undefined> }>) {
+    searchParams
+}: { 
+    params: Awaited<{ id: string }>;
+    searchParams: Record<string, string | undefined>;
+}) {
+    // @ts-ignore
     const { id } = params;
     const communityId = searchParams?.communityId ?? "";
 
@@ -140,11 +144,13 @@ export default async function SinglePostPage({
     const comments = await getCommentsForPost(id);
     const { user } = await getUserData(communityId);
 
-    const userId = user?.id ?? "";
-    const isAdmin = user?.isAdmin ?? false;
+    const userId = user?.id as string;
+    const isAdmin = user?.isAdmin as boolean;
     const subAdmin = user?.SubcommunityMember?.[0]?.role === "admin";
 
-    if (!post) return null;
+    if (!post) {
+        return null;
+    }
 
     return (
         <section className="py-8">
@@ -152,16 +158,21 @@ export default async function SinglePostPage({
                 <div className="col-span-10 md:col-span-6 lg:col-span-7">
                     <h2 className="text-2xl font-bold mb-4">{post.title}</h2>
                     <p className="text-sm">
-                        By: <Link href={`/users/${post.author.id}`} className="text-primary">{post.author.userName}</Link>,
-                        <span className="pl-1"><CreatedAt date={post.createdAt} /></span>,
-                        in <Link href={`/g/${post.subcommunity.id}`} className="text-primary">{post.subcommunity.name}</Link>
+                        By: <Link href={`/users/${post.author.id}`} className="text-primary hover:text-primary/90 transition">{post.author.userName}</Link>,
+                        <span className="pl-1"><CreatedAt date={post.createdAt} /></span>, in <Link href={`/g/${post.subcommunity.id}`} className="text-primary hover:text-primary/90 transition">{post.subcommunity.name}</Link>
                     </p>
                     <Separator className="my-4" />
-                    <PostContent content={post.content ?? "{}"} />
+                    <PostContent content={post.content || "{}"} />
 
                     {post.imagesUrl.length > 0 && (
                         <section className="my-4">
-                            <PostGridGallery images={post.imagesUrl.map((url) => ({ src: url, width: 1450, height: 600 }))} />
+                            <PostGridGallery
+                                images={post.imagesUrl.map((url) => ({
+                                    src: url,
+                                    width: 1450,
+                                    height: 600,
+                                }))}
+                            />
                         </section>
                     )}
 
@@ -184,4 +195,3 @@ export default async function SinglePostPage({
         </section>
     );
 }
-
