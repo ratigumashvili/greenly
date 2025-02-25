@@ -10,7 +10,7 @@ import { PostCommentSection } from "@/components/comments/post-comment-section";
 import { prisma } from "@/lib/prisma"
 import { getCommentsForPost } from "@/app/actions"
 import { getUserData } from "@/lib/utils"
-import { use } from "react"
+
 
 
 async function getSinglePost(postId: string) {

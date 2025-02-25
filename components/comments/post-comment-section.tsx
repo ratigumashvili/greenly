@@ -39,20 +39,31 @@ export function PostCommentSection({
             <CreatePostCommentForm postId={postId} subcommunityId={communityId} parentId={null} />
             <div className="mt-4">
                 {initialComments.length > 0 ? (
-                    initialComments.map((comment) => (
-                        <PostCommentItem
-                            key={comment.id}
-                            comment={comment}
-                            handleReplyClick={handleReplyClick}
-                            isReplying={isReplying}
-                            postId={postId}
-                            communityId={communityId}
-                            onReplySuccess={handleReplySuccess}
-                            isAdmin={isAdmin}
-                            subAdmin={subAdmin}
-                            userId={userId}
-                        />
-                    ))
+                    initialComments.map((comment) => {
+
+                        const count = comment?.votes?.length > 0 && comment.votes.reduce((acc: number, vote: { voteType: "UP" | "DOWN" }) => {
+                            if (vote.voteType === "UP") return acc + 1
+                            if (vote.voteType === "DOWN") return acc - 1
+        
+                            return acc
+                        }, 0)
+
+                        return (
+                            <PostCommentItem
+                                key={comment.id}
+                                comment={comment}
+                                handleReplyClick={handleReplyClick}
+                                isReplying={isReplying}
+                                postId={postId}
+                                communityId={communityId}
+                                onReplySuccess={handleReplySuccess}
+                                isAdmin={isAdmin}
+                                subAdmin={subAdmin}
+                                userId={userId}
+                                count={count}
+                            />
+                        )
+                    })
                 ) : (
                     <p className="text-gray-500">No comments yet.</p>
                 )}

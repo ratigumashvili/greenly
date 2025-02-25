@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { EllipsisIcon } from "lucide-react";
 
 import { CreatePostCommentForm } from "@/components/comments/create-post-comment-form";
-import { PostVoting } from "@/components/comments/post-voting";
+import { CommentVoting } from "@/components/comments/post-voting";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -25,7 +25,8 @@ export function PostCommentItem({
     onReplySuccess,
     isAdmin,
     subAdmin,
-    userId
+    userId,
+    count
 }: {
     comment: any;
     handleReplyClick: (id: string) => void;
@@ -35,7 +36,8 @@ export function PostCommentItem({
     onReplySuccess?: () => void;
     isAdmin: boolean,
     subAdmin: boolean,
-    userId: string
+    userId: string,
+    count: number
 }) {
 
     const [isDeleting, setIsDeleting] = useState(false);
@@ -57,11 +59,17 @@ export function PostCommentItem({
     };
 
     return (
-        <div key={comment.id} className="pl-8 p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+        <div className="pl-8 p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
             <div className="flex items-start justify-between">
                 <div className="relative pl-6">
                     <div className="absolute -top-4 -left-8 -bottom-4 w-8 min-h-full bg-slate-100/70 flex flex-col items-center justify-center">
-                        <PostVoting postId={postId} communityId={communityId} />
+                        <CommentVoting
+                            commentId={comment.id}
+                            initialVotes={comment.votes.length === 0 ? 0 : count}
+                            userVote={comment.userVote} 
+                            postId={postId}
+                            subcommunity={communityId}
+                        />
                     </div>
                     <p className="font-semibold text-gray-900">@{comment.author.userName}</p>
                     <p className="text-gray-700">{comment.content}</p>
@@ -116,6 +124,7 @@ export function PostCommentItem({
                             isAdmin={isAdmin}
                             subAdmin={subAdmin}
                             userId={userId}
+                            count={count}
                         />
                     ))}
                 </div>

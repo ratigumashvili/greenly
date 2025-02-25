@@ -790,60 +790,47 @@ export async function deleteComment(idToDelete: string) {
   }
 }
 
-
-
-
-
-
-
-
 export async function handleCommentVote(formData: FormData) {
-  const { session, user, isMember } = await getUserData(formData.get("postId") as string);
+  const { session, user } = await getUserData();
 
   if (!session || !user?.id) {
     return { error: "Unauthorized" };
   }
 
-  if (!isMember) {
-    return { error: "Only members can vote." };
-  }
-
   const commentId = formData.get("commentId") as string;
   const direction = formData.get("direction") as "UP" | "DOWN";
+  const subcommunity = formData.get("subcommunity") as string;
 
-  if (!commentId) {
-    return { error: "Comment ID is required." };
+  if (!commentId || !direction || !subcommunity) {
+    return { error: "Invalid vote request" };
   }
 
-  const existingVote = await prisma.commentVote.findFirst({
-    where: {
-      commentId,
-      userId: user.id,
-    },
-  });
-
-  if (existingVote) {
-    if (existingVote.voteType === direction) {
-      // Remove the vote if the user clicks the same vote again
-      await prisma.commentVote.delete({ where: { id: existingVote.id } });
-    } else {
-      // Update vote if changing from UP to DOWN or vice versa
-      await prisma.commentVote.update({
-        where: { id: existingVote.id },
-        data: { voteType: direction },
-      });
-    }
-  } else {
-    // Create a new vote if the user hasn't voted yet
-    await prisma.commentVote.create({
-      data: {
-        voteType: direction,
-        userId: user.id,
-        commentId,
-      },
+  try {
+    const existingVote = await prisma.commentVote.findFirst({
+      where: { commentId, userId: user.id },
     });
-  }
 
-  return { success: true, message: "Vote updated successfully" };
+    if (existingVote) {
+      if (existingVote.voteType === direction) {
+        await prisma.commentVote.delete({ where: { id: existingVote.id } });
+        return { success: true, message: "Vote removed" };
+      } else {
+        await prisma.commentVote.update({
+          where: { id: existingVote.id },
+          data: { voteType: direction },
+        });
+        return { success: true, message: "Vote changed" };
+      }
+    }
+
+    await prisma.commentVote.create({
+      data: { voteType: direction, userId: user.id, commentId },
+    });
+
+    return { success: true, message: "Vote added" };
+  } catch (error) {
+    console.error("Error handling vote:", error);
+    return { error: "Something went wrong. Please try again." };
+  }
 }
 
