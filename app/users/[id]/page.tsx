@@ -69,7 +69,7 @@ async function getSingleUser(paramsId: string) {
 }
 
 
-export default async function SingleUsersPage({ params }: { params: { id: string } }) {
+export default async function SingleUsersPage({ params }: { params: Promise<{ id: string }> }) {
 
     const { id } = await params
     const user = await getSingleUser(id)
