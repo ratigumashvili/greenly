@@ -134,6 +134,7 @@ export default async function SinglePostPage({
 }: {
     // @ts-ignore
     params: { id: string };
+    // @ts-ignore
     searchParams: Record<string, string | undefined>;
 }) {
     const { id } = params; // ✅ No need to await
