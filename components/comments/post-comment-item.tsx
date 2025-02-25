@@ -63,13 +63,7 @@ export function PostCommentItem({
             <div className="flex items-start justify-between">
                 <div className="relative pl-6">
                     <div className="absolute -top-4 -left-8 -bottom-4 w-8 min-h-full bg-slate-100/70 flex flex-col items-center justify-center">
-                        {/* <CommentVoting
-                            commentId={comment.id}
-                            initialVotes={comment.votes.length === 0 ? 0 : count}
-                            userVote={comment.userVote} 
-                            postId={postId}
-                            subcommunity={communityId}
-                        /> */}
+                        
                         <CommentVoting
                             commentId={comment.id}
                             votes={comment.votes} // 🟢 Pass full votes array
@@ -77,7 +71,6 @@ export function PostCommentItem({
                             postId={postId}
                             subcommunity={communityId}
                         />
-
 
                     </div>
                     <p className="font-semibold text-gray-900">@{comment.author.userName}</p>
