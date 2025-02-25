@@ -13,50 +13,50 @@ import { getUserData } from "@/lib/utils"
 
 
 
-// async function getSinglePost(postId: string) {
-//     const data = await prisma.post.findFirst({
-//         where: {
-//             id: postId
-//         },
-//         orderBy: {
-//             createdAt: "desc"
-//         },
-//         select: {
-//             id: true,
-//             title: true,
-//             content: true,
-//             file: true,
-//             imagesUrl: true,
-//             createdAt: true,
-//             updatedAt: true,
-//             author: {
-//                 select: {
-//                     id: true,
-//                     userName: true
-//                 }
-//             },
-//             vote: {
-//                 select: {
-//                     id: true,
-//                     voteType: true,
-//                     User: {
-//                         select: {
-//                             id: true
-//                         }
-//                     },
-//                 }
-//             },
-//             subcommunity: {
-//                 select: {
-//                     id: true,
-//                     name: true
-//                 }
-//             }
-//         }
-//     })
+async function getSinglePost(postId: string) {
+    const data = await prisma.post.findFirst({
+        where: {
+            id: postId
+        },
+        orderBy: {
+            createdAt: "desc"
+        },
+        select: {
+            id: true,
+            title: true,
+            content: true,
+            file: true,
+            imagesUrl: true,
+            createdAt: true,
+            updatedAt: true,
+            author: {
+                select: {
+                    id: true,
+                    userName: true
+                }
+            },
+            vote: {
+                select: {
+                    id: true,
+                    voteType: true,
+                    User: {
+                        select: {
+                            id: true
+                        }
+                    },
+                }
+            },
+            subcommunity: {
+                select: {
+                    id: true,
+                    name: true
+                }
+            }
+        }
+    })
 
-//     return data
-// }
+    return data
+}
 
 // export default async function SinglePostPage(
 //     { 
