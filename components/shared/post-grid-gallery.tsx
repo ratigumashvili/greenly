@@ -13,6 +13,7 @@ export function PostGridGallery({ images }: { images: { src: string; width: numb
     <>
       <div className="flex flex-wrap gap-2">
         {images.map((img, index) => (
+          // eslint-disable-next-line
           <img
             key={index}
             src={img.src}

@@ -16,7 +16,7 @@ export function PostCommentSection({
 }: {
     postId: string;
     communityId: string;
-    initialComments: any[];
+    initialComments: unknown[];
     isAdmin: boolean;
     subAdmin: boolean;
     userId: string

@@ -2,7 +2,7 @@
 
 import { cn, tiptapJsonToHtml } from "@/lib/utils";
 
-export default function PostContent({ content, className }: { content: any, className?: string }) {
+export default function PostContent({ content, className }: { content: unknown, className?: string }) {
     let parsedContent: string = "";
 
     if (typeof content === "string") {
