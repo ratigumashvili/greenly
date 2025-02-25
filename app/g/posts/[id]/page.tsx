@@ -132,11 +132,7 @@ async function getSinglePost(postId: string) {
 export default async function SinglePostPage({
     params,
     searchParams
-}: { 
-    params: Awaited<{ id: string }>;
-    searchParams: Record<string, string | undefined>;
-}) {
-    // @ts-expect-error Next.js 15 incorrectly infers params as a Promise, forcing it as an object
+}: PageProps<{ id: string }>) {
     const { id } = params;
     const communityId = searchParams?.communityId ?? "";
 
@@ -148,9 +144,7 @@ export default async function SinglePostPage({
     const isAdmin = user?.isAdmin as boolean;
     const subAdmin = user?.SubcommunityMember?.[0]?.role === "admin";
 
-    if (!post) {
-        return null;
-    }
+    if (!post) return null;
 
     return (
         <section className="py-8">
