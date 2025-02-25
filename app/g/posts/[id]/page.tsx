@@ -136,7 +136,7 @@ export default async function SinglePostPage({
     params: Awaited<{ id: string }>;
     searchParams: Record<string, string | undefined>;
 }) {
-    // @ts-ignore
+    // @ts-expect-error
     const { id } = params;
     const communityId = searchParams?.communityId ?? "";
 
