@@ -59,12 +59,12 @@ async function getSinglePost(postId: string) {
 }
 
 export default async function SinglePostPage(
-    {
-        params,
-        searchParams,
-    }: {
-        params: { id: string };
-        searchParams: Record<string, string | undefined>;
+    { 
+        params, 
+        searchParams 
+    }: { 
+        params: { id: string } | Promise<{ id: string }>; 
+        searchParams: Record<string, string | undefined> 
     }
 ) {
     const { id } = await params
