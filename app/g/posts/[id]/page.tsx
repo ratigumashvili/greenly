@@ -59,14 +59,14 @@ async function getSinglePost(postId: string) {
     return data
 }
 
-type PageProps = {
-    params: Awaited<{ id: string }>;  // Ensures `params` is an object, not a Promise
-    searchParams: Record<string, string | undefined>;
-};
+// type PageProps = {
+//     params: Awaited<{ id: string }>;  // Ensures `params` is an object, not a Promise
+//     searchParams: Record<string, string | undefined>;
+// };
 
-export default async function SinglePostPage({ params, searchParams }: PageProps) {
+export default async function SinglePostPage({ searchParams, params }: { searchParams: Promise<{ page?: string }>, params: string }) {
     const { id } = await params; // ✅ Ensures `params` is awaited correctly
-    const communityId = searchParams?.communityId ?? "";
+    const { communityId } = await searchParams ?? ""
 
     const post = await getSinglePost(id);
     const comments = await getCommentsForPost(id);
