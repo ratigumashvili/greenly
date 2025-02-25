@@ -1,4 +1,5 @@
 import Link from "next/link"
+import type { PageProps } from "next";
 
 import { Separator } from "@/components/ui/separator"
 import { AboutTheCommunity } from "@/components/shared/about-the-community"
@@ -130,21 +131,13 @@ async function getSinglePost(postId: string) {
 // }
 
 export default async function SinglePostPage(
-    { 
-        params, 
-        searchParams 
-    }: { 
-        params: { id: string }; // ✅ Remove Promise
-        searchParams: Record<string, string | undefined> 
-    }
+    { params, searchParams }: PageProps<{ id: string }>
 ) {
-    // ✅ No need to await params
-    const { id } = params; 
+    const { id } = params;
     const communityId = searchParams?.communityId ?? "";
 
     const post = await getSinglePost(id);
     const comments = await getCommentsForPost(id);
-
     const { user } = await getUserData(communityId);
 
     const userId = user?.id as string;
