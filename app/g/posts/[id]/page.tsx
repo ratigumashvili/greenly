@@ -59,10 +59,8 @@ async function getSinglePost(postId: string) {
 }
 
 export default async function SinglePostPage({ searchParams, params }: { searchParams: Promise<{ communityId?: string }>; params: Promise<{ id: string }> }) {
-    const { id } = await params; // ✅ Ensures `params` is awaited correctly
+    const { id } = await params;
     const { communityId } = await searchParams
-
-    // const communityIdValue = communityId ?? "";
 
     const post = await getSinglePost(id);
     const comments = await getCommentsForPost(id);
