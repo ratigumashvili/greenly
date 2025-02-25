@@ -32,7 +32,7 @@ async function getData(page: number = 1, limit: number = COMMUNITIES_DISPLAY_LIM
     return { communities, totalCommunities }
 }
 
-export default async function Communities({ searchParams }: { searchParams: { page?: string } }) {
+export default async function Communities({ searchParams }: { searchParams: Promise<{ page?: string }> }) {
 
     const { page } = await searchParams
     const currentPage = page ? parseInt(page, 10) || 1 : 1;
