@@ -12,8 +12,6 @@ import { prisma } from "@/lib/prisma"
 import { getCommentsForPost } from "@/app/actions"
 import { getUserData } from "@/lib/utils"
 
-
-
 async function getSinglePost(postId: string) {
     const data = await prisma.post.findFirst({
         where: {
@@ -68,6 +66,7 @@ export default async function SinglePostPage(
         searchParams: Record<string, string | undefined> 
     }
 ) {
+    // @ts-ignore
     const { id } = await params
     const communityId = (await searchParams).communityId ?? "";
 
