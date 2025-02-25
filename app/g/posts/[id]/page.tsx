@@ -1,3 +1,4 @@
+import type { PageProps } from "next";
 import Link from "next/link"
 
 import { Separator } from "@/components/ui/separator"
