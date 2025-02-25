@@ -15,6 +15,7 @@ export const ourFileRouter = {
       maxFileCount: 4,
     },
   })
+  // eslint-disable-next-line
     .middleware(async ({ req }) => {
       const {user} = await getUserData();
       if (!user) throw new UploadThingError("Unauthorized");
@@ -34,6 +35,7 @@ export const ourFileRouter = {
         maxFileCount: 1,
       },
     })
+    // eslint-disable-next-line
       .middleware(async ({ req }) => {
         const { user } = await getUserData();
         if (!user) throw new UploadThingError("Unauthorized");

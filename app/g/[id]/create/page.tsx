@@ -31,7 +31,7 @@ async function getData(id: string) {
     return data;
 }
 
-export default async function CreatePost({ params }: { params: { id: string } }) {
+export default async function CreatePost({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params
     const data = await getData(id)
     const { session, user } = await getUserData()
