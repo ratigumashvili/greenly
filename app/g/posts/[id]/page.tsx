@@ -128,25 +128,22 @@ async function getSinglePost(postId: string) {
 //     )
 // }
 
-export default async function SinglePostPage(
-    { 
-        params, 
-        searchParams 
-    }: { 
-        params: { id: string }; 
-        searchParams: Record<string, string | undefined>; 
-    }
-) {
+export default async function SinglePostPage({
+    params,
+    searchParams,
+}: {
+    params: { id: string };
+    searchParams: Record<string, string | undefined>;
+}) {
     const { id } = params; // ✅ No need to await
-    const communityId = searchParams?.communityId ?? ""; // ✅ No need to await
+    const communityId = searchParams?.communityId ?? "";
 
     const post = await getSinglePost(id);
     const comments = await getCommentsForPost(id);
-
     const { user } = await getUserData(communityId);
 
-    const userId = user?.id as string;
-    const isAdmin = user?.isAdmin as boolean;
+    const userId = user?.id ?? "";
+    const isAdmin = user?.isAdmin ?? false;
     const subAdmin = user?.SubcommunityMember?.[0]?.role === "admin";
 
     if (!post) {
@@ -196,5 +193,6 @@ export default async function SinglePostPage(
         </section>
     );
 }
+
 
 
