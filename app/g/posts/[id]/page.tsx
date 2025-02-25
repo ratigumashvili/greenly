@@ -64,7 +64,7 @@ async function getSinglePost(postId: string) {
 //     searchParams: Record<string, string | undefined>;
 // };
 
-export default async function SinglePostPage({ searchParams, params }: { searchParams: Promise<{ page?: string }>, params: string }) {
+export default async function SinglePostPage({ searchParams, params }: { searchParams: Promise<{ page?: string }>, params: Promise<{ id: string }> }) {
     const { id } = await params; // ✅ Ensures `params` is awaited correctly
     const { communityId } = await searchParams ?? ""
 
