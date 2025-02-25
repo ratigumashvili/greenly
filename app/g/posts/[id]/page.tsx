@@ -66,7 +66,7 @@ export default async function SinglePostPage(
         searchParams: Record<string, string | undefined> 
     }
 ) {
-    // @ts-ignore
+    
     const { id } = await params
     const communityId = (await searchParams).communityId ?? "";
 
