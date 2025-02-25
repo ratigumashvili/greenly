@@ -30,7 +30,7 @@ export function PostCommentItem({
     userId,
     count
 }: {
-    comment: any;
+    comment: unknown;
     handleReplyClick: (id: string) => void;
     isReplying: string | null;
     postId: string;
@@ -123,7 +123,7 @@ export function PostCommentItem({
 
             {comment.replies?.length > 0 && (
                 <div className="ml-6 mt-3 border-l-2 border-gray-200 pl-4">
-                    {comment.replies.map((reply: any) => (
+                    {comment.replies.map((reply: unknown) => (
                         <PostCommentItem
                             key={reply.id}
                             comment={reply}
