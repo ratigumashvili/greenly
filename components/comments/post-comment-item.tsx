@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { EllipsisIcon } from "lucide-react";
 
+import { CreatedAt } from "@/components/shared/created-at";
 import { CreatePostCommentForm } from "@/components/comments/create-post-comment-form";
 import { CommentVoting } from "@/components/comments/post-voting";
 import {
@@ -66,14 +67,18 @@ export function PostCommentItem({
                         
                         <CommentVoting
                             commentId={comment.id}
-                            votes={comment.votes} // 🟢 Pass full votes array
+                            votes={comment.votes}
                             userVote={comment.userVote}
                             postId={postId}
                             subcommunity={communityId}
                         />
 
                     </div>
-                    <p className="font-semibold text-gray-900">@{comment.author.userName}</p>
+                    <p className="text-sm text-muted-foreground mb-4">
+                        by: <span className="font-semibold text-gray-900">@{comment.author.userName}</span>,
+                        {" "}
+                        <CreatedAt date={comment.createdAt} />
+                    </p>
                     <p className="text-gray-700">{comment.content}</p>
                 </div>
 
