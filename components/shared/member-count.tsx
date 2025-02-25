@@ -16,7 +16,7 @@ export function MemberCount({subcommunityId, isMember}: MemberCountProps) {
     useEffect(() => {
         async function fetchCount() {
             const result = await getMemberCount(subcommunityId);
-            if (result.success) {
+            if (result?.success) {
                 setMemberCount(result.count);
             }
         }
