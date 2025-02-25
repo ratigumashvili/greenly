@@ -864,3 +864,22 @@ export async function updatePost({
     return { error: "Failed to update post." };
   }
 }
+
+export async function deletePost({
+  postId,
+}: {
+  postId: string,
+}) {
+  try {
+    await prisma.post.delete({
+      where: {
+        id: postId
+      }
+    })
+
+    return { success: true, message: "Post deleted successfully"};
+  } catch (error) {
+    console.error("Error deleting post:", error);
+    return { error: "Failed to delete post." };
+  }
+}

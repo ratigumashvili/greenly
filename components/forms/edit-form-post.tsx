@@ -13,7 +13,8 @@ import { Button } from "@/components/ui/button";
 import { SubmitButton } from "@/components/forms/submit-button";
 import { MenuBar } from "@/components/shared/tip-tap";
 
-import { updatePost } from "@/app/actions";
+import { deletePost, updatePost } from "@/app/actions";
+import { useModalStore } from "@/store/modal-store";
 
 export function EditPostForm({
     post
@@ -21,9 +22,12 @@ export function EditPostForm({
 
     const [title, setTitle] = useState(post.title)
     const [isLoading, setIsLoading] = useState(false)
+    const [isDeleting, setIsDeleting] = useState(false)
     const [content, setContent] = useState<JSONContent>(
         typeof post.content === "string" ? JSON.parse(post.content) : post.content
     );
+
+    const { openModal } = useModalStore()
 
     const router = useRouter()
 
@@ -65,9 +69,44 @@ export function EditPostForm({
 
     }
 
+    async function handleDeletePost(event?: React.FormEvent<HTMLFormElement>) {
+        event?.preventDefault()
+        setIsDeleting(true)
+        const response = await deletePost({
+            postId: post.id
+        })
+        if (response.error) {
+            toast.error(response.error)
+        } else {
+            toast.success("Post deleted successfully")
+            router.push(`/g/${post.subcommunityId}`)
+        }
+        setIsDeleting(false)
+    }
+
     return (
         <>
-            <h2 className="text-2xl font-bold mb-4">Edit post</h2>
+            <div className="flex items-center justify-between">
+                <h2 className="text-2xl font-bold mb-4">Edit post</h2>
+                <form onSubmit={handleDeletePost}>
+                    <Button
+                        variant="destructive"
+                        type="button"
+                        disabled={isDeleting}
+                        onClick={() =>
+                            openModal({
+                                title: "Delete this post?",
+                                description: "Are you sure you want to delete this post? This action can not be undone.",
+                                confirmText: "Delete",
+                                cancelText: "Cancel",
+                                onConfirm: () => handleDeletePost(),
+                            })
+                        }
+                    >
+                        Delete post
+                    </Button>
+                </form>
+            </div>
 
             <form className="space-y-4" onSubmit={handleSubmit}>
                 <div className="space-y-2">
