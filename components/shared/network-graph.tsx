@@ -86,8 +86,7 @@ const NetworkGraph = ({ user }: NetworkGraphProps) => {
 
     return (
         <div
-            className={`w-full max-w-7xl relative overflow-hidden inset-0 pointer-events-auto transition-all duration-300 ${state === "expanded" ? "-z-[1]" : "z-10"
-                }`}
+            className={`w-full max-w-7xl relative overflow-hidden inset-0 pointer-events-auto transition-all duration-300 ${state === "expanded" ? "-z-[1]" : "z-10"}`}
         >
             <ForceGraph3D
                 ref={fgRef}

@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 import { deleteComment } from "@/app/actions";
+import { useSidebar } from "@/components/ui/sidebar";
 
 export function PostCommentItem({
     comment,
@@ -42,7 +43,10 @@ export function PostCommentItem({
 }) {
 
     const [isDeleting, setIsDeleting] = useState(false);
+    
     const router = useRouter()
+
+    const { state } = useSidebar();
 
     const handleDelete = async (idToDelete: string) => {
         setIsDeleting(true);
@@ -60,7 +64,7 @@ export function PostCommentItem({
     };
 
     return (
-        <div className="pl-8 p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+        <div className={`pl-8 p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden ${state === "expanded" ? "hidden" : "block"}`}>
             <div className="flex items-start justify-between">
                 <div className="relative pl-6">
                     <div className="absolute -top-4 -left-8 -bottom-4 w-8 min-h-full bg-slate-100/70 flex flex-col items-center justify-center">
