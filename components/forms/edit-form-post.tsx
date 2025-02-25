@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { toast } from "sonner";
 import { EditorContent, useEditor, JSONContent } from "@tiptap/react";
 import StarterKit from '@tiptap/starter-kit'
 
@@ -10,10 +11,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { SubmitButton } from "@/components/forms/submit-button";
-import { toast } from "sonner";
+import { MenuBar } from "@/components/shared/tip-tap";
 
 import { updatePost } from "@/app/actions";
-import { MenuBar } from "../shared/tip-tap";
 
 export function EditPostForm({
     post
