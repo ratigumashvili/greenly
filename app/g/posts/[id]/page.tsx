@@ -134,7 +134,7 @@ type PageProps = {
 };
 
 export default async function SinglePostPage({params, searchParams}: PageProps) {
-    const id = params.id; // ✅ No need to await
+    const id = params.id;
     const communityId = searchParams?.communityId ?? "";
 
     const post = await getSinglePost(id);
