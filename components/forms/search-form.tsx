@@ -4,9 +4,10 @@ import { Input } from "@/components/ui/input"
 
 export function SearchForm() {
     return (
-        <form className="relative hidden md:block w-full max-w-[400px] ">
+        <form className="relative hidden md:block w-full max-w-[400px]">
             <Input
-                placeholder="Search greenly"
+                name="communityName"
+                placeholder="Search greenly communities"
                 className="rounded-full pl-9 placeholder:text-muted-foreground bg-slate-50"
             />
             <button className="absolute top-1/2 left-2 -translate-y-1/2 t">

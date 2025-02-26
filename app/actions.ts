@@ -877,9 +877,42 @@ export async function deletePost({
       }
     })
 
-    return { success: true, message: "Post deleted successfully"};
+    return { success: true, message: "Post deleted successfully" };
   } catch (error) {
     console.error("Error deleting post:", error);
     return { error: "Failed to delete post." };
   }
+}
+
+
+export async function getAllTags() {
+  const data = await prisma.tag.findMany({
+    select: {
+      name: true
+    }
+  })
+  return data
+}
+
+export async function getDataByTag(tagName: string) {
+
+  if (!tagName) return []
+  
+  const data = await prisma.subcommunity.findMany({
+    where: {
+      tags: {
+        some: {
+          tag: {
+            name: tagName
+          }
+        }
+      }
+    },
+    select: {
+      id: true,
+      name: true
+    }
+  })
+
+  return data
 }

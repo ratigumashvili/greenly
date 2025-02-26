@@ -29,11 +29,6 @@ export const menuItems = [
       icon: Search,
     },
     {
-      title: "Tags",
-      url: "/tags",
-      icon: Tags,
-    },
-    {
       title: "Settings",
       url: "/settings",
       icon: Settings,
