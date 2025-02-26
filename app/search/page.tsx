@@ -1,13 +1,14 @@
 import { PageTitle } from "@/components/shared/page-title";
 import { Tags } from "@/components/shared/tags";
 import { Separator } from "@/components/ui/separator";
-import { getDataByTag } from "../actions";
+import { getCommunitiesByName, getDataByTag } from "../actions";
 
-export default async function SearchPage({ searchParams, params }: { searchParams: Promise<{ tagName?: string }>; params: Promise<{ id: string }> }) {
+export default async function SearchPage({ searchParams, params }: { searchParams: Promise<{ tagName?: string; name?: string }>; params: Promise<{ id: string }> }) {
     
     const { id } = await params;
-    const { tagName } = await searchParams
-    const communities = await getDataByTag(tagName)
+    const { tagName, name } = await searchParams
+    const communitiesByTags = await getDataByTag(tagName)
+    const communitiesByName = await getCommunitiesByName(name)
 
     return (
         <section className="py-8">
@@ -19,7 +20,8 @@ export default async function SearchPage({ searchParams, params }: { searchParam
                 </div>
                 <div className="col-span-10 md:col-span-6 lg:col-span-3">
                 <h2 className="font-bold text-xl mb-4">Search results</h2>
-                    <pre>{JSON.stringify(communities, null, 2)}</pre>
+                    <pre>by tags: {JSON.stringify(communitiesByTags, null, 2)}</pre>
+                    <pre>by name: {JSON.stringify(communitiesByName, null, 2)}</pre>
                 </div>
             </div>
         </section>

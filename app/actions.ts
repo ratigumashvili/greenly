@@ -897,7 +897,7 @@ export async function getAllTags() {
 export async function getDataByTag(tagName: string) {
 
   if (!tagName) return []
-  
+
   const data = await prisma.subcommunity.findMany({
     where: {
       tags: {
@@ -910,9 +910,33 @@ export async function getDataByTag(tagName: string) {
     },
     select: {
       id: true,
-      name: true
+      name: true,
     }
   })
 
   return data
+}
+
+export async function getCommunitiesByName (name: string) {
+  
+  if(!name) return []
+  
+  try {
+    const data = await prisma.subcommunity.findMany({
+      where: {
+        name: {
+          contains: name,
+          mode: "insensitive"
+        }
+      },
+      select: {
+        id: true,
+        name: true
+      }
+    })
+
+    return data
+  } catch (error) {
+    console.log(error)
+  }
 }
