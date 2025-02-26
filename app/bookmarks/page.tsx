@@ -6,42 +6,11 @@ import { NotLoggedIn } from "@/components/shared/not-logged-in";
 import { PageTitle } from "@/components/shared/page-title";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { BookmarkButton } from "@/components/shared/bookmark-button";
 
 import { prisma } from "@/lib/prisma";
 import { getUserData } from "@/lib/utils";
 import { removeBookmark, isPostBookmarked } from "@/app/actions";
-import { Button } from "@/components/ui/button";
-
-// async function getBookmarkedPosts(userId: string) {
-//     return await prisma.bookmark.findMany({
-//         where: {
-//             userId
-//         },
-//         include: {
-//             post: {
-//                 select: {
-//                     id: true,
-//                     title: true,
-//                     createdAt: true,
-//                     author: {
-//                         select: {
-//                             id: true,
-//                             name: true,
-//                             userName: true
-//                         }
-//                     },
-//                     subcommunity: {
-//                         select: {
-//                             id: true,
-//                             name: true
-//                         }
-//                     }
-//                 }
-//             }
-//         }
-//     })
-
-// }
 
 async function getBookmarkedPosts(userId: string) {
     const bookmarks = await prisma.bookmark.findMany({
@@ -63,7 +32,6 @@ async function getBookmarkedPosts(userId: string) {
         }
     });
 
-    // Fetch bookmark status in parallel using Promise.all
     const bookmarksWithStatus = await Promise.all(
         bookmarks.map(async (bookmark) => ({
             ...bookmark,
@@ -103,11 +71,11 @@ export default async function BookmarksPage() {
                                             "use server"
                                             await removeBookmark(user.id, item.post.id)
                                         }}>
-                                            <Button
-                                                variant="ghost" size="icon"
-                                            >
-                                                {item.isBookmarked ? <BookmarkCheckIcon /> : <BookmarkIcon />}
-                                            </Button>
+                                            <BookmarkButton
+                                                postId={item.post.id}
+                                                userId={user.id}
+                                                isBookmarked={item.isBookmarked}
+                                            />
                                         </form>
                                     </CardTitle>
                                 </CardHeader>
