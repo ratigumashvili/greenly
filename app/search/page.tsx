@@ -38,7 +38,9 @@ export default async function SearchPage({
 
                     {resultByCommunityName && resultByCommunityName.length > 0 &&
                         resultByCommunityName.map((item) => (
-                            <Link key={item.id} href={`/g/${item.id}`} className="block">{item.name}</Link>
+                            <div key={item.id} className="border-b last:border-b-0 w-full mb-2 pb-4">
+                                <Link href={`/g/${item.id}`} className="block text-xl">{item.name}</Link>
+                            </div>
                         )
                         )}
 
@@ -52,7 +54,9 @@ export default async function SearchPage({
 
                     {resultByUserName && resultByUserName.length > 0 &&
                         resultByUserName.map((item) => (
-                            <Link key={item.userName} href={`/users/${item.id}`} className="block">{item.name}, AKA @{item.userName}</Link>
+                            <div key={item.userName} className="border-b last:border-b-0 w-full mb-2 pb-4">
+                                <Link href={`/users/${item.id}`} className="block text-xl">{item.name}, AKA @{item.userName}</Link>
+                            </div>
                         )
                         )}
 
