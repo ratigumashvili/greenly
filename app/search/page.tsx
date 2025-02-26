@@ -1,9 +1,9 @@
 import { PageTitle } from "@/components/shared/page-title";
-import { Tags } from "@/components/shared/tags";
 import { Separator } from "@/components/ui/separator";
 import { SearchFormsTabs } from "@/components/forms/tabs/search-forms-tabs";
 
 import { getAllTags, getCommunitiesByName, getDataByTag, getUsersByName } from "@/app/actions";
+import Link from "next/link";
 
 export default async function SearchPage({
     searchParams
@@ -15,8 +15,10 @@ export default async function SearchPage({
     }>
 }) {
 
-    const tags = await getAllTags()
     const { tagName, communityName, userName } = await searchParams
+
+    const tags = await getAllTags()
+
     const resultByCommunityName = await getCommunitiesByName(communityName)
     const resultByUserName = await getUsersByName(userName)
     const resultByCommunityTag = await getDataByTag(tagName)
@@ -25,26 +27,34 @@ export default async function SearchPage({
         <section className="py-8">
             <PageTitle>Search Greenly by</PageTitle>
             <Separator className="mb-4" />
-            {/* <div className="grid grid-cols-10 gap-4">
-                <div className="col-span-10 md:col-span-4 lg:col-span-3">
-                    <Tags tagName={tagName} />
-                </div>
-                <div className="col-span-10 md:col-span-6 lg:col-span-3">
-                <h2 className="font-bold text-xl mb-4">Search results</h2>
-                    <pre>by tags: {JSON.stringify(resultByCommunityTag, null, 2)}</pre>
-                    <pre>by name: {JSON.stringify(resultByCommunityName, null, 2)}</pre>
-                </div>
-            </div> */}
+
             <div className="grid grid-cols-10 gap-4">
                 <div className="col-span-10 md:col-span-4 lg:col-span-3">
                     <SearchFormsTabs tags={tags} tagName={tagName} />
                 </div>
                 <div className="col-span-10 md:col-span-6 lg:col-span-3">
-                    <pre>by tags: {JSON.stringify(resultByCommunityTag, null, 2)}</pre>
-                    <pre>by name: {JSON.stringify(resultByCommunityName, null, 2)}</pre>
-                    <pre>by user {JSON.stringify(resultByUserName, null, 2)}</pre>
+
+                    {resultByCommunityName && resultByCommunityName.length > 0 &&
+                        resultByCommunityName.map((item) => (
+                            <Link key={item.id} href={`/g/${item.id}`} className="block">{item.name}</Link>
+                        )
+                        )}
+
+                    {resultByCommunityTag && resultByCommunityTag.length > 0 &&
+                        resultByCommunityTag.map((item) => (
+                            <Link key={item.id} href={`/g/${item.id}`} className="block">{item.name}</Link>
+                        )
+                        )}
+
+                    {resultByUserName && resultByUserName.length > 0 &&
+                        resultByUserName.map((item) => (
+                            <Link key={item.userName} href={`/users/${item.id}`} className="block">{item.name}, AKA @{item.userName}</Link>
+                        )
+                        )}
+
                 </div>
             </div>
+
         </section>
     )
 }
