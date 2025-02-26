@@ -10,9 +10,10 @@ import { CreatedAt } from "@/components/shared/created-at"
 import { PostGridGallery } from "@/components/shared/post-grid-gallery"
 import PostContent from "@/components/shared/feed/post-content"
 import { PostCommentSection } from "@/components/comments/post-comment-section";
+import { BookmarkButton } from "@/components/shared/bookmark-button"
 
 import { prisma } from "@/lib/prisma"
-import { getCommentsForPost } from "@/app/actions"
+import { getCommentsForPost, isPostBookmarked } from "@/app/actions"
 import { getUserData } from "@/lib/utils"
 
 async function getSinglePost(postId: string) {
@@ -72,21 +73,27 @@ export default async function SinglePostPage({ searchParams, params }: { searchP
     const isAdmin = user?.isAdmin ?? false;
     const subAdmin = user?.SubcommunityMember?.[0]?.role === "admin";
 
+    const isBookmarked = await isPostBookmarked(post.id, userId)
+
     if (!post) return null;
 
     return (
         <section className="py-8">
+            <pre>is isBookmarked {JSON.stringify(isBookmarked, null, 2)}</pre>
             <div className="grid grid-cols-10 gap-4">
                 <div className="col-span-10 md:col-span-6 lg:col-span-7">
-                    <div className="flex items-center justify-between">
-                        <h2 className="text-2xl font-bold mb-4">{post.title}</h2>
-                        {userId === post.author.id && (
-                            <Button asChild variant="ghost" size="icon">
-                                <Link href={`/g/posts/${post.id}/edit`}>
-                                    <SettingsIcon />
-                                </Link>
-                            </Button>
-                        )}
+                    <div className="flex items-center justify-between mb-4">
+                        <h2 className="text-2xl font-bold">{post.title}</h2>
+                        <div>
+                            <BookmarkButton postId={post.id} userId={userId} isBookmarked={isBookmarked} />
+                            {userId === post.author.id && (
+                                <Button asChild variant="ghost" size="icon">
+                                    <Link href={`/g/posts/${post.id}/edit`}>
+                                        <SettingsIcon />
+                                    </Link>
+                                </Button>
+                            )}
+                        </div>
                     </div>
                     <p className="text-sm">
                         By: <Link href={`/users/${post.author.id}`} className="text-primary hover:text-primary/90 transition">{post.author.userName}</Link>,

@@ -1009,3 +1009,88 @@ export async function getPostsByTitle(passedName: string) {
     return [];
   }
 }
+
+
+
+
+
+
+export async function toggleBookmark(postId: string, userId: string) {
+  if (!postId || !userId) return { error: "Invalid request." };
+
+  try {
+    const existingBookmark = await prisma.bookmark.findUnique({
+      where: {
+        userId_postId: { userId, postId },
+      },
+    });
+
+    if (existingBookmark) {
+      await prisma.bookmark.delete({
+        where: { id: existingBookmark.id },
+      });
+      return { success: true, message: "Bookmark removed." };
+    } else {
+      await prisma.bookmark.create({
+        data: { userId, postId },
+      });
+      return { success: true, message: "Bookmark added." };
+    }
+  } catch (error) {
+    console.error("Error toggling bookmark:", error);
+    return { error: "Failed to update bookmark." };
+  }
+}
+
+export async function isPostBookmarked(postId: string, userId: string) {
+  if (!postId || !userId) return false;
+
+  try {
+    const bookmark = await prisma.bookmark.findUnique({
+      where: {
+        userId_postId: { userId, postId }
+      }
+    });
+
+    return !!bookmark;
+  } catch (error) {
+    console.error("Error checking bookmark:", error);
+    return false;
+  }
+}
+
+export async function addBookmark(userId: string, postId: string) {
+  try {
+    return await prisma.bookmark.create({
+      data: { userId, postId },
+    });
+  } catch (error) {
+    console.error("Error adding bookmark:", error);
+    return null;
+  }
+}
+
+export async function removeBookmark(userId: string, postId: string) {
+  try {
+    return await prisma.bookmark.delete({
+      where: { userId_postId: { userId, postId } },
+    });
+  } catch (error) {
+    console.error("Error removing bookmark:", error);
+    return null;
+  }
+}
+
+export async function getUserBookmarks(userId: string) {
+  try {
+    return await prisma.bookmark.findMany({
+      where: { userId },
+      include: { post: true },
+    });
+  } catch (error) {
+    console.error("Error fetching bookmarks:", error);
+    return [];
+  }
+}
+
+
