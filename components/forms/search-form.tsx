@@ -12,7 +12,7 @@ export function SearchForm() {
 
     function handleFormSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault()
-        router.push(`/search?name=${searchValue}`)
+        router.push(`/search?communityName=${searchValue}`)
         setSearchValue("")
     }
     

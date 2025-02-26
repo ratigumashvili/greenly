@@ -917,21 +917,56 @@ export async function getDataByTag(tagName: string) {
   return data
 }
 
-export async function getCommunitiesByName (name: string) {
-  
-  if(!name) return []
-  
+export async function getCommunitiesByName(communityName: string) {
+
+  if (!communityName) return []
+
   try {
     const data = await prisma.subcommunity.findMany({
       where: {
         name: {
-          contains: name,
+          contains: communityName,
           mode: "insensitive"
         }
       },
       select: {
         id: true,
         name: true
+      }
+    })
+
+    return data
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export async function getUsersByName(passedName: string) {
+
+  if (!passedName) return []
+
+  try {
+    const data = await prisma.user.findMany({
+      where: {
+        OR: [
+          {
+            name: {
+              contains: passedName,
+              mode: "insensitive"
+            }
+          },
+          {
+            userName: {
+              contains: passedName,
+              mode: "insensitive"
+            }
+          }
+        ]
+      },
+      select: {
+        id: true,
+        name: true,
+        userName: true
       }
     })
 
