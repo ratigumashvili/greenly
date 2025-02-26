@@ -79,9 +79,9 @@ export default async function SinglePostPage({ searchParams, params }: { searchP
 
     return (
         <section className="py-8">
-            <div className="grid grid-cols-10 gap-4">
+            <div className="grid grid-cols-10 gap-6">
                 <div className="col-span-10 md:col-span-6 lg:col-span-7">
-                    <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-start justify-between mb-4">
                         <h2 className="text-2xl font-bold">{post.title}</h2>
                         <div>
                             <BookmarkButton postId={post.id} userId={userId} isBookmarked={isBookmarked} />
