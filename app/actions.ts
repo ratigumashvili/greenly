@@ -975,3 +975,37 @@ export async function getUsersByName(passedName: string) {
     console.log(error)
   }
 }
+
+export async function getPostsByTitle(passedName: string) {
+
+  if (!passedName) return []
+
+  try {
+    const data = await prisma.post.findMany({
+      where: {
+        title: {
+          contains: passedName,
+          mode: "insensitive"
+        }
+      },
+      select: {
+        id: true,
+        title: true,
+        subcommunityId: true,
+        author: {
+          select: {
+            id: true,
+            name: true,
+            userName: true
+          }
+        }
+      }
+    })
+
+    return data
+
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+    return [];
+  }
+}

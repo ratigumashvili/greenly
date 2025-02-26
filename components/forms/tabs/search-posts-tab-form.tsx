@@ -14,7 +14,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-export function SearchUserTabForm() {
+export function SearchPostsTabForm() {
 
     const [searchValue, setSearchValue] = useState("")
     const router = useRouter()
@@ -22,7 +22,7 @@ export function SearchUserTabForm() {
     function handleFormSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault()
         if(!searchValue.trim()) return
-        router.push(`/search?userName=${encodeURIComponent(searchValue.trim())}`)
+        router.push(`/search?postTitle=${encodeURIComponent(searchValue.trim())}`)
         setSearchValue("")
     }
 
@@ -30,14 +30,14 @@ export function SearchUserTabForm() {
         <form onSubmit={handleFormSubmit}>
             <Card>
                 <CardHeader>
-                    <CardTitle className="text-base">Search by user</CardTitle>
+                    <CardTitle className="text-base">Search by posts</CardTitle>
                     <CardDescription>
-                        The search field does not require an exact match with the user&apos;s name or username; it retrieves users whose names or usernames contain the provided term. Do not include @ symbol while searching by username.
+                        The search field does not require an exact match with the post&apos;s title; it retrieves posts whose title contain the provided term.
                     </CardDescription>
                     <CardContent className="space-y-2 p-0">
                         <div className="space-y-1 mb-2">
-                            <Label htmlFor="name" className="text-base">Name / Username</Label>
-                            <Input id="name" value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
+                            <Label htmlFor="title" className="text-base">Post title</Label>
+                            <Input id="title" value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
                         </div>
                     </CardContent>
                     <CardFooter className="space-x-2 p-0 justify-end">

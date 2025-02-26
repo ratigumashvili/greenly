@@ -21,7 +21,8 @@ export function SearchCommunityTabForm() {
 
     function handleFormSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault()
-        router.push(`/search?communityName=${searchValue}`)
+        if(!searchValue.trim()) return
+        router.push(`/search?communityName=${encodeURIComponent(searchValue.trim())}`)
         setSearchValue("")
     }
 
