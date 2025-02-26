@@ -1072,9 +1072,12 @@ export async function addBookmark(userId: string, postId: string) {
 
 export async function removeBookmark(userId: string, postId: string) {
   try {
-    return await prisma.bookmark.delete({
+    const data = await prisma.bookmark.delete({
       where: { userId_postId: { userId, postId } },
     });
+
+    revalidatePath("/bookmarks")
+    return data
   } catch (error) {
     console.error("Error removing bookmark:", error);
     return null;

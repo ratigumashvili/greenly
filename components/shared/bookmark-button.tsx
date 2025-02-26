@@ -5,8 +5,9 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { BookmarkCheckIcon, BookmarkIcon } from "lucide-react";
 
-import { addBookmark, removeBookmark } from "@/app/actions";
 import { Button } from "@/components/ui/button";
+
+import { addBookmark, removeBookmark } from "@/app/actions";
 
 export function BookmarkButton({ postId, userId, isBookmarked }: { postId: string; userId: string; isBookmarked: boolean }) {
     const [isPending, startTransition] = useTransition();

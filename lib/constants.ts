@@ -1,4 +1,4 @@
-import { Plus, Home, Handshake, Users, Tags, Search, Settings } from "lucide-react"
+import { Plus, Home, Handshake, Users, Bookmark, Search, Settings } from "lucide-react"
 
 export const COMMUNITIES_DISPLAY_LIMIT = 9
 
@@ -45,6 +45,11 @@ export const menuItems = [
         title: "Search",
         url: "/search",
         icon: Search,
+      },
+      {
+        title: "Bookmarks",
+        url: "/bookmarks",
+        icon: Bookmark
       },
       {
         title: "Settings",
