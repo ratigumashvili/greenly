@@ -28,7 +28,7 @@ export function CommunityCard({
             </CardHeader>
             <CardDescription>
                 <CardContent>
-                    <p className="line-clamp-3">{description}</p>
+                    <p className="line-clamp-2">{description}</p>
                 </CardContent>
             </CardDescription>
             <CardFooter className="flex flex-col gap-4">

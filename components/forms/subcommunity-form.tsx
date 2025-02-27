@@ -99,8 +99,8 @@ export function SubCommunityForm({ mode, initialData }: SubCommunityFormProps) {
                     <Input
                         id="hashtag"
                         name="hashtag"
-                        placeholder="Max 10 char. separated with comma"
-                        maxLength={15}
+                        placeholder="Max 20 char. separated with comma"
+                        maxLength={20}
                         value={tagValue}
                         onChange={handleTagInput}
                     />

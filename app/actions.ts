@@ -542,13 +542,79 @@ export async function getMemberCount(subcommunityId: string) {
   }
 }
 
+// export async function createPost(formData: FormData) {
+//   const subcommunityId = formData.get("subcommunityId") as string;
+//   const title = formData.get("title") as string;
+//   const content = (formData.get("content") as string) || "";
+  
+//   const rawLocation = formData.get("location");
+//   const location = rawLocation && rawLocation.toString().trim() !== "" ? rawLocation.toString() : null;
+
+//   const imagesUrl = formData.get("imagesUrl") ? JSON.parse(formData.get("imagesUrl") as string) : [];
+//   const file = formData.get("file") ? JSON.parse(formData.get("file") as string) : null;
+
+//   if (!title || !subcommunityId) {
+//     return { error: "Title and subcommunity are required." };
+//   }
+
+//   const { session, user, isMember } = await getUserData(subcommunityId);
+
+//   if (!session || !user?.id) {
+//     return { error: "Unauthorized" };
+//   }
+
+//   if (!isMember) {
+//     return { error: "Only community members can create posts" };
+//   }
+
+//   try {
+//     const post = await prisma.post.create({
+//       data: {
+//         title,
+//         content,
+//         location: location ?? undefined,
+//         imagesUrl,
+//         file,
+//         authorId: user.id,
+//         subcommunityId,
+//       },
+//     });
+
+//     return { success: true, message: "Post created successfully", post };
+//   } catch (error) {
+//     console.error("Create Post Error:", error);
+//     return { error: "Failed to create post. Please try again." };
+//   }
+// }
+
+
 export async function createPost(formData: FormData) {
   const subcommunityId = formData.get("subcommunityId") as string;
   const title = formData.get("title") as string;
-  const content = (formData.get("content") as string) || "";
+  const content = formData.get("content") ? JSON.parse(formData.get("content") as string) : {};
 
-  const imagesUrl = formData.get("imagesUrl") ? JSON.parse(formData.get("imagesUrl") as string) : [];
-  const file = formData.get("file") ? JSON.parse(formData.get("file") as string) : null;
+  // ✅ Ensure location is correctly handled
+  let location = formData.get("location")?.toString().trim();
+  if (!location || location === "") {
+    location = null; // Explicitly set to null when empty
+  }
+
+  let imagesUrl: string[] = [];
+  let file: string | null = null;
+
+  try {
+    imagesUrl = formData.get("imagesUrl") ? JSON.parse(formData.get("imagesUrl") as string) : [];
+  } catch (error) {
+    console.error("Error parsing imagesUrl:", error);
+    return { error: "Invalid image data format." };
+  }
+
+  try {
+    file = formData.get("file") ? JSON.parse(formData.get("file") as string) : null;
+  } catch (error) {
+    console.error("Error parsing file:", error);
+    return { error: "Invalid file data format." };
+  }
 
   if (!title || !subcommunityId) {
     return { error: "Title and subcommunity are required." };
@@ -561,19 +627,25 @@ export async function createPost(formData: FormData) {
   }
 
   if (!isMember) {
-    return { error: "Only community members can create posts" };
+    return { error: "Only community members can create posts." };
   }
 
   try {
+    const postData: any = {
+      title,
+      content,
+      imagesUrl,
+      file,
+      authorId: user.id,
+      subcommunityId,
+    };
+
+    if (location) {
+      postData.location = location; // ✅ Add location only if it's valid
+    }
+
     const post = await prisma.post.create({
-      data: {
-        title,
-        content,
-        imagesUrl,
-        file,
-        authorId: user.id,
-        subcommunityId,
-      },
+      data: postData, // ✅ Pass only valid fields to Prisma
     });
 
     return { success: true, message: "Post created successfully", post };
@@ -582,6 +654,10 @@ export async function createPost(formData: FormData) {
     return { error: "Failed to create post. Please try again." };
   }
 }
+
+
+
+
 
 export async function handleVote(formData: FormData) {
   const { session, user } = await getUserData();

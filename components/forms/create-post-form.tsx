@@ -15,12 +15,17 @@ import { createPost } from "@/app/actions";
 import { toast } from "sonner";
 import ImageUploader from "@/components/shared/image-uploader";
 import PdfUploader from "../shared/pdf-uploader";
+import { useMyLocation } from "@/hooks/use-my-location";
 
 
 export function CreatePostForm({ id }: { id: string }) {
     const [isLoading, setIsLoading] = useState(false);
     const [imageUrls, setImageUrls] = useState<string[]>([]);
     const [fileUrl, setFileUrl] = useState<string | null>(null)
+    
+    const [locationEnabled, setLocationEnabled] = useState(false);
+    const { address, getCurrentLocation, loading } = useMyLocation();
+    
     const router = useRouter();
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -31,6 +36,10 @@ export function CreatePostForm({ id }: { id: string }) {
 
         formData.set("imagesUrl", JSON.stringify(imageUrls));
         formData.set("file", JSON.stringify(fileUrl));
+
+        if (locationEnabled && address) {
+            formData.set("location", address);
+        }
 
         try {
             const response = await createPost(formData);
@@ -72,6 +81,20 @@ export function CreatePostForm({ id }: { id: string }) {
                         </Label>
                         <Tiptap />
                     </div>
+
+                    <div className="flex items-center gap-2 mb-3">
+                        <input type="checkbox" id="attach-location" onChange={() => setLocationEnabled(!locationEnabled)} />
+                        <label htmlFor="attach-location">Attach my location</label>
+                    </div>
+
+                    {locationEnabled && (
+                        <div className="mb-3 flex items-center gap-2">
+                            <Button onClick={getCurrentLocation} disabled={loading}>
+                                {loading ? "Fetching location..." : "Get My Location"}
+                            </Button>
+                            {address && <Input type="text" defaultValue={address} className="py-4" />}
+                        </div>
+                    )}
 
                     <div className="flex flex-col xl:flex-row items-center justify-between gap-6">
                         <ImageUploader onUploadComplete={setImageUrls} />

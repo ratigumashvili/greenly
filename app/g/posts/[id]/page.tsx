@@ -30,6 +30,7 @@ async function getSinglePost(postId: string) {
             content: true,
             file: true,
             imagesUrl: true,
+            location: true,
             createdAt: true,
             updatedAt: true,
             author: {
@@ -100,6 +101,8 @@ export default async function SinglePostPage({ searchParams, params }: { searchP
                     </p>
                     <Separator className="my-4" />
                     <PostContent content={post.content || "{}"} />
+                    
+                    {post.location && <p>{post.location}</p>}
 
                     {post.imagesUrl.length > 0 && (
                         <section className="my-4">
