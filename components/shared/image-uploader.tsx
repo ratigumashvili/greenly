@@ -1,37 +1,57 @@
 "use client";
 
-import { toast } from "sonner";
+import { useState } from "react";
 
-import { UploadDropzone } from "@/lib/uploadthing";
-import { Label } from "@/components/ui/label";
-import { useSidebar } from "@/components/ui/sidebar";
-import { useIsTablet } from "@/hooks/use-tablet";
+export default function ImageUploader({ 
+    onUploadComplete, 
+    existingImages = [] 
+}: { 
+    onUploadComplete: (urls: string[]) => void;
+    existingImages?: string[];
+}) {
+    const [uploadedImages, setUploadedImages] = useState(existingImages);
 
-export default function ImageUploader({ onUploadComplete }: { onUploadComplete: (urls: string[]) => void }) {
-
-    const { state } = useSidebar()
-    const isTablet = useIsTablet()
-
-    const handleUploadComplete = (resp: any) => {
-        const urls = resp.map((file: { ufsUrl: string }) => file.ufsUrl);
-        onUploadComplete(urls);
-        toast.success("Files uploaded successfully!");
+    const handleUploadComplete = (newImages: string[]) => {
+        const updatedImages = [...uploadedImages, ...newImages];
+        setUploadedImages(updatedImages);
+        onUploadComplete(updatedImages);
     };
 
-    const handleUploadError = (error: any) => {
-        toast.error("Upload failed: " + error);
+    const handleRemoveImage = (imageUrl: string) => {
+        const updatedImages = uploadedImages.filter(url => url !== imageUrl);
+        setUploadedImages(updatedImages);
+        onUploadComplete(updatedImages); 
     };
 
     return (
-        <div className={`w-full space-y-2 ${state === "expanded" && isTablet ? "-z-10" : "z-0"}`}>
-            <Label className="text-base">Upload mages</Label>
-            <UploadDropzone
-                endpoint="imageUploader"
-                onClientUploadComplete={handleUploadComplete}
-                onUploadError={handleUploadError}
-                className="ut-button:bg-primary ut-button:ut-readying:bg-primary/50 ut-button:ut-uploading:bg-primary/50 ut-button:ut-uploading:after:bg-primary ut-label:text-primary"
+        <div>
+            <div className="mb-4 flex flex-wrap gap-2">
+                {uploadedImages.map((url, index) => (
+                    <div key={index} className="relative">
+                        <img src={url} alt="Uploaded" className="w-20 h-20 object-cover rounded" />
+                        <button 
+                            type="button"
+                            onClick={() => handleRemoveImage(url)}
+                            className="absolute top-0 right-0 bg-red-500 text-white text-xs p-1 rounded-full"
+                        >
+                            ✕
+                        </button>
+                    </div>
+                ))}
+            </div>
+
+            <input 
+                type="file" 
+                accept="image/*" 
+                multiple 
+                onChange={(e) => {
+                    if (!e.target.files) return;
+                    
+                    const newUrls = Array.from(e.target.files).map(file => URL.createObjectURL(file));
+
+                    handleUploadComplete(newUrls);
+                }}
             />
         </div>
     );
 }
-
