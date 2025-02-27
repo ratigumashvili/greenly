@@ -10,6 +10,7 @@ import { CreatedAt } from "@/components/shared/created-at"
 import { PostGridGallery } from "@/components/shared/post-grid-gallery"
 import PostContent from "@/components/shared/feed/post-content"
 import { PostCommentSection } from "@/components/comments/post-comment-section";
+import { UserLocation } from "@/components/shared/feed/user-location"
 import { BookmarkButton } from "@/components/shared/bookmark-button"
 
 import { prisma } from "@/lib/prisma"
@@ -102,7 +103,7 @@ export default async function SinglePostPage({ searchParams, params }: { searchP
                     <Separator className="my-4" />
                     <PostContent content={post.content || "{}"} />
                     
-                    {post.location && <p>{post.location}</p>}
+                    {post.location && <UserLocation address={post.location} />}
 
                     {post.imagesUrl.length > 0 && (
                         <section className="my-4">

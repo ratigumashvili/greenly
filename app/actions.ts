@@ -542,52 +542,6 @@ export async function getMemberCount(subcommunityId: string) {
   }
 }
 
-// export async function createPost(formData: FormData) {
-//   const subcommunityId = formData.get("subcommunityId") as string;
-//   const title = formData.get("title") as string;
-//   const content = (formData.get("content") as string) || "";
-  
-//   const rawLocation = formData.get("location");
-//   const location = rawLocation && rawLocation.toString().trim() !== "" ? rawLocation.toString() : null;
-
-//   const imagesUrl = formData.get("imagesUrl") ? JSON.parse(formData.get("imagesUrl") as string) : [];
-//   const file = formData.get("file") ? JSON.parse(formData.get("file") as string) : null;
-
-//   if (!title || !subcommunityId) {
-//     return { error: "Title and subcommunity are required." };
-//   }
-
-//   const { session, user, isMember } = await getUserData(subcommunityId);
-
-//   if (!session || !user?.id) {
-//     return { error: "Unauthorized" };
-//   }
-
-//   if (!isMember) {
-//     return { error: "Only community members can create posts" };
-//   }
-
-//   try {
-//     const post = await prisma.post.create({
-//       data: {
-//         title,
-//         content,
-//         location: location ?? undefined,
-//         imagesUrl,
-//         file,
-//         authorId: user.id,
-//         subcommunityId,
-//       },
-//     });
-
-//     return { success: true, message: "Post created successfully", post };
-//   } catch (error) {
-//     console.error("Create Post Error:", error);
-//     return { error: "Failed to create post. Please try again." };
-//   }
-// }
-
-
 export async function createPost(formData: FormData) {
   const subcommunityId = formData.get("subcommunityId") as string;
   const title = formData.get("title") as string;
@@ -937,12 +891,12 @@ export async function updatePost({
   postId,
   title,
   content,
-  imagesUrl, // ✅ Store images
+  imagesUrl,
 }: {
   postId: string;
   title: string;
   content: any;
-  imagesUrl?: string[]; // ✅ Optional field for images
+  imagesUrl?: string[];
 }) {
   try {
     const updatedPost = await prisma.post.update({
