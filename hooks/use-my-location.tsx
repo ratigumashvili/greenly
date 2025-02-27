@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 export function useMyLocation() {
-    const [location, setLocation] = useState<{latitude: number, longitude: number} | null>(null)
+    const [location, setLocation] = useState<{ latitude: number, longitude: number } | null>(null)
     const [address, setAddress] = useState<string | null>(null)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
@@ -17,14 +17,14 @@ export function useMyLocation() {
 
         navigator.geolocation.getCurrentPosition(
             async (position) => {
-                const {latitude, longitude} = position.coords;
-                setLocation({latitude, longitude})
+                const { latitude, longitude } = position.coords;
+                setLocation({ latitude, longitude })
 
                 try {
                     const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
                     const data = await response.json()
 
-                    if(data && data.display_name) {
+                    if (data && data.display_name) {
                         setAddress(data.display_name)
                     }
                 } catch (error) {
@@ -41,5 +41,5 @@ export function useMyLocation() {
         )
     }
 
-    return {location, address, error, loading, getCurrentLocation}
+    return { location, address, error, loading, getCurrentLocation }
 }
