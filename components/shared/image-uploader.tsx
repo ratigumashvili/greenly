@@ -5,8 +5,10 @@ import { toast } from "sonner";
 import { XIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { useSidebar } from "@/components/ui/sidebar";
 
 import { UploadDropzone } from "@/lib/uploadthing";
+import { useIsTablet } from "@/hooks/use-tablet";
 
 export default function ImageUploader({
     onUploadComplete,
@@ -17,6 +19,9 @@ export default function ImageUploader({
 }) {
     const [uploadedImages, setUploadedImages] = useState(existingImages);
     const [isUploading, setIsUploading] = useState(false);
+
+    const { state } = useSidebar()
+    const isTablet = useIsTablet()
 
     const handleUploadComplete = (uploadedFiles: { url: string }[]) => {
         if (!uploadedFiles || uploadedFiles.length === 0) {
@@ -40,7 +45,7 @@ export default function ImageUploader({
 
     return (
         <>
-            <div className="space-y-4">
+            <div className={`w-full space-y-2 ${state === "expanded" && isTablet ? "-z-10" : "z-0"}`}>
                 <div className="flex flex-wrap gap-2">
                     {uploadedImages.map((url, index) => (
                         <div key={index} className="relative w-20 h-20 group">

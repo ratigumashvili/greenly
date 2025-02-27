@@ -73,7 +73,7 @@ export function CreatePostForm({ id }: { id: string }) {
                         <Tiptap />
                     </div>
 
-                    <div className="flex flex-col xl:flex-row items-center justify-between gap-6 border">
+                    <div className="flex flex-col xl:flex-row items-center justify-between gap-6">
                         <ImageUploader onUploadComplete={setImageUrls} />
                         <PdfUploader onUploadComplete={setFileUrl} />
                     </div>
