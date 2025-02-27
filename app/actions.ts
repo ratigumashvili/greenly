@@ -838,33 +838,6 @@ export async function handleCommentVote(formData: FormData) {
   }
 }
 
-export async function updatePost({
-  postId,
-  title,
-  content
-}: {
-  postId: string,
-  title: string,
-  content: any
-}) {
-  try {
-    const updatedPost = prisma.post.update({
-      where: {
-        id: postId
-      },
-      data: {
-        title,
-        content
-      }
-    })
-
-    return { success: true, message: "Post updated successfully", post: updatedPost };
-  } catch (error) {
-    console.error("Error updating post:", error);
-    return { error: "Failed to update post." };
-  }
-}
-
 export async function deletePost({
   postId,
 }: {
@@ -884,6 +857,33 @@ export async function deletePost({
   }
 }
 
+export async function updatePost({
+  postId,
+  title,
+  content,
+  imagesUrl,
+}: {
+  postId: string;
+  title: string;
+  content: any;
+  imagesUrl?: string[];
+}) {
+  try {
+    const updatedPost = await prisma.post.update({
+      where: { id: postId },
+      data: {
+        title,
+        content,
+        imagesUrl,
+      },
+    });
+
+    return { success: true, message: "Post updated successfully", post: updatedPost };
+  } catch (error) {
+    console.error("Error updating post:", error);
+    return { error: "Failed to update post." };
+  }
+}
 
 export async function getAllTags() {
   const data = await prisma.tag.findMany({

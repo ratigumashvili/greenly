@@ -17,7 +17,8 @@ export default async function SinglePostEditPage({ params }: { params: Promise<{
             title: true,
             content: true,
             authorId: true,
-            subcommunityId: true
+            subcommunityId: true,
+            imagesUrl: true
         }
     })
 
@@ -31,7 +32,7 @@ export default async function SinglePostEditPage({ params }: { params: Promise<{
 
     return (
         <section className="py-8">
-            <EditPostForm post={post} />
+            <EditPostForm post={{ ...post, imagesUrl: post.imagesUrl || [] }} />
         </section>
     )
 }
