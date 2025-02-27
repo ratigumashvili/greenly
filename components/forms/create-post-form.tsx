@@ -75,7 +75,7 @@ export function CreatePostForm({ id }: { id: string }) {
 
                     <div className="flex flex-col xl:flex-row items-center justify-between gap-6">
                         <ImageUploader onUploadComplete={setImageUrls} />
-                        <PdfUploader onUploadComplete={setFileUrl} />
+                        {/* <PdfUploader onUploadComplete={setFileUrl} /> */}
                     </div>
 
                 </CardContent>

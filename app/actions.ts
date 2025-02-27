@@ -861,12 +861,12 @@ export async function updatePost({
   postId,
   title,
   content,
-  imagesUrl,
+  imagesUrl, // ✅ Store images
 }: {
   postId: string;
   title: string;
   content: any;
-  imagesUrl?: string[];
+  imagesUrl?: string[]; // ✅ Optional field for images
 }) {
   try {
     const updatedPost = await prisma.post.update({
@@ -874,7 +874,7 @@ export async function updatePost({
       data: {
         title,
         content,
-        imagesUrl,
+        imagesUrl, // ✅ Save new image URLs to DB
       },
     });
 
@@ -884,6 +884,7 @@ export async function updatePost({
     return { error: "Failed to update post." };
   }
 }
+
 
 export async function getAllTags() {
   const data = await prisma.tag.findMany({
