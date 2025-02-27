@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import Typography from '@tiptap/extension-typography'
-import Highlight from '@tiptap/extension-highlight'
 import Link from "@tiptap/extension-link";
 import { useEditor, EditorContent, type Editor, JSONContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
@@ -12,7 +11,6 @@ import {
     Heading1Icon,
     Heading2Icon,
     Heading3Icon,
-    HighlighterIcon,
     ItalicIcon,
     LinkIcon,
     ListIcon,
@@ -109,14 +107,6 @@ export const MenuBar = ({ editor }: { editor: Editor | null }) => {
         </Button>
         <Button
             type="button"
-            variant={editor.isActive("highlight") ? "default" : "outline"}
-            size="icon"
-            onClick={() => editor.chain().focus().toggleHighlight().run()}
-        >
-            <HighlighterIcon />
-        </Button>
-        <Button
-            type="button"
             variant={editor.isActive("bulletList") ? "default" : "outline"}
             size="icon"
             onClick={() => editor.chain().focus().toggleBulletList().run()}
@@ -196,7 +186,6 @@ const Tiptap = () => {
     const editor = useEditor({
         extensions: [
             StarterKit,
-            Highlight,
             Typography,
             Link.configure({
                 openOnClick: true,
