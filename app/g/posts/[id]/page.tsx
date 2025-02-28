@@ -10,7 +10,7 @@ import { PostGridGallery } from "@/components/shared/post-grid-gallery"
 import PostContent from "@/components/shared/feed/post-content"
 import { PostCommentSection } from "@/components/comments/post-comment-section";
 import { BookmarkButton } from "@/components/shared/bookmark-button"
-import {UserLocation} from "@/components/shared/feed/user-location"
+import { UserLocation } from "@/components/shared/feed/user-location"
 
 import { prisma } from "@/lib/prisma"
 import { getCommentsForPost, isPostBookmarked } from "@/app/actions"
@@ -101,10 +101,13 @@ export default async function SinglePostPage({ searchParams, params }: { searchP
                     </p>
                     <Separator className="my-4" />
                     <PostContent content={post.content || ""} />
-                    
-                    <Separator className="my-4" />
-                    
-                    {post.location && <UserLocation address={post.location} postId={post.id} />}
+
+                    {post.location && (
+                        <>
+                            <Separator className="my-4" />
+                            <UserLocation address={post.location} postId={post.id} />
+                        </>
+                    )}
 
                     {post.imagesUrl.length > 0 && (
                         <section className="my-4">
