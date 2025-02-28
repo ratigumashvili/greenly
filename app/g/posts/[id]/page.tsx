@@ -100,7 +100,9 @@ export default async function SinglePostPage({ searchParams, params }: { searchP
                         <span className="pl-1"><CreatedAt date={post.createdAt} /></span>, in <Link href={`/g/${post.subcommunity.id}`} className="text-primary hover:text-primary/90 transition">{post.subcommunity.name}</Link>
                     </p>
                     <Separator className="my-4" />
-                    <PostContent content={post.content || "{}"} />
+                    <PostContent content={post.content || ""} />
+                    
+                    <Separator className="my-4" />
                     
                     {post.location && <UserLocation address={post.location} postId={post.id} />}
 

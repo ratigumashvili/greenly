@@ -33,11 +33,6 @@ export const menuItems = [
       url: "/search",
       icon: Search,
     },
-    {
-      title: "Settings",
-      url: "/settings",
-      icon: Settings,
-    },
   ]
 
   export const menuSmall = [
