@@ -2,7 +2,7 @@
 
 import { Icon } from "leaflet"
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet"
-import MarkerClusterGroup from "react-leaflet-markercluster";
+import MarkerClusterGroup from 'react-leaflet-cluster'
 import ResetSearchParamsButton from "./reset-searchparams-button"
 
 interface MapProps {
@@ -34,7 +34,12 @@ export default function MapComponent({ locations, handleMarkerClick }: MapProps)
                         key={location}
                         icon={icon}
                         position={[coordinates.latitude, coordinates.longitude]}
-                        eventHandlers={{ click: () => handleMarkerClick(location) }}
+                        eventHandlers={{
+                            click: (e) => {
+                                e.originalEvent.stopPropagation();
+                                handleMarkerClick(location);
+                            }
+                        }}
                     >
                         <Popup>{location}</Popup>
                     </Marker>
