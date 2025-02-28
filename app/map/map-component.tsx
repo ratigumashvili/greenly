@@ -1,7 +1,8 @@
 "use client"
 
 import { Icon } from "leaflet"
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet"
+import { MapContainer, Marker, TileLayer } from "react-leaflet"
+import MarkerClusterGroup from "react-leaflet-markercluster";
 import ResetSearchParamsButton from "./reset-searchparams-button"
 
 interface MapProps {
@@ -27,6 +28,7 @@ export default function MapComponent({ locations, handleMarkerClick }: MapProps)
 
             <ResetSearchParamsButton />
 
+            <MarkerClusterGroup>
                 {locations.map(({ location, coordinates }) => (
                     <Marker
                         key={location}
@@ -39,9 +41,9 @@ export default function MapComponent({ locations, handleMarkerClick }: MapProps)
                             }
                         }}
                     >
-                        <Popup>{location}</Popup>
                     </Marker>
                 ))}
+            </MarkerClusterGroup>
         </MapContainer>
     )
 }
