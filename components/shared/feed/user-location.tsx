@@ -30,7 +30,7 @@ async function getCoordinates(address: string) {
     }
 }
 
-export function UserLocation({ address }: { address: string }) {
+export function UserLocation({ address, postId }: { address: string, postId: string }) {
 
     const [coords, setCoords] = useState<{ latitude: number, longitude: number } | null>(null)
 
@@ -43,7 +43,7 @@ export function UserLocation({ address }: { address: string }) {
             })
         }
         getUserCoordinates()
-    }, [])
+    }, [postId])
 
     if (!address) return
 

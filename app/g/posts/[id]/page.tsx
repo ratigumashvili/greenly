@@ -103,7 +103,7 @@ export default async function SinglePostPage({ searchParams, params }: { searchP
                     <Separator className="my-4" />
                     <PostContent content={post.content || "{}"} />
                     
-                    {post.location && <UserLocation address={post.location} />}
+                    {post.location && <UserLocation address={post.location} postId={post.id} />}
 
                     {post.imagesUrl.length > 0 && (
                         <section className="my-4">
