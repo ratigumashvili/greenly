@@ -11,9 +11,7 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 
-import "leaflet/dist/leaflet.css"
-
-const icon = new Icon({
+export const icon = new Icon({
     iconUrl: "/pin.png",
     iconSize: [28, 28],
 })

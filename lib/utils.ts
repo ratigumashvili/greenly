@@ -151,3 +151,4 @@ export async function getCoordinates(address: string) {
       return { error: "Failed to fetch coordinates." };
   }
 }
+

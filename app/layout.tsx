@@ -10,6 +10,7 @@ import { AppSidebar } from "@/components/shared/app-sidebar"
 import { firaGo } from "@/lib/fonts"
 
 import "./globals.css";
+import "leaflet/dist/leaflet.css"
 
 export const metadata: Metadata = {
   title: "Greenly",

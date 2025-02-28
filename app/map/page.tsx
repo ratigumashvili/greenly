@@ -1,67 +1,51 @@
+"use client"
+
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
+
 import { PageTitle } from "@/components/shared/page-title";
+import { MapSidebar } from "./sidebar";
 
-import { prisma } from "@/lib/prisma";
+import { useIsMounted } from "@/hooks/use-is-mounted";
 
-import { getCoordinates } from "@/lib/utils";
+const MapComponent = dynamic(() => import("./map-component"), {
+    ssr: false
+})
 
-async function getPostsGroupedByLocation() {
-    const uniqueLocations = await prisma.post.findMany({
-        where: {
-            location: {
-                not: null
-            }
-        }, 
-        select: {
-            location: true
-        }, 
-        distinct: ["location"]
-    })
+export default function GlobalMap() {
+    const [locations, setLocations] = useState<{ location: string, coordinates: { latitude: number, longitude: number } }[]>([])
+    const searchParams = useSearchParams()
+    const router = useRouter()
+    const isMounted = useIsMounted()
 
-    const locations = uniqueLocations.map((loc) => loc.location)
+    useEffect(() => {
+        fetch("/api/locations")
+            .then(res => res.json())
+            .then(data => setLocations(data))
+            .catch(error => console.error("Error loading locations ", error))
+    }, [])
 
-    const locationData = await Promise.all(
-        locations.map(async (location) => {
-            const coordinates = await getCoordinates(location)
-            return {location, coordinates}
-        })
-    )
+    function handleMarkerClick(location: string) {
+        const params = new URLSearchParams(searchParams.toString())
+        params.set("location", location)
+        router.push(`/map?${params.toString()}`)
+    }
 
-    const postsByLocation = await prisma.post.findMany({
-        where: {
-            location: {
-                in: locations
-            }
-        },
-        select: {
-            title: true,
-            id: true,
-            subcommunityId: true,
-            location: true
-        },
-        orderBy: {
-            createdAt: "desc"
-        }
-    })
+    if (!isMounted) return <p>Loading...</p>
 
-    const groupedPosts = locationData.map(({location, coordinates}) => ({
-        location: {
-            title: location,
-            coordinates: [coordinates.latitude, coordinates.longitude]
-        },
-        posts: postsByLocation.filter(post => post.location === location) 
-    }))
-
-    return groupedPosts
-}
-
-export default async function GlobalMap() {
-    const data = await getPostsGroupedByLocation()
     return (
         <section className="py-8">
             <PageTitle>Map</PageTitle>
-            <pre>
-                {JSON.stringify(data, null, 2)}
-            </pre>
+            <div className="grid grid-cols-6 gap-4">
+                <div className="col-span-4">
+                    <MapComponent locations={locations} handleMarkerClick={handleMarkerClick} />
+                </div>
+                <div className="col-span-2">
+                    <MapSidebar />
+                </div>
+            </div>
         </section>
     )
 }
