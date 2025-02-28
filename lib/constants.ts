@@ -1,4 +1,4 @@
-import { Plus, Home, Handshake, Users, Bookmark, Search, Settings } from "lucide-react"
+import { Plus, Home, Handshake, Users, EarthIcon, Bookmark, Search, Settings } from "lucide-react"
 
 export const COMMUNITIES_DISPLAY_LIMIT = 9
 
@@ -23,6 +23,11 @@ export const menuItems = [
         url: "/users",
         icon: Users
     },
+    {
+      title: "Map",
+      url: "/map",
+      icon: EarthIcon
+  },
     {
       title: "Search",
       url: "/search",

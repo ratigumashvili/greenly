@@ -904,7 +904,7 @@ export async function updatePost({
       data: {
         title,
         content,
-        imagesUrl, // ✅ Save new image URLs to DB
+        imagesUrl,
       },
     });
 
@@ -1040,11 +1040,6 @@ export async function getPostsByTitle(passedName: string) {
     return [];
   }
 }
-
-
-
-
-
 
 export async function toggleBookmark(postId: string, userId: string) {
   if (!postId || !userId) return { error: "Invalid request." };
