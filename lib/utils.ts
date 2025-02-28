@@ -3,10 +3,6 @@ import { twMerge } from "tailwind-merge"
 import { prisma } from "@/lib/prisma"
 import { authSession } from "@/lib/auth"
 
-import { generateHTML } from "@tiptap/html";
-import StarterKit from "@tiptap/starter-kit";
-import Link from "@tiptap/extension-link";
-
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
@@ -102,36 +98,6 @@ export async function getUserData(subcommunityId?: string) {
 }
 
 export const separator = (index: number, array: any, separatorType: string = ', ', separatorEnd: string = ".") => index === array.length - 1 ? separatorEnd : separatorType
-
-export function tiptapJsonToHtml(content: string | object | null): string {
-  try {
-      let json;
-
-      if (!content) {
-          console.error("No content provided");
-          return "<p>Invalid content</p>";
-      }
-
-      if (typeof content === "string") {
-          json = JSON.parse(content);
-      } else {
-          json = content;
-      }
-
-      if (!json || typeof json !== "object" || !json.type) {
-          console.error("Invalid JSON structure:", json);
-          return "<p>Invalid content</p>";
-      }
-
-      return generateHTML(json, [
-          StarterKit,
-          Link.configure({ openOnClick: true }),
-      ]);
-  } catch (error) {
-      console.error("Error parsing Tiptap JSON:", error);
-      return "<p>Invalid content</p>";
-  }
-}
 
 export async function getCoordinates(address: string) {
   const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`;

@@ -452,7 +452,7 @@ export async function kickMember(subcommunityId: string, memberEmail: string) {
   }
 
   if (role !== "admin") {
-    console.error("❌ User is NOT an admin, cannot manage members.");
+    console.error("User is NOT an admin, cannot manage members.");
     return { error: "Only admins can manage members" };
   }
 
@@ -489,12 +489,12 @@ export async function promoteToAdmin(subcommunityId: string, memberEmail: string
   const { user, isMember, role } = await getUserData(subcommunityId);
 
   if (!user || !isMember) {
-    console.error("❌ Authorization failed: No user or not a member");
+    console.error("Authorization failed: No user or not a member");
     return { error: "Unauthorized" };
   }
 
   if (role !== "admin") {
-    console.error("❌ Authorization failed: User is not an admin");
+    console.error("Authorization failed: User is not an admin");
     return { error: "Only admins can promote members" };
   }
 
@@ -504,7 +504,7 @@ export async function promoteToAdmin(subcommunityId: string, memberEmail: string
   });
 
   if (!targetUser) {
-    console.error("❌ User not found in database!");
+    console.error("User not found in database!");
     return { error: "User not found" };
   }
 
@@ -542,72 +542,68 @@ export async function getMemberCount(subcommunityId: string) {
   }
 }
 
+
 export async function createPost(formData: FormData) {
   const subcommunityId = formData.get("subcommunityId") as string;
   const title = formData.get("title") as string;
-  const content = formData.get("content") ? JSON.parse(formData.get("content") as string) : {};
-
-  // ✅ Ensure location is correctly handled
+  const content = formData.get("content") as string || "";
+  
   let location = formData.get("location")?.toString().trim();
   if (!location || location === "") {
-    location = null; // Explicitly set to null when empty
+      location = null;
   }
 
   let imagesUrl: string[] = [];
   let file: string | null = null;
 
   try {
-    imagesUrl = formData.get("imagesUrl") ? JSON.parse(formData.get("imagesUrl") as string) : [];
+      imagesUrl = formData.get("imagesUrl") ? JSON.parse(formData.get("imagesUrl") as string) : [];
   } catch (error) {
-    console.error("Error parsing imagesUrl:", error);
-    return { error: "Invalid image data format." };
+      console.error("Error parsing imagesUrl:", error);
+      return { error: "Invalid image data format." };
   }
 
   try {
-    file = formData.get("file") ? JSON.parse(formData.get("file") as string) : null;
+      file = formData.get("file") ? JSON.parse(formData.get("file") as string) : null;
   } catch (error) {
-    console.error("Error parsing file:", error);
-    return { error: "Invalid file data format." };
+      console.error("Error parsing file:", error);
+      return { error: "Invalid file data format." };
   }
 
-  if (!title || !subcommunityId) {
-    return { error: "Title and subcommunity are required." };
+  if (!title || !subcommunityId || !content.trim()) {
+      return { error: "Title, content, and subcommunity are required." };
   }
 
   const { session, user, isMember } = await getUserData(subcommunityId);
 
   if (!session || !user?.id) {
-    return { error: "Unauthorized" };
+      return { error: "Unauthorized" };
   }
 
   if (!isMember) {
-    return { error: "Only community members can create posts." };
+      return { error: "Only community members can create posts." };
   }
 
   try {
-    const postData: any = {
-      title,
-      content,
-      imagesUrl,
-      file,
-      authorId: user.id,
-      subcommunityId,
-    };
+      const post = await prisma.post.create({
+          data: {
+              title,
+              content,
+              location,
+              imagesUrl,
+              file,
+              authorId: user.id,
+              subcommunityId,
+          },
+      });
 
-    if (location) {
-      postData.location = location; // ✅ Add location only if it's valid
-    }
-
-    const post = await prisma.post.create({
-      data: postData, // ✅ Pass only valid fields to Prisma
-    });
-
-    return { success: true, message: "Post created successfully", post };
+      return { success: true, message: "Post created successfully", post };
   } catch (error) {
-    console.error("Create Post Error:", error);
-    return { error: "Failed to create post. Please try again." };
+      console.error("Create Post Error:", error);
+      return { error: "Failed to create post. Please try again." };
   }
 }
+
 
 
 
@@ -892,11 +888,15 @@ export async function updatePost({
   title,
   content,
   imagesUrl,
+  file,
+  location,
 }: {
   postId: string;
   title: string;
-  content: any;
+  content: string;
   imagesUrl?: string[];
+  file?: string | null;
+  location?: string;
 }) {
   try {
     const updatedPost = await prisma.post.update({
@@ -905,6 +905,8 @@ export async function updatePost({
         title,
         content,
         imagesUrl,
+        file: file ?? null, // ✅ Ensure file is either a string or null
+        location: location?.trim() || null, // ✅ Ensure location is stored correctly
       },
     });
 
@@ -914,6 +916,7 @@ export async function updatePost({
     return { error: "Failed to update post." };
   }
 }
+
 
 
 export async function getAllTags() {

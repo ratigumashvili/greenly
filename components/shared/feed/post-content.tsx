@@ -1,17 +1,13 @@
-"use client"
+"use client";
 
-import { cn, tiptapJsonToHtml } from "@/lib/utils";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm"; // Enables GitHub-flavored Markdown (tables, strikethrough, etc.)
+import { cn } from "@/lib/utils";
 
-export default function PostContent({ content, className }: { content: any, className?: string }) {
-    let parsedContent: string = "";
-
-    if (typeof content === "string") {
-        parsedContent = content;
-    } else if (typeof content === "object" && content !== null) {
-        parsedContent = JSON.stringify(content);
-    } else {
-        parsedContent = "{}";
-    }
-
-    return <div className={cn("[&_p]:mb-3", className)} dangerouslySetInnerHTML={{ __html: tiptapJsonToHtml(parsedContent) }} />;
+export default function PostContent({ content, className }: { content: string; className?: string }) {
+    return (
+        <div className={cn("prose max-w-none", className)}>
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
+        </div>
+    );
 }
