@@ -1,15 +1,11 @@
 "use client"
 
 import { useEffect, useState } from "react";
-import { EarthIcon } from "lucide-react";
+import dynamic from "next/dynamic";
 
-import { Button } from "@/components/ui/button";
-import {
-    Dialog,
-    DialogContent,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog"
+const UserLocationMap = dynamic(() => import("./user-location-map"), {
+    ssr: false
+})
 
 async function getCoordinates(address: string) {
     const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`;
@@ -32,38 +28,22 @@ async function getCoordinates(address: string) {
 
 export function UserLocation({ address, postId }: { address: string, postId: string }) {
 
-    const [coords, setCoords] = useState<{ latitude: number, longitude: number } | null>(null)
+    const [coords, setCoords] = useState<[number, number] | null>(null)
 
     useEffect(() => {
         async function getUserCoordinates() {
             const data = await getCoordinates(address)
-            setCoords({
-                latitude: data.latitude,
-                longitude: data.longitude
-            })
+            setCoords([data.latitude, data.longitude])
         }
         getUserCoordinates()
     }, [postId])
 
-    if (!address) return
+    if (!address || !coords) return
 
     return (
         <div className="flex items-center gap-2">
             {address}
-            <Dialog>
-                <DialogTrigger asChild>
-                    <Button variant="ghost" size="icon">
-                        <EarthIcon />
-                    </Button>
-                </DialogTrigger>
-                <DialogContent className="w-full sm:max-w-[625px]">
-                    <DialogTitle className="sr-only">Map</DialogTitle>
-                    <pre>
-                        {JSON.stringify(coords, null, 2)}
-                    </pre>
-                </DialogContent>
-            </Dialog>
-
+            <UserLocationMap coords={coords} address={address} />
         </div>
     )
 }

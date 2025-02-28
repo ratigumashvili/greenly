@@ -33,6 +33,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "javascript-time-ago": "^2.5.11",
+    "leaflet": "^1.9.4",
     "lucide-react": "^0.475.0",
     "next": "15.1.7",
     "next-auth": "^5.0.0-beta.25",
@@ -41,6 +42,7 @@
     "react-dom": "^19.0.0",
     "react-force-graph-3d": "^1.26.0",
     "react-image-gallery": "^1.4.0",
+    "react-leaflet": "^5.0.0",
     "react-time-ago": "^7.3.3",
     "sonner": "^1.7.4",
     "tailwind-merge": "^3.0.1",
@@ -55,6 +57,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/typography": "^0.5.16",
+    "@types/leaflet": "^1.9.16",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

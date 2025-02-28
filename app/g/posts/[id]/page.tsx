@@ -1,7 +1,6 @@
-
-
 import Link from "next/link"
 import { SettingsIcon } from "lucide-react"
+import dynamic from "next/dynamic"
 
 import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
@@ -10,8 +9,8 @@ import { CreatedAt } from "@/components/shared/created-at"
 import { PostGridGallery } from "@/components/shared/post-grid-gallery"
 import PostContent from "@/components/shared/feed/post-content"
 import { PostCommentSection } from "@/components/comments/post-comment-section";
-import { UserLocation } from "@/components/shared/feed/user-location"
 import { BookmarkButton } from "@/components/shared/bookmark-button"
+import {UserLocation} from "@/components/shared/feed/user-location"
 
 import { prisma } from "@/lib/prisma"
 import { getCommentsForPost, isPostBookmarked } from "@/app/actions"
