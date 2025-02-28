@@ -18,7 +18,14 @@ export async function GET(req: Request) {
             select: {
                 id: true,
                 title: true,
-                subcommunityId: true
+                subcommunityId: true,
+                createdAt: true,
+                author: {
+                    select: {
+                        userName: true,
+                        id: true
+                    }
+                }
             },
             orderBy: {
                 createdAt: "desc"

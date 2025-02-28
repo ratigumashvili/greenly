@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 
 import { PageTitle } from "@/components/shared/page-title";
-import { MapSidebar } from "./sidebar";
+import { MapSidebar } from "./map-sidebar";
 
 import { useIsMounted } from "@/hooks/use-is-mounted";
 
