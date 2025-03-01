@@ -18,10 +18,22 @@ const MarkdownEditor = ({ initialContent = "", onContentChange }: MarkdownEditor
 
     const handleChange = (value: string) => {
         setContent(value);
-        onContentChange(value); // ✅ Pass content to parent
+        onContentChange(value);
     };
 
-    return <SimpleMDE value={content} onChange={handleChange} />;
+    return (
+        <SimpleMDE
+        value={content}
+        onChange={handleChange}
+        options={{
+            toolbar: [
+                "bold", "italic", "heading", "|",
+                "quote", "unordered-list", "ordered-list", "link", "image", "|",
+                "fullscreen"
+            ],
+            spellChecker: false,
+        }}/>
+    )
 };
 
 export default MarkdownEditor;
