@@ -17,7 +17,12 @@ export interface DynamicGraphUserProps {
     Posts: {
         postTitle: string,
         postId: string
-        subcommunityId: string
+        subcommunityId: string,
+        createdAt: Date,
+        subcommunity: {
+            id: string,
+            name: string,
+        }
     }[]
 }
 
@@ -56,7 +61,14 @@ async function getSingleUser(paramsId: string) {
                     select: {
                         id: true,
                         title: true,
-                        subcommunityId: true
+                        subcommunityId: true,
+                        createdAt: true,
+                        subcommunity: {
+                            select: {
+                                name: true,
+                                id: true
+                            }
+                        }
                     }
                 }
             }
@@ -89,7 +101,9 @@ export default async function SingleUsersPage({ params }: { params: Promise<{ id
         Posts: user.Post.map((post) => ({
             postTitle: post.title,
             postId: post.id,
-            subcommunityId: post.subcommunityId
+            subcommunityId: post.subcommunityId,
+            subcommunity: post.subcommunity,
+            createdAt: post.createdAt,
         }))
     };
 
@@ -106,18 +120,42 @@ export default async function SingleUsersPage({ params }: { params: Promise<{ id
                     <dd>{user?.userName}</dd>
                     <dt>Email:</dt>
                     <dd>{user.email}</dd>
-                    <dt>institution:</dt>
-                    <dd>{user?.institution}</dd>
-                    <dt>Department:</dt>
-                    <dd>{user?.department}</dd>
-                    <dt>Disciplines:</dt>
-                    <dd>{user?.disciplines}</dd>
-                    <dt>Fields:</dt>
-                    <dd>{user?.fields}</dd>
-                    <dt>Interests:</dt>
-                    <dd>{user?.interests}</dd>
-                    <dt>About:</dt>
-                    <dd>{user?.about}</dd>
+                    {user?.institution && (
+                        <>
+                            <dt>institution:</dt>
+                            <dd>{user?.institution}</dd>
+                        </>
+                    )}
+                    {user?.department && (
+                        <>
+                            <dt>Department:</dt>
+                            <dd>{user?.department}</dd>
+                        </>
+                    )}
+                    {user?.disciplines && (
+                        <>
+                            <dt>Disciplines:</dt>
+                            <dd>{user?.disciplines}</dd>
+                        </>
+                    )}
+                    {user?.fields && (
+                        <>
+                            <dt>Fields:</dt>
+                            <dd>{user?.fields}</dd>
+                        </>
+                    )}
+                    {user?.interests && (
+                        <>
+                            <dt>Interests:</dt>
+                            <dd>{user?.interests}</dd>
+                        </>
+                    )}
+                    {user?.about && (
+                        <>
+                            <dt>About:</dt>
+                            <dd>{user?.about}</dd>
+                        </>
+                    )}
                 </dl>
             </section>
 

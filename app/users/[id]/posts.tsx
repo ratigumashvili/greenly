@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { DynamicGraphUserProps } from "./page";
+import { CreatedAt } from "@/components/shared/created-at";
 
 export function UsersPosts({ user }: { user: DynamicGraphUserProps }) {
     return (
@@ -9,9 +10,13 @@ export function UsersPosts({ user }: { user: DynamicGraphUserProps }) {
                 <ul className=" space-y-2 list-disc ml-4">
                     {user.Posts.map((post) => (
                         <li key={post.postId} className="text-base">
-                            <Link href={`/g/posts/${post.postId}?communityId=${post.subcommunityId}`}>
+                            <Link href={`/g/posts/${post.postId}?communityId=${post.subcommunityId}`} className="text-primary hover:text-primary/90 transition">
                                 {post.postTitle}
-                            </Link>
+                            </Link>.
+                            in <Link href={`/g/${post.subcommunity.id}`} className="italic">
+                                {post.subcommunity.name}
+                            </Link>,{" "}
+                            <CreatedAt date={post.createdAt} />
                         </li>
                     ))}
                 </ul>
