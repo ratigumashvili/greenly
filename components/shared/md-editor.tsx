@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import SimpleMDE, { SimpleMDEReactProps } from "react-simplemde-editor";
+import { marked } from "marked";
+import DOMPurify from "dompurify";
 import "easymde/dist/easymde.min.css";
 
 interface MarkdownEditorProps {
@@ -17,6 +19,12 @@ const MarkdownEditor = ({ initialContent = "", onContentChange }: MarkdownEditor
         autofocus: true,
         status: false,
         spellChecker: false,
+
+        renderingConfig: {
+            codeSyntaxHighlighting: true,
+            singleLineBreaks: true,
+        },
+
         toolbar: [
             "bold" as const, 
             "italic" as const, 
@@ -31,10 +39,24 @@ const MarkdownEditor = ({ initialContent = "", onContentChange }: MarkdownEditor
             "horizontal-rule" as const, "|",
             "redo" as const,
             "undo" as const, "|",
-            // "preview" as const, 
-            // "side-by-side" as const, 
+            "preview" as const, 
+            "side-by-side" as const, 
             "fullscreen" as const
         ],
+
+        previewRender: (plainText) => {
+            const result = marked.parse(plainText);
+
+            // ✅ Check if result is a Promise and handle both cases
+            if (result instanceof Promise) {
+                result.then((parsedHTML) => {
+                    return DOMPurify.sanitize(parsedHTML);
+                });
+                return "Loading preview..."; // Placeholder while Promise resolves
+            }
+
+            return DOMPurify.sanitize(result); // If it's a string, sanitize & return it
+        }
     });
 
     useEffect(() => {
