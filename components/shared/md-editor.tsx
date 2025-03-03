@@ -47,15 +47,14 @@ const MarkdownEditor = ({ initialContent = "", onContentChange }: MarkdownEditor
         previewRender: (plainText) => {
             const result = marked.parse(plainText);
 
-            // ✅ Check if result is a Promise and handle both cases
             if (result instanceof Promise) {
                 result.then((parsedHTML) => {
                     return DOMPurify.sanitize(parsedHTML);
                 });
-                return "Loading preview..."; // Placeholder while Promise resolves
+                return "Loading preview..."; 
             }
 
-            return DOMPurify.sanitize(result); // If it's a string, sanitize & return it
+            return DOMPurify.sanitize(result);
         }
     });
 
