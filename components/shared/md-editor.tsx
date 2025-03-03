@@ -20,15 +20,19 @@ const MarkdownEditor = ({ initialContent = "", onContentChange }: MarkdownEditor
         toolbar: [
             "bold" as const, 
             "italic" as const, 
+            "strikethrough" as const,
             "heading" as const, "|",
             "quote" as const, 
             "unordered-list" as const, 
             "ordered-list" as const, "|",
             "link" as const, 
             "image" as const, 
-            "table" as const, "|",
-            "preview" as const, 
-            "side-by-side" as const, 
+            "table" as const,
+            "horizontal-rule" as const, "|",
+            "redo" as const,
+            "undo" as const, "|",
+            // "preview" as const, 
+            // "side-by-side" as const, 
             "fullscreen" as const
         ],
     });
@@ -51,7 +55,7 @@ const MarkdownEditor = ({ initialContent = "", onContentChange }: MarkdownEditor
             }}
             value={content}
             onChange={handleChange}
-            options={optionsRef.current} // ✅ Always use stored options
+            options={optionsRef.current}
         />
     );
 };
