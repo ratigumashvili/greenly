@@ -1,7 +1,7 @@
 "use client";
 
 import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm"; // Enables GitHub-flavored Markdown (tables, strikethrough, etc.)
+import remarkGfm from "remark-gfm"; 
 import { cn } from "@/lib/utils";
 
 export default function PostContent({ content, className }: { content: string; className?: string }) {

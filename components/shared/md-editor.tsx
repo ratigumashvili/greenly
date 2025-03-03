@@ -37,7 +37,7 @@ const MarkdownEditor = ({ initialContent = "", onContentChange }: MarkdownEditor
                 toolbar: [
                     "bold", "italic", "heading", "|",
                     "quote", "unordered-list", "ordered-list", "|",
-                    "link", "image", "|",
+                    "link", "image", "table", "|",
                     "fullscreen"
                 ],
                 spellChecker: false,
